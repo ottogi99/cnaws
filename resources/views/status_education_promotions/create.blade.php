@@ -1,0 +1,37 @@
+@extends('layouts.app')
+
+@section('title', '지원현황')
+
+@section('style')
+  @parent
+  <style>
+    select {width:120px; height:50px; background-color:#efefef; border-radius:5px; border:1px solid #cccccc; float:right; margin-right:10px;}
+    .input-group-addon {background:none; border:none;}
+    .input-group > .form-control {width:330px; font-size:15px;}
+    input[type="radio"] {margin:0; box-shadow:none; }
+  </style>
+@stop
+
+@section('content')
+  @php $viewName = 'status_education_promotions.create'; @endphp
+  <div class="box col-md-4">
+    <div class="box-inner" style="background-color:#ffffff;">
+      <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
+        <span>농작업지원단(교육·홍보비) 지출현황 등록</span>
+      </div>
+
+      <form class="box-content" action="{{ route('status_education_promotions.store') }}" method="POST" style="padding-bottom:50px;">
+        @csrf
+
+        @include('status_education_promotions.partial.form')
+        <hr/>
+        <div class="pull-left">
+          <a href="{{ route('status_education_promotions.index') }}" class="btn btn-sm btn-primary">목록</a>
+        </div>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-sm btn-primary">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+@stop
