@@ -214,6 +214,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         $this->stack[$key] = array_merge($this->stack[$key], $array_job_end);
                     } catch (\Exception $e) {
                         $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
                     }
 
                     $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
@@ -280,7 +281,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
           '7' => '제공자',
           '8' => '교통비',
           '9' => '간식비',
-          '10' => '마스크구압비',
+          '10' => '마스크구입비',
           '11' => '비고',
         ];
     }

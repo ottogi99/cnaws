@@ -72,13 +72,11 @@
               <td>{{ ($user->isAdmin()) ? '관리자' : '사용자' }}</td>
               <td>{{ $user->updated_at->format('Y-m-d') }}</td>
               <td>
-                @if($schedule->is_allow)
-                  <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button>
-                  <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('users.edit', $user->id) }}'">수정</button>
-                  @can('delete-user', auth()->user()->nonghyup_id)
-                  <button class="btn btn-xs btn-danger button__delete" data-id="{{ $user->id }}">삭제</button>
-                  @endcan
-                @endif
+                <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button>
+                <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('users.edit', $user->id) }}'">수정</button>
+                @can('delete-user', auth()->user()->nonghyup_id)
+                <button class="btn btn-xs btn-danger button__delete" data-id="{{ $user->id }}">삭제</button>
+                @endcan
               </td>
             </tr>
             @empty

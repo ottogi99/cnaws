@@ -44,7 +44,7 @@ class CreateManpowerSupportersTable extends Migration
             // 키 지정
             // $table->unique('name', 'contact');                  // 이름과 연락처로 중복 방지
             // 인덱스 지정
-            $table->unique(['business_year, nonghyup_id', 'name']);
+            $table->unique(['business_year', 'nonghyup_id', 'name']);
 
             // 외래키 정의
             $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');        //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????

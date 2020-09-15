@@ -515,6 +515,26 @@ ul.main-menu li:not(.nav-header) {
     margin-left: 10px;
 }
 
+.accordion > ul > li {
+    color:#ffffff; 
+}
+
+.accordion > ul > .smenu1 {
+	padding:5px 0px 15px 0;
+}
+
+.accordion > ul > li > ul > li {
+    color:#ffffff; margin:7px 0px 5px 0;
+}
+
+.accordion > ul > li > ul > li:hover {
+    background-color:#5a5b5b;
+}
+
+.accordion > ul > li > ul > li a {
+    text-decoration:none; 
+}
+
 .nav-sm {
     display: none;
 }

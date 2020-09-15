@@ -116,6 +116,7 @@
         <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button>										<!-- {!! $errors->first('excel', '<span class="form-error">:message</span>') !!} -->
       </div>
 
+      @if($schedule->is_allow)
       <div style="text-align:right; margin-top:45px;">
         <div class="bg-light" style="padding-top:10px;">
           <form action="{{ route('small_farmers.import') }}" method="POST" enctype="multipart/form-data" class="form__upload">
@@ -128,6 +129,7 @@
           </form>
         </div>
       </div>
+      @endif
 
       <div class="bot_pagination">
         {{ $farmers->withQueryString()->links() }}

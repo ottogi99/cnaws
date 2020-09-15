@@ -26,25 +26,37 @@
         </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
-        <img src="/img/icon-3.png"/ style="margin:0px 10px 0px 10px;">
-        <span>모집현황</span></a>
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{ route('small_farmers.index') }}">소규모·영세소농</a></li>
-          <li><a href="{{ route('large_farmers.index') }}">대규모·전업농가</a></li>
-          <li><a href="{{ route('machine_supporters.index') }}">농기계지원반</a></li>
-          <li><a href="{{ route('manpower_supporters.index') }}">인력지원반</a></li>
-        </ul>
+        <img src="img/icon-3.png"/ style="margin:0px 10px 0px 10px;">
+          <span>모집등록</span></a>
+          <ul class="nav nav-pills nav-stacked">
+            <li ><a>인력지원반</a>
+            <ul>
+              <li><a href="{{ route('large_farmers.index') }}">농가모집</a></li>
+              <li><a href="{{ route('manpower_supporters.index') }}">지원단모집</a></li>
+            </ul>
+          </li>
+          <li class="smenu1"><a>농기계지원반</a>
+            <ul>
+              <li><a href="{{ route('small_farmers.index') }}">농가모집</li>
+              <li><a href="{{ route('machine_supporters.index') }}">지원단모집</a></li>
+            </ul>
+          </li>
+          </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
-        <img src="/img/icon-4.png"/ style="margin:0px 10px 0px 10px;">
-        <span>지원현황</span></a>
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{ route('status_education_promotions.index') }}">교육·홍보비</a></li>
-          <li><a href="{{ route('status_machine_supporters.index') }}">소규모·영세소농</a></li>
-          <li><a href="{{ route('status_manpower_supporters.index') }}">대규모·전업농가</a></li>
+        <img src="img/icon-4.png"/ style="margin:0px 10px 0px 10px;">
+          <span>지원현황</span></a>
+            <ul class="nav nav-pills nav-stacked">
+              <li><a href="{{ route('status_education_promotions.index') }}">교육·홍보비</a></li>
+              <li><a>농작업지원</a>
+              <ul>
+                <li><a href="{{ route('status_manpower_supporters.index') }}">인력지원반</a></li>
+                <li><a href="{{ route('status_machine_supporters.index') }}">농기계지원반</a></li>
+              </ul>
+          </li>
           <li><a href="{{ route('status_labor_payments.index') }}">센터운영비(인건비)</a></li>
           <li><a href="{{ route('status_operating_costs.index') }}">센터운영비(운영비)</a></li>
-        </ul>
+          </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
         <img src="/img/icon-5.png"/ style="margin:0px 10px 0px 10px;">

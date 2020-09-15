@@ -13,9 +13,9 @@
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:140px; font-size:13px;">데이터입력</span>
         <span class="input-group-addon" style="width:41px; font-size:13px;">허용</span>
-        <input type="radio" name="is_allow" id="is_allow1" value="1" class="form-control" style="width:18px; box-shadow:none;" checked="checked">
+        <input type="radio" name="is_allow" id="is_allow1" value="1" class="form-control" style="width:18px; box-shadow:none;" {{ ($schedule->is_allow) ? 'checked' : '' }} >
         <span class="input-group-addon" style="width:41px; font-size:13px;">불가</span>
-        <input type="radio" name="is_allow" id="is_allow2" value="0" class="form-control" style="width:18px; box-shadow:none;">
+        <input type="radio" name="is_allow" id="is_allow2" value="0" class="form-control" style="width:18px; box-shadow:none;" {{ !($schedule->is_allow) ? 'checked' : '' }}>
       </div>
 
       <div class="input-group input-group-lg" style="padding-bottom:10px;">

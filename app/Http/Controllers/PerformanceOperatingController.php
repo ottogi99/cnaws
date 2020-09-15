@@ -9,6 +9,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Exports\PerformanceOperatingExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Illuminate\Support\Facades\Log;
+
 class PerformanceOperatingController extends Controller
 {
     public function __construct()
@@ -35,6 +37,8 @@ class PerformanceOperatingController extends Controller
         $user = auth()->user();
 
         $raw = sprintf("CALL GetPerformanceOperating('%s', '%s', '%s')", $year, $sigun_code, $nonghyup_id);
+        Log::debug($raw);
+
         $rows = DB::select(DB::raw($raw));
         // $rows = DB::select($raw);
         $rows = $this->arrayPaginator($rows, $request);

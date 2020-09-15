@@ -135,6 +135,7 @@ class StatusMachineSupportersController extends Controller
         $user = auth()->user();
         $business_year = now()->format('Y');
 
+        $farmer_id = $request->input('farmer_id');
         $supporter_id = $request->input('supporter_id');
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
@@ -142,31 +143,8 @@ class StatusMachineSupportersController extends Controller
         $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
 
-        $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+        $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
 
-        // // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
-        // $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
-        //                               ->join('users', 'status_machine_supporters.nonghyup_id', 'users.nonghyup_id')
-        //                               ->join('small_farmers', 'status_machine_supporters.farmer_id', 'small_farmers.id')
-        //                               ->join('machine_supporters', 'status_machine_supporters.supporter_id', 'machine_supporters.id')
-        //                               ->select(
-        //                                   'status_machine_supporters.*',
-        //                                   'users.name as nonghyup_name',
-        //                                   'small_farmers.name as farmer_name', 'small_farmers.address as farmer_address',
-        //                                   'machine_supporters.name as supporter_name',
-        //                                 )
-        //                               ->where('status_machine_supporters.business_year', $business_year)
-        //                               // ->where('status_machine_supporters.supporter_id', $supporter_id)
-        //                               // id 중복이 아니라 이름 중복을 검색하여야 한다.
-        //                               ->where('machine_supporters.name', $supporter_name)
-        //                               ->where(function ($query) use ($job_start_date, $job_end_date) {
-        //                                   $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
-        //                                         ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-        //                               })
-        //                               ->get();
-        //                               // ->exists())
-
-        // dd($duplicated_items);
         if (count($duplicated_items) > 0)
         {
             // $error_message = '요청하신 데이터 정보<br/>';
@@ -260,6 +238,7 @@ class StatusMachineSupportersController extends Controller
         $this->authorize('edit-status-machine-supporter', $row);
 
         // 중복 체크 start >>
+        $farmer_id = $request->input('farmer_id');
         $supporter_id = $request->input('supporter_id');
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
@@ -267,7 +246,7 @@ class StatusMachineSupportersController extends Controller
         $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
 
-        $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+        $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
@@ -451,7 +430,7 @@ class StatusMachineSupportersController extends Controller
         // return ;
     }
 
-    private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
+    private function check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date)
     {
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
@@ -465,14 +444,12 @@ class StatusMachineSupportersController extends Controller
                                           'machine_supporters.name as supporter_name',
                                         )
                                       ->where('status_machine_supporters.business_year', now()->year)
-                                      // ->where('status_machine_supporters.supporter_id', $supporter_id)
-                                      // id 중복이 아니라 이름 중복을 검색하여야 한다.
+                                      ->where('small_farmers.id', $farmer_id)
                                       ->where('machine_supporters.name', $supporter_name)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
                                                 ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
                                       })
                                       ->get();
-                                      // ->exists())
     }
 }

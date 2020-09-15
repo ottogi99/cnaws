@@ -38,7 +38,8 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
           			ROUND(ROUND(T3.amount * 0.21) - T4.payment_do) AS balance_do,
           			ROUND(ROUND(T3.amount * 0.49) - T4.payment_sigun) AS balance_sigun,
           			ROUND(ROUND(T3.amount * 0.20) - T4.payment_center) AS balance_center,
-          			ROUND(ROUND(T3.amount * 0.10) - T4.payment_unit) AS balance_unit
+                ROUND(ROUND(T3.amount * 0.10) - T4.payment_unit) AS balance_unit,
+          			ROUND(T4.payment_sum / T3.amount, 1) AS execution_rate
           		FROM users T1
               LEFT OUTER JOIN
           		(

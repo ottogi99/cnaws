@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('home', [
+    'as'  => 'home.index2',
+    'uses' => 'HomeController@index',
+]);
 
 Route::get('/', [
     'as'  => 'home.index',
@@ -201,6 +205,10 @@ Route::delete('machine_supporters/delete-multiple', [
     'as'  => 'machine_supporters.multiple-delete',
     'uses' => 'MachineSupportersController@deleteMultiple'
 ]);
+Route::get('machine_supporters/example', [
+    'as'  => 'machine_supporters.example',
+    'uses' => 'MachineSupportersController@example'
+]);
 Route::resource('machine_supporters', 'MachineSupportersController');
 
 // 인력지원반 모집현황
@@ -219,6 +227,10 @@ Route::post('manpower_supporters/import', [
 Route::delete('manpower_supporters/delete-multiple', [
     'as'  => 'manpower_supporters.multiple-delete',
     'uses' => 'ManpowerSupportersController@deleteMultiple'
+]);
+Route::get('manpower_supporters/example', [
+    'as'  => 'manpower_supporters.example',
+    'uses' => 'ManpowerSupportersController@example'
 ]);
 Route::resource('manpower_supporters', 'ManpowerSupportersController');
 
@@ -258,6 +270,10 @@ Route::delete('status_machine_supporters/delete-multiple', [
     'as'  => 'status_machine_supporters.multiple-delete',
     'uses' => 'StatusMachineSupportersController@deleteMultiple'
 ]);
+Route::get('status_machine_supporters/example', [
+    'as'  => 'status_machine_supporters.example',
+    'uses' => 'StatusMachineSupportersController@example'
+]);
 Route::resource('status_machine_supporters', 'StatusMachineSupportersController');
 
 // 인력지원반 지원현황
@@ -272,6 +288,10 @@ Route::post('status_manpower_supporters/import', [
 Route::delete('status_manpower_supporters/delete-multiple', [
     'as'  => 'status_manpower_supporters.multiple-delete',
     'uses' => 'StatusManpowerSupportersController@deleteMultiple'
+]);
+Route::get('status_manpower_supporters/example', [
+    'as'  => 'status_manpower_supporters.example',
+    'uses' => 'StatusManpowerSupportersController@example'
 ]);
 Route::resource('status_manpower_supporters', 'StatusManpowerSupportersController');
 
@@ -292,6 +312,10 @@ Route::delete('status_labor_payments/delete-multiple', [
     'as'  => 'status_labor_payments.multiple-delete',
     'uses' => 'StatusLaborPaymentsController@deleteMultiple'
 ]);
+Route::get('status_labor_payments/example', [
+    'as'  => 'status_labor_payments.example',
+    'uses' => 'StatusLaborPaymentsController@example'
+]);
 Route::resource('status_labor_payments', 'StatusLaborPaymentsController');
 
 // 센터운영비(운영비) 지급현황
@@ -310,6 +334,10 @@ Route::delete('status_operating_costs/delete-multiple', [
 Route::delete('status_operating_costs/delete-multiple', [
     'as'  => 'status_operating_costs.multiple-delete',
     'uses' => 'StatusOperatingCostsController@deleteMultiple'
+]);
+Route::get('status_operating_costs/example', [
+    'as'  => 'status_operating_costs.example',
+    'uses' => 'StatusOperatingCostsController@example'
 ]);
 Route::resource('status_operating_costs', 'StatusOperatingCostsController');
 

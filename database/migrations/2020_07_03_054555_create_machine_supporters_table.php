@@ -38,7 +38,7 @@ class CreateMachineSupportersTable extends Migration
             $table->softDeletes('deleted_at', 0);         // 삭제일
 
             // 키 지정
-            $table->unique(['business_year, nonghyup_id', 'name']);      // 하나의 농협이 동일한 이름의 지원단 등록 제한
+            $table->unique(['business_year', 'nonghyup_id', 'name']);      // 하나의 농협이 동일한 이름의 지원단 등록 제한
 
             // 외래키 정의
             $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');          //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????

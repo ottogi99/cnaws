@@ -213,6 +213,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                         $this->stack[$key] = array_merge($this->stack[$key], $array_job_end);
                     } catch (\Exception $e) {
                         $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
                     }
 
                     $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
