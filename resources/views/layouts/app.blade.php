@@ -73,6 +73,7 @@
   @include('layouts.partial.top-nav')
 
   <div class="ch-container" style="padding-left:0;">
+    <div style="background-color:#323333; width:210px; height:100%; position:absolute;"></div>
     <div class="row">
       <div class="col-sm-2 col-lg-2">
         @include('layouts.partial.left-nav')

@@ -70,7 +70,7 @@
             <td>{{ number_format($row->small_farmer_number) }}</td>
             <td>{{ number_format($row->machine_supporter_number) }}</td>
             <td>{{ number_format($row->machine_supporter_performance_days) }}</td>
-            <td>{{ number_format($row->machine_supporter_working_area) }}</td>
+            <td>{{ number_format($row->machine_supporter_working_area, 1) }}</td>
             <td>{{ number_format($row->large_farmer_number) }}</td>
             <td>{{ number_format($row->manpower_supporter_number) }}</td>
             <td>{{ number_format($row->manpower_supporter_performance_days) }}</td>
@@ -85,7 +85,7 @@
       </table>
 
       <hr/>
-      
+
       <div style="float:right;">
       @if($rows->total() > 0)
         <a href="{{ route('performance_operating.export',

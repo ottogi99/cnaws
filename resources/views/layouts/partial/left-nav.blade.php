@@ -65,7 +65,7 @@
       </li>
 
       <div class="box col-md-12">
-        <div class="box-inner">
+        <!-- <div class="box-inner">
           <div class="box-header well">
             <h2 style="color:#ffffff;"><i class="glyphicon glyphicon-bullhorn"></i> 알림</h2>
 
@@ -87,7 +87,7 @@
               <strong>로그인</strong><br> 로그인에 성공하였습니다.
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
   </div>
 </div>

@@ -18,41 +18,41 @@
 @stop
 
 @section('content')
-<img src="/img/main-logo.png"/ style="width:274px; height:160px; margin-bottom:200px;">
-<div class="row">
+<img src="/img/main-logo.png"/ style="width:274px; height:160px; margin-bottom:100px;">
+<div class="row" >
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 6건" class="well top-block" href="#">
-      <i class="glyphicon glyphicon-user blue"></i>
-      <div>New 일반지원단 모집</div>
-      <div>507</div>
-      <span class="notification">6</span>
+      <!-- <i class="glyphicon glyphicon-user blue"></i> -->
+      <div>일반지원단 모집</div>
+      <!-- <div>507</div> -->
+      <!-- <span class="notification">6</span> -->
     </a>
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 4건" class="well top-block" href="#">
-      <i class="glyphicon glyphicon-star green"></i>
-      <div>New 전문지원단 모집</div>
-      <div>228</div>
-      <span class="notification green">4</span>
+      <!-- <i class="glyphicon glyphicon-star green"></i> -->
+      <div>전문지원단 모집</div>
+      <!-- <div>228</div> -->
+      <!-- <span class="notification green">4</span> -->
     </a>
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 34건" class="well top-block" href="#">
-      <i class="glyphicon  glyphicon glyphicon-volume-up yellow"></i>
-      <div>New 공지사항</div>
-      <div>52</div>
-      <span class="notification yellow">34</span>
+      <!-- <i class="glyphicon  glyphicon glyphicon-volume-up yellow"></i> -->
+      <div>공지사항</div>
+      <!-- <div>52</div> -->
+      <!-- <span class="notification yellow">34</span> -->
     </a>
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 12건" class="well top-block" href="#">
-      <i class="glyphicon glyphicon-envelope red"></i>
-      <div>New 건의사항</div>
-      <div>25</div>
-      <span class="notification red">12</span>
+      <!-- <i class="glyphicon glyphicon-envelope red"></i> -->
+      <div>건의사항</div>
+      <!-- <div>25</div> -->
+      <!-- <span class="notification red">12</span> -->
     </a>
   </div>
 </div>
@@ -139,10 +139,10 @@
       style="background:none; height:70px; text-align:center; line-height:60px; font-size:15px;">
         <span>공지사항</span>
 
-        <div class="box-icon">
+        <!-- <div class="box-icon">
           <a href="#" class="btn btn-minimize btn-round btn-default">
           <i class="glyphicon glyphicon-chevron-up"></i></a>
-        </div>
+        </div> -->
       </div>
       <div class="box-content">
         <table class="table table-condensed">
@@ -211,10 +211,10 @@
       style="background:none; height:70px; text-align:center; line-height:60px; font-size:15px;">
         <span>건의사항</span>
 
-        <div class="box-icon">
+        <!-- <div class="box-icon">
           <a href="#" class="btn btn-minimize btn-round btn-default">
           <i class="glyphicon glyphicon-chevron-up"></i></a>
-        </div>
+        </div> -->
       </div>
       <div class="box-content">
         <table class="table table-condensed">
