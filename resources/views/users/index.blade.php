@@ -84,9 +84,11 @@
               <td colspan="12">항목이 존재하지 않습니다.</td>
             </tr>
             @if (!(request()->input('year')) || request()->input('year') == now()->year)
-            <tr>
-              <td colspan="12"><a href="{{ route('users.copy', now()->subYear()->format('Y')) }}" class="btn btn-sm btn-primary">전년 데이터 가져오기</td>
-            </tr>
+              @if (auth()->user()->isAdmin())
+              <tr>
+                <td colspan="12"><a href="{{ route('users.copy', now()->subYear()->format('Y')) }}" class="btn btn-sm btn-primary">전년 데이터 가져오기</td>
+              </tr>
+              @endif
             @endif
           @endforelse
         </tbody>
