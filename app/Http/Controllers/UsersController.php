@@ -46,7 +46,7 @@ class UsersController extends Controller
                         ->join('siguns', 'users.sigun_code', 'siguns.code')
                         ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
                         ->select(
-                            'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name',
+                            'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name'
                           )
                         ->where('activated_users.business_year', $year)
                         ->when($sigun_code, function($query, $sigun_code) {
