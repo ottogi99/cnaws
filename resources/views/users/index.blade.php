@@ -92,9 +92,11 @@
         </tbody>
       </table>
 
+      @if (auth()->user()->isAdmin())
       <div style="float:left;">
         <button style="margin: 5px;" class="btn btn-danger btn-sm delete-all" data-url="">일괄삭제</button>
       </div>
+      @endif
 
       <div style="float:right;">
         @if($schedule->is_allow)
@@ -103,9 +105,12 @@
             <button type="submit" class="btn btn-sm btn-success" onclick="openExcelPopup();">엑셀 업로드</button>
           @endcan
         @endif
+
+        @if (auth()->user()->isAdmin())
         <a href="{{ route('users.export',
             ['year'=>request()->input('year'), 'sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
             class="btn btn-sm btn-primary">엑셀다운로드</a>
+        @endif
       </div>
 
       <div class="bot_pagination">

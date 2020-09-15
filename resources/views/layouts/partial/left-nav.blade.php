@@ -5,7 +5,6 @@
     </div>
     <ul class="nav nav-pills nav-stacked main-menu">
       <li class="nav-header" style="height:30px;"></li>
-      @if (auth()->user()->isAdmin())
       <li class="accordion">
         <a class="ajax-link" href="#">
           <img src="/img/icon-1.png"/ style="margin:0px 10px 0px 10px;">
@@ -13,11 +12,12 @@
         </a>
         <ul class="nav nav-pills nav-stacked">
           <li><a href="{{ route('users.index') }}">사용자(농협)</a></li>
+          @if (auth()->user()->isAdmin())
           <li><a href="{{ route('schedules.show') }}">입력관리</a></li>
           <li><a href="{{ route('user_histories.index') }}">이력조회</a></li>
+          @endif
         </ul>
       </li>
-      @endif
       <li class="accordion"><a class="ajax-link" href="#">
         <img src="/img/icon-2.png"/ style="margin:0px 10px 0px 10px;">
         <span>사업관리</span></a>
