@@ -12,27 +12,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // $nonghyups = [
-        //     [
-        //         'sigun_code'=>'ca', 'nonghyup_id'=>'onthesys',
-        //         'name'=>'온더농협', 'contact'=>'0424842014', 'address'=>'대전 유성구 테크노2로 187 418',
-        //         'representative'=>'오진덕',
-        //         'activated'=>1, 'is_admin'=>1, 'sequence'=>1
-        //     ],
-        //     [
-        //         'sigun_code'=>'as', 'nonghyup_id'=>'migun',
-        //         'name'=>'미건농협', 'contact'=>'0424842014', 'address'=>'대전 유성구 테크노2로 187 418',
-        //         'representative'=>'정율하',
-        //         'activated'=>1, 'is_admin'=>0, 'sequence'=>1
-        //     ],
-        //     [
-        //         'sigun_code'=>'as', 'nonghyup_id'=>'bamboo',
-        //         'name'=>'죽동농협', 'contact'=>'0424842014', 'address'=>'대전 유성구 죽동로 39',
-        //         'representative'=>'정성화',
-        //         'activated'=>1, 'is_admin'=>0, 'sequence'=>2
-        //     ],
-        // ];
-
         $nonghyups = [
             // 관리자(2)
             [ 'nonghyup_id'=>'cnadmin', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'sequence'=>1, 'name'=>'충남도청' ],

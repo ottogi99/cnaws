@@ -86,6 +86,14 @@ Route::delete('users/delete-multiple', [
     'as'  => 'users.multiple-delete',
     'uses' => 'UsersController@deleteMultiple'
 ]);
+Route::patch('users/toggle-activated', [
+    'as'  => 'users.toggle-activated',
+    'uses' => 'UsersController@toggleActivated'
+]);
+Route::patch('users/toggle-allowed', [
+    'as'  => 'users.toggle-allowed',
+    'uses' => 'UsersController@toggleAllowed'
+]);
 // 시군에 따라 농협 목록을 가져오기 위한 Ajax 대응
 Route::get('users/list/', [
     'as' => 'users.list',

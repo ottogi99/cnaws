@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('representative')->nullable();         // 사용자(농협)대표자
             $table->boolean('activated')->default(0);             // 사용자(농협)활성화여부(0,1)
             $table->boolean('is_admin')->default(0);              // 사용자(농협)관리자여부(0,1)
+            $table->boolean('is_input_allowed')->default(0);      // 사용자 자료 입력 허용 여부(0:제한, 1:허용)
             $table->unsignedTinyInteger('sequence')->default(0);
             //기존 내용
             // $table->string('email')->nullable();

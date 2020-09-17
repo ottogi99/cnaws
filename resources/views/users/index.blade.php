@@ -45,7 +45,8 @@
               <th>주소</th>
               <th>연락처</th>
               <th>대표자</th>
-              <th>활성화</th>
+              <th>입력상태</th>
+              <th>계정상태</th>
               <th>권한</th>
               <th>갱신일자</th>
               <th>기능</th>
@@ -62,13 +63,8 @@
               <td>{{ $user->address }}</td>
               <td>{{ $user->contact }}</td>
               <td>{{ $user->representative }}</td>
-              <td>{{ ($user->activated) ? '활성' : '비활성' }}
-              @can('activate-user', auth()->user()->nonghyup_id)
-                (
-                <button class="btn btn-danger btn-xs button__activate" data-id="{{ $user->id }}" data-activated="{{ $user->activated }}">{{ ($user->activated) ? '비활성화' : '활성화' }}</button>
-                )
-              @endcan
-              </td>
+              <td>{{ ($user->is_input_allowed) ? '가능' : '중지' }}
+              <td>{{ ($user->activated) ? '활성' : '비활성' }}</td>
               <td>{{ ($user->isAdmin()) ? '관리자' : '사용자' }}</td>
               <td>{{ $user->updated_at->format('Y-m-d') }}</td>
               <td>
@@ -94,9 +90,13 @@
         </tbody>
       </table>
 
+      <hr/>
+
       @if (auth()->user()->isAdmin())
       <div style="float:left;">
-        <button style="margin: 5px;" class="btn btn-danger btn-sm delete-all" data-url="">일괄삭제</button>
+        <button style="margin: 5px;" class="btn btn-danger btn-sm delete-all" data-url="">선택삭제</button>
+        <button style="margin: 5px;" class="btn btn-wanrning btn-sm activated-all" data-url="">계정상태변경</button>
+        <button style="margin: 5px;" class="btn btn-wanrning btn-sm input-allowed-all" data-url="">입력상태변경</button>
       </div>
       @endif
 
@@ -193,13 +193,79 @@
             data: 'ids=' + strIds,
             success: function (data) {
                 if (data['status'] == true) {
-                    // $(".check:checked").each(function() {
-                    //   $(this).parents("tr").remove();
-                    // });
                     alert(data['message']);
                     location.reload();
                 } else {
                     alert("삭제시 오류가 발생하였습니다.");
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+      }
+    }
+  });
+
+// 선택 계정상태 변경
+  $('.activated-all').on('click', function(e) {
+    var selected_ids = [];
+    $(".check:checked").each(function() {
+        selected_ids.push($(this).attr('data-id'));
+    });
+
+    if (selected_ids.length <= 0)
+    {
+      alert("계정상태를 변경할 항목을 선택하세요.");
+    } else {
+      if (confirm("정말로 선택된 항목들의 계정상태를 변경 하시겠습니까?"))
+      {
+        var strIds = selected_ids.join(",");
+
+        $.ajax({
+            url: "{{ route('users.toggle-activated') }}",
+            type: 'PATCH',
+            data: 'ids=' + strIds,
+            success: function (data) {
+                if (data['status'] == true) {
+                    alert(data['message']);
+                    location.reload();
+                } else {
+                    alert("변경시 오류가 발생하였습니다.");
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+      }
+    }
+  });
+
+  $('.input-allowed-all').on('click', function(e) {
+    var selected_ids = [];
+    $(".check:checked").each(function() {
+        selected_ids.push($(this).attr('data-id'));
+    });
+
+    if (selected_ids.length <= 0)
+    {
+      alert("입력상태를 변경할 항목을 선택해 주세요.");
+    } else {
+      if (confirm("정말로 선택된 항목들의 입력상태를 변경 하시겠습니까?"))
+      {
+        var strIds = selected_ids.join(",");
+
+        $.ajax({
+            url: "{{ route('users.toggle-allowed') }}",
+            type: 'PATCH',
+            data: 'ids=' + strIds,
+            success: function (data) {
+                if (data['status'] == true) {
+                    alert(data['message']);
+                    location.reload();
+                } else {
+                    alert("변경시 오류가 발생하였습니다.");
                 }
             },
             error: function (data) {

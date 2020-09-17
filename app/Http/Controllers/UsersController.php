@@ -294,15 +294,63 @@ class UsersController extends Controller
         }
     }
 
-
+    // 선택삭제 기능 추가
     public function deleteMultiple(Request $request)
     {
         $ids = $request->ids;
-
         // $this->authorize('delete-small-farmer', $farmer);
-        $budgets = \App\User::whereIn('id', explode(",", $ids))->delete();
+        $users = \App\User::whereIn('id', explode(",", $ids))->delete();
 
         return response()->json(['status'=>true, 'message'=>"삭제 되었습니다."], 200);
+    }
+
+    // 선택 계정상태 변경
+    public function toggleActivated(Request $request)
+    {
+        $ids = $request->ids;
+
+        $users = \App\User::whereIn('id', explode(",", $ids))->get();
+
+        DB::beginTransaction();
+        try
+        {
+            foreach ($users as $user) {
+                $user->activated = !$user->activated;
+                Log::debug($user->activated);
+                $user->save();
+            }
+            DB::commit();
+            return response()->json(['status'=>true, 'message'=>'변경 되었습니다.'], 200);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            return response()->json([], 500);
+        }
+    }
+
+    // 선택 입력상태 변경
+    public function toggleAllowed(Request $request)
+    {
+        $ids = $request->ids;
+
+        $users = \App\User::whereIn('id', explode(",", $ids))->get();
+
+        DB::beginTransaction();
+        try
+        {
+            foreach ($users as $user) {
+                $user->is_input_allowed = !$user->is_input_allowed;
+                $user->save();
+            }
+            DB::commit();
+            return response()->json(['status'=>true, 'message'=>'변경 되었습니다.'], 200);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            return response()->json([], 500);
+        }
     }
 
     public function export(Request $request)
