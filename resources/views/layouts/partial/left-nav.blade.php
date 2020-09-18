@@ -29,18 +29,18 @@
         <img src="img/icon-3.png"/ style="margin:0px 10px 0px 10px;">
           <span>모집등록</span></a>
           <ul class="nav nav-pills nav-stacked">
+            <li class="smenu1"><a>농기계지원반</a>
+              <ul>
+                <li><a href="{{ route('small_farmers.index') }}">농가모집</li>
+                <li><a href="{{ route('machine_supporters.index') }}">지원반모집</a></li>
+              </ul>
+            </li>
             <li ><a>인력지원반</a>
-            <ul>
-              <li><a href="{{ route('large_farmers.index') }}">농가모집</a></li>
-              <li><a href="{{ route('manpower_supporters.index') }}">지원단모집</a></li>
-            </ul>
-          </li>
-          <li class="smenu1"><a>농기계지원반</a>
-            <ul>
-              <li><a href="{{ route('small_farmers.index') }}">농가모집</li>
-              <li><a href="{{ route('machine_supporters.index') }}">지원단모집</a></li>
-            </ul>
-          </li>
+              <ul>
+                <li><a href="{{ route('large_farmers.index') }}">농가모집</a></li>
+                <li><a href="{{ route('manpower_supporters.index') }}">지원반모집</a></li>
+              </ul>
+            </li>
           </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
@@ -50,8 +50,8 @@
               <li><a href="{{ route('status_education_promotions.index') }}">교육·홍보비</a></li>
               <li><a>농작업지원</a>
               <ul>
-                <li><a href="{{ route('status_manpower_supporters.index') }}">인력지원반</a></li>
                 <li><a href="{{ route('status_machine_supporters.index') }}">농기계지원반</a></li>
+                <li><a href="{{ route('status_manpower_supporters.index') }}">인력지원반</a></li>
               </ul>
           </li>
           <li><a href="{{ route('status_labor_payments.index') }}">센터운영비(인건비)</a></li>

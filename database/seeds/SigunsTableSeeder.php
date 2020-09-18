@@ -27,7 +27,7 @@ class SigunsTableSeeder extends Seeder
           array('sequence'  => 13, 'code'  => 'hs', 'name'  => '홍성군'),
           array('sequence'  => 14, 'code'  => 'ys', 'name'  => '예산군'),
           array('sequence'  => 15, 'code'  => 'ta', 'name'  => '태안군'),
-          array('sequence'  => 16, 'code'  => 'pn', 'name'  => '품농'),
+          // array('sequence'  => 16, 'code'  => 'pn', 'name'  => '품농'),
       );
 
       foreach ($siguns as $sigun) {

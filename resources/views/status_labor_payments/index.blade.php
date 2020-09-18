@@ -111,7 +111,7 @@
 
       <div style="float:right;">
       @if($schedule->is_allow)
-        <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('status_operating_costs.create') }}'">등록</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('status_labor_payments.create') }}'">등록</button>
       @endif
       @if($rows->total() > 0)
         <a href="{{ route('status_labor_payments.export',

@@ -111,8 +111,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 if ($this->is_valid_numeric($value)){
                     $business_year = Carbon::createFromDate($value);
 
-                    if (!$business_year == now()->format('Y'))
-                        $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
+                if (!$business_year == now()->format('Y'))
+                    $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
                 } else {
                     $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
                 }
@@ -124,6 +124,13 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $sigun = \App\Sigun::where('name', trim($value))->first();
                     if (!$sigun) {
                         $onFailure('해당 시군이 존재하지 않습니다.('. $value.')');
+                        return;
+                    }
+
+                    $user = auth()->user();
+                    if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
+                        $onFailure('타 지역의 데이터는 등록할 수 없습니다.: '.$value);
+                        return;
                     }
                 },
             ],
@@ -134,6 +141,12 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $nonghyup = \App\User::where('name', trim($value))->first();
                     if (!$nonghyup) {
                         $onFailure('해당 농협이 존재하지 않습니다.('. $value.')');
+                        return;
+                    }
+
+                    $user = auth()->user();
+                    if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
+                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
                         return;
                     }
 

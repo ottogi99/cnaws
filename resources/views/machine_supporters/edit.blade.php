@@ -30,10 +30,6 @@
         <div class="pull-right">
           <button type="submit" class="btn btn-sm btn-primary">수정</button>
         </div>
-
-        <div class="input-group pull-right">
-          <button type="submit" class="btn btn-primary">수정</button>
-        </div>
       </form>
     </div>
   </div>

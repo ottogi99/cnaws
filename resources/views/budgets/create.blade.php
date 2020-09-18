@@ -24,8 +24,13 @@
 
         @include('budgets.partial.form', [$siguns, $nonghyups, $budget])
 
-        <div class="input-group pull-right">
-          <button type="submit" class="btn btn-primary">저장</button>
+        <hr/>
+
+        <div class="pull-left">
+          <a href="{{ route('budgets.index') }}" class="btn btn-sm btn-primary">목록</a>
+        </div>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-sm btn-primary">저장</button>
         </div>
       </form>
     </div>

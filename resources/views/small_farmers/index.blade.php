@@ -74,10 +74,10 @@
             <td>{{ ($farmer->sex == 'M') ? '남' : '여' }}</td>
             <td>{{ $farmer->address }}</td>
             <td>{{ $farmer->contact }}</td>
-            <td>{{ number_format($farmer->sum_acreage) }}</td>
-            <td>{{ number_format($farmer->acreage1) }}</td>
-            <td>{{ number_format($farmer->acreage2) }}</td>
-            <td>{{ number_format($farmer->acreage3) }}</td>
+            <td>{{ number_format($farmer->sum_acreage, 1) }}</td>
+            <td>{{ number_format($farmer->acreage1, 1) }}</td>
+            <td>{{ number_format($farmer->acreage2, 1) }}</td>
+            <td>{{ number_format($farmer->acreage3, 1) }}</td>
             <td>{{ $farmer->created_at->format('Y-m-d') }}</td>
             <!-- <td>{{ $farmer->updated_at }}</td> -->
             <!-- <td>{{ $farmer->deleted_at }}</td> -->

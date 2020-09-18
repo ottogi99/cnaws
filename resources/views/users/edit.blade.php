@@ -24,8 +24,13 @@
         @csrf
         {!! method_field('PUT') !!}
         @include('users.partial.form')
-        <div class="input-group pull-right">
-          <button type="submit" class="btn btn-primary">수정</button>
+
+        <hr/>
+        <div class="pull-left">
+          <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary">목록</a>
+        </div>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-sm btn-primary">수정</button>
         </div>
       </form>
     </div>

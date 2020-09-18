@@ -39,25 +39,27 @@
           <tr>
             <th width="3%" rowspan='3'>번호</th>
             <th colspan='2'>지역정보</th>
-            <th colspan='4'>일반지원단</th>
-            <th colspan='4'>전문지원단</th>
+            <th colspan='5'>농기계지원반</th>
+            <th colspan='5'>인력지원반</th>
           </tr>
           <tr>
             <th rowspan='2'>시군명</th>
             <th rowspan='2'>대상농협</th>
             <th colspan='2'>모집실적</th>
-            <th colspan='2'>지원실적</th>
+            <th colspan='3'>지원실적</th>
             <th colspan='2'>모집실적</th>
-            <th colspan='2'>지원실적</th>
+            <th colspan='3'>지원실적</th>
           </tr>
           <tr>
             <th>농가모집(명)</th>
             <th>지원단모집(명)</th>
             <th>지원농가(호)</th>
+            <th>지원일수(일)</th>
             <th>면적(㏊)</th>
             <th>농가모집(명)</th>
             <th>지원단모집(명)</th>
             <th>지원농가(호)</th>
+            <th>지원일수(일)</th>
             <th>지원인력(명)</th>
           </tr>
         </thead>
@@ -69,16 +71,18 @@
             <td>{{ $row->nonghyup_name }}</td>
             <td>{{ number_format($row->small_farmer_number) }}</td>
             <td>{{ number_format($row->machine_supporter_number) }}</td>
+            <td>{{ number_format($row->machine_supporter_supported_farmers) }}</td>
             <td>{{ number_format($row->machine_supporter_performance_days) }}</td>
             <td>{{ number_format($row->machine_supporter_working_area, 1) }}</td>
             <td>{{ number_format($row->large_farmer_number) }}</td>
             <td>{{ number_format($row->manpower_supporter_number) }}</td>
-            <td>{{ number_format($row->manpower_supporter_performance_days) }}</td>
-            <td>{{ number_format($row->manpower_supporter_working_days) }}</td>
+            <td>{{ number_format($row->manpower_supporter_supported_farmers) }}</td>       <!-- 하루라도 지원받은 농가수 -->
+            <td>{{ number_format($row->manpower_supporter_performance_days) }}</td>        <!-- 지원일수(농가당 하루씩 계산(동일일 지원단 지원횟수 상관없이)) -->
+            <td>{{ number_format($row->manpower_supporter_working_days) }}</td>            <!-- working_days의 합 -->
           </tr>
           @empty
           <tr>
-            <td colspan="13">항목이 존재하지 않습니다.</td>
+            <td colspan="15">항목이 존재하지 않습니다.</td>
           </tr>
           @endforelse
         </tbody>

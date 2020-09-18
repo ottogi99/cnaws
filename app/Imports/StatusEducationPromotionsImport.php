@@ -90,12 +90,26 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
                 $sigun = \App\Sigun::where('name', trim($value))->first();
                 if (!$sigun) {
                     $onFailure('해당 시군이 존재하지 않습니다: '.$value);
+                    return;
+                }
+
+                $user = auth()->user();
+                if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
+                    $onFailure('타 지역의 데이터는 등록할 수 없습니다.: '.$value);
+                    return;
                 }
             },
             '2' => function($attribute, $value, $onFailure) {
                 $nonghyup = \App\User::where('name', trim($value))->first();
                 if (!$nonghyup) {
                     $onFailure('해당 농협이 존재하지 않습니다: '.$value);
+                    return;
+                }
+
+                $user = auth()->user();
+                if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
+                    $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
+                    return;
                 }
             },
             '7' => ['required',

@@ -121,6 +121,28 @@ class BudgetsController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],
+            'amount' => ['required'],
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'amount'        => '비밀번호',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
+        $payload = array_merge($request->all(), [
+          'password' => bcrypt($request->input('password'))
+        ]);
+
         $user = auth()->user();
 
         if ($user->isAdmin()) {

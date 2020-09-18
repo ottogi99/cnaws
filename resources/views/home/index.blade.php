@@ -23,7 +23,7 @@
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 6건" class="well top-block" href="#">
       <!-- <i class="glyphicon glyphicon-user blue"></i> -->
-      <div>일반지원단 모집</div>
+      <div>농기계지원반 모집</div>
       <!-- <div>507</div> -->
       <!-- <span class="notification">6</span> -->
     </a>
@@ -32,7 +32,7 @@
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" title="최신 4건" class="well top-block" href="#">
       <!-- <i class="glyphicon glyphicon-star green"></i> -->
-      <div>전문지원단 모집</div>
+      <div>인력지원반 모집</div>
       <!-- <div>228</div> -->
       <!-- <span class="notification green">4</span> -->
     </a>

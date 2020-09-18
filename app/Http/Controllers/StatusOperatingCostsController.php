@@ -233,6 +233,7 @@ class StatusOperatingCostsController extends Controller
     public function import(Request $request)
     {
         $allowed = ["xls", "xlsx"];
+
         $rules = [
             'excel' => ['required', 'file', 'mimes:xls,xlsx', 'max:20000'],  // 512: 512 kilobytes, 1024(1M)
         ];
@@ -255,6 +256,7 @@ class StatusOperatingCostsController extends Controller
         Log::debug($excel->getClientOriginalName());
 
         $import = new StatusOperatingCostsImport();
+
         // $import->import('uploaded_status_operating_costs.xlsx', 'local', \Maatwebsite\Excel\Excel::XLSX);
         $import->import($excel, \Maatwebsite\Excel\Excel::XLSX);
 
@@ -262,38 +264,6 @@ class StatusOperatingCostsController extends Controller
 
         $failures = $import->failures();   // Import Failure
         $errors = $import->errors();    // Import Error
-
-        $failure_rows = [];
-        if (count($failures) > 0) {
-            foreach ($failures as $failure) {
-                 // $failure->row(); // row that went wrong
-                 // $failure->attribute(); // either heading key (if using heading row concern) or column index
-                 // $failure->errors(); // Actual error messages from Laravel validator
-                 // $failure->values(); // The values of the row that has failed.
-
-                 foreach($failures as $failure) {
-                     $row = $failure->row();
-                     $value = isset($failure_rows[(string)$row]) ? $failure_rows[(string)$row] : 0;
-                     $failure_rows += [(string)$row => $value + 1];
-                     // array_push($failure_rows, (string)$row, );
-                     // dd($failure_rows[(string)$row]);
-                     $column = $failure->attribute();
-                     Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
-                 }
-            }
-            $total_rows = $inserted_rows + count($failure_rows);
-
-            flash()->error('전체 '.$total_rows.'개의 데이터 중 '.$inserted_rows.' 건의 데이터가 입력 되었습니다.');
-
-            $message = '입력한 데이터의 형식이 잘못되었습니다. 행 [';
-            foreach($failure_rows as $row_number => $values) {
-                $message = $message . $row_number . ', ';
-            }
-            $message = $message . ']';
-
-            flash()->warning($message);
-            return redirect(route('status_operating_costs.index'));
-        }
 
         if (count($errors) > 0) {
             foreach($errors as $error) {
@@ -312,6 +282,41 @@ class StatusOperatingCostsController extends Controller
                 }
             }
             // Log::debug($errors);
+            return redirect(route('status_operating_costs.index'));
+        }
+
+        $total_rows = 0;
+        $failure_rows = [];
+        if (count($failures) > 0) {
+            $failure_message = '[실패한 입력 데이터].<br/>';
+            foreach ($failures as $index => $failure) {
+                // $failure->row(); // row that went wrong
+                // $failure->attribute(); // either heading key (if using heading row concern) or column index
+                // $failure->errors(); // Actual error messages from Laravel validator
+                // $failure->values(); // The values of the row that has failed.
+
+                $row = $failure->row();
+                $value = isset($failure_rows[(string)$row]) ? $failure_rows[(string)$row] : 0;
+                $failure_rows += [(string)$row => $value + 1];
+                // array_push($failure_rows, (string)$row, );
+                // dd($failure_rows[(string)$row]);
+                $column = $failure->attribute();
+                Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
+
+                 // if ($index <= 10)
+                $failure_message .= ($index+1). ')' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
+            }
+            $total_rows = $inserted_rows + count($failure_rows);
+
+            flash()->error('전체 '.$total_rows.'개의 데이터 중 '.$inserted_rows.' 건의 데이터가 입력 되었습니다.');
+
+            // $message = '입력한 데이터의 형식이 잘못되었습니다. 행 [';
+            // foreach($failure_rows as $row_number => $values) {
+            //     $message = $message . $row_number . ', ';
+            // }
+            // $message = $message . ']';
+
+            flash()->warning($failure_message);
             return redirect(route('status_operating_costs.index'));
         }
 

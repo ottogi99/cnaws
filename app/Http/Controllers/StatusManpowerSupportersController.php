@@ -396,7 +396,7 @@ class StatusManpowerSupportersController extends Controller
                 Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
 
                  // if ($index <= 10)
-                $failure_message .= ($index+1). ') ' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
+                $failure_message .= ($index+1). ')' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
             }
             $total_rows = $inserted_rows + count($failure_rows);
 

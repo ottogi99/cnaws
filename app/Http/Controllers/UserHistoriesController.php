@@ -19,30 +19,8 @@ class UserHistoriesController extends Controller
         $keyword = request()->input('q');
         $user = auth()->user();
 
-        // $users = \App\UserHistory::with('sigun')
-        //             ->join('siguns', 'users.sigun_code', 'siguns.code')
-        //             ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
-        //             ->select(
-        //                 'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name',
-        //               )
-        //             ->where('activated_users.business_year', $year)
-        //             ->when($sigun_code, function($query, $sigun_code) {
-        //                 return $query->where('users.sigun_code', $sigun_code);
-        //             }, function($query, $user) {
-        //                 return $query;
-        //             })
-        //             ->when($keyword, function($query, $keyword) {
-        //                 return $query->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
-        //                               ->orWhere('siguns.name', 'like', '%'.$keyword.'%');
-        //             })
-        //             // ->orderby($sort, $order)
-        //             ->orderby('siguns.sequence')
-        //             ->orderby('users.is_admin', 'DESC')
-        //             ->orderby('users.sequence')
-        //             ->paginate(10);
-
         if ($item) {
-          $histories = \App\UserHistory::when($keyword, function($query, $keyword) {
+          $histories = \App\UserHistory::when($keyword, function($query, $keyword) use ($item) {
                                             return $query->whereRaw($item.' like \'%'.$keyword.'%\'');
                                           })
                                           ->orderby('created_at', 'DESC')->paginate(10);

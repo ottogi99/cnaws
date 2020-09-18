@@ -149,11 +149,13 @@ class UsersTableSeeder extends Seeder
             [ 'nonghyup_id'=>'nh477161', 'sigun_code'=>'ta', 'activated'=>1, 'is_admin'=>0, 'sequence'=>5, 'name'=>'소원농협' ],
             [ 'nonghyup_id'=>'nh477172', 'sigun_code'=>'ta', 'activated'=>1, 'is_admin'=>0, 'sequence'=>6, 'name'=>'원북농협' ],
             // 품농(5)
-            [ 'nonghyup_id'=>'nh457811', 'sigun_code'=>'pn', 'activated'=>1, 'is_admin'=>0, 'sequence'=>1, 'name'=>'세종공주원예농협' ],
-            [ 'nonghyup_id'=>'nh475815', 'sigun_code'=>'pn', 'activated'=>1, 'is_admin'=>0, 'sequence'=>2, 'name'=>'예산능금농협' ],
-            [ 'nonghyup_id'=>'nh477817', 'sigun_code'=>'pn', 'activated'=>1, 'is_admin'=>0, 'sequence'=>3, 'name'=>'충서원예농협' ],
-            [ 'nonghyup_id'=>'nh483816', 'sigun_code'=>'pn', 'activated'=>1, 'is_admin'=>0, 'sequence'=>4, 'name'=>'아산원예농협' ],
-            [ 'nonghyup_id'=>'nh485818', 'sigun_code'=>'pn', 'activated'=>1, 'is_admin'=>0, 'sequence'=>5, 'name'=>'천안배농협' ],
+            [ 'nonghyup_id'=>'nh457811', 'sigun_code'=>'gj', 'activated'=>1, 'is_admin'=>0, 'sequence'=>1, 'name'=>'세종공주원예농협' ],
+            [ 'nonghyup_id'=>'nh475815', 'sigun_code'=>'ys', 'activated'=>1, 'is_admin'=>0, 'sequence'=>2, 'name'=>'예산능금농협' ],
+            [ 'nonghyup_id'=>'nh477817', 'sigun_code'=>'ss', 'activated'=>1, 'is_admin'=>0, 'sequence'=>3, 'name'=>'충서원예농협' ],
+            [ 'nonghyup_id'=>'nh483816', 'sigun_code'=>'as', 'activated'=>1, 'is_admin'=>0, 'sequence'=>4, 'name'=>'아산원예농협' ],
+            [ 'nonghyup_id'=>'nh485818', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>0, 'sequence'=>5, 'name'=>'천안배농협' ],
+            // 논산계룡농협 계룡지점???
+            // [ 'nonghyup_id'=>'', 'sigun_code'=>'', 'activated'=>1, 'is_admin'=>0, 'sequence'=>5, 'name'=>'논산계룡농협 계룡지점' ],
         ];
 
 

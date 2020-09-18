@@ -66,3 +66,47 @@
   </div>
 </div>
 @stop
+
+@section('script')
+  @parent
+  <script>
+      // 마스터 레이아웃의 HTML 헤더 영역에 CSRF 토큰값이 저장되어 있다. 그 값을 읽어서 모든 Ajax 요청 헤더 붙인다.
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')   // X-CSRF-TOKEN HTTP 요청 헤더
+          }
+      });
+
+      $('.button__delete').on('click', function(e) {
+        var userId = $(this).data('id');
+
+        if (confirm('항목을 삭제합니다.')) {
+          $.ajax({
+              type: 'DELETE',
+              url: '/users/' + userId
+          }).then(function() {
+              window.location.href = '/users';
+          });
+        }
+      });
+
+      $('.button__activate').on('click', function(e) {
+        var userId = $(this).data('id');
+        var activated = $(this).data('activated');
+        var str_activated = (activated == '0' ? '활성화' : '비활성화')
+
+        if (confirm('항목을 ' + str_activated + ' 하시겠습니까?')) {
+          $.ajax({
+            type: 'PATCH',
+            url: '/users/activate/' + userId,
+            data: { activated: activated, _method: 'PATCH' },
+            // success: function() {
+            //   alert(str_activated + '하였습니다');
+            // }
+          }).then(function() {
+            window.location.href = '/users';
+          });
+        }
+      });
+  </script>
+@stop

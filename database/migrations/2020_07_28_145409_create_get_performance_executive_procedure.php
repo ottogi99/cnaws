@@ -59,17 +59,85 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
           		ON T1.nonghyup_id = T3.nonghyup_id
           		LEFT OUTER JOIN
           		(
-          			SELECT
-          				nonghyup_id,
-          				COUNT(nonghyup_id) AS NUMBER,
-          				SUM(payment_sum) AS payment_sum,
-          				SUM(payment_do) AS payment_do,
-          				SUM(payment_sigun) AS payment_sigun,
-          				SUM(payment_center) AS payment_center,
-          				SUM(payment_unit) AS payment_unit
-          			FROM status_education_promotions
-          			WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
-          			GROUP BY nonghyup_id
+                SELECT 
+              		T1.nonghyup_id,
+              		IFNULL(T2.payment_sum, 0)+IFNULL(T3.payment_sum, 0)+IFNULL(T4.payment_sum, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_sum,
+              		IFNULL(T2.payment_do, 0)+IFNULL(T3.payment_do, 0)+IFNULL(T4.payment_do, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_do,
+              		IFNULL(T2.payment_sigun, 0)+IFNULL(T3.payment_sigun, 0)+IFNULL(T4.payment_sigun, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_sigun,
+              		IFNULL(T2.payment_center, 0)+IFNULL(T3.payment_center, 0)+IFNULL(T4.payment_center, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_center,
+              		IFNULL(T2.payment_unit, 0)+IFNULL(T3.payment_unit, 0)+IFNULL(T4.payment_unit, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_unit
+              	FROM
+              	users T1
+              	LEFT OUTER JOIN	-- 교육.홍보비
+              	(
+              		SELECT
+              			nonghyup_id,
+              			SUM(payment_sum) AS payment_sum,
+              			SUM(payment_do) AS payment_do,
+              			SUM(payment_sigun) AS payment_sigun,
+              			SUM(payment_center) AS payment_center,
+              			SUM(payment_unit) AS payment_unit
+              		FROM status_education_promotions
+              		WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+              		GROUP BY nonghyup_id
+              	) T2
+              	ON T1.nonghyup_id = T2.nonghyup_id
+              	LEFT OUTER JOIN	-- 농기계지원반
+              	(
+              		SELECT
+              			nonghyup_id,
+              			SUM(payment_sum) AS payment_sum,
+              			SUM(payment_do) AS payment_do,
+              			SUM(payment_sigun) AS payment_sigun,
+              			SUM(payment_center) AS payment_center,
+              			SUM(payment_unit) AS payment_unit
+              		FROM status_machine_supporters
+              		WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+              		GROUP BY nonghyup_id
+              	) T3
+              	ON T1.nonghyup_id = T3.nonghyup_id
+              	LEFT OUTER JOIN	-- 인력지원반
+              	(
+              		SELECT
+              			nonghyup_id,
+              			SUM(payment_sum) AS payment_sum,
+              			SUM(payment_do) AS payment_do,
+              			SUM(payment_sigun) AS payment_sigun,
+              			SUM(payment_center) AS payment_center,
+              			SUM(payment_unit) AS payment_unit
+              		FROM status_manpower_supporters
+              		WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+              		GROUP BY nonghyup_id
+              	) T4
+              	ON T1.nonghyup_id = T4.nonghyup_id
+              	LEFT OUTER JOIN	-- 센터운영비(인건비)
+              	(
+              		SELECT
+              			nonghyup_id,
+              			SUM(payment_sum) AS payment_sum,
+              			SUM(payment_do) AS payment_do,
+              			SUM(payment_sigun) AS payment_sigun,
+              			SUM(payment_center) AS payment_center,
+              			SUM(payment_unit) AS payment_unit
+              		FROM status_labor_payments
+              		WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+              		GROUP BY nonghyup_id
+              	) T5
+              	ON T1.nonghyup_id = T5.nonghyup_id
+              	LEFT OUTER JOIN	-- 센터 운영비(운영비)
+              	(
+              		SELECT
+              			nonghyup_id,
+              			SUM(payment_sum) AS payment_sum,
+              			SUM(payment_do) AS payment_do,
+              			SUM(payment_sigun) AS payment_sigun,
+              			SUM(payment_center) AS payment_center,
+              			SUM(payment_unit) AS payment_unit
+              		FROM status_operating_costs
+              		WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+              		GROUP BY nonghyup_id
+              	) T6
+              	ON T1.nonghyup_id = T6.nonghyup_id
           		) T4
           		ON T1.nonghyup_id = T4.nonghyup_id
               WHERE T2.code = IF(p_sigun_code = '', T2.code, p_sigun_code)
