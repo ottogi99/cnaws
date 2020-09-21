@@ -17,3 +17,25 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('/siguns', 'SigunsController@')
+//     Route::get('/users')
+// })
+//
+//
+
+// Route::prefix('users')->middleware('auth:api')->group(function () {
+//     Route::post('/', 'UserController@store');
+//     Route::post('/', 'UserController@store');
+// });
+
+Route::get('/siguns', [
+    'as' => 'api.siguns',
+    'uses' => 'SigunController@index'
+]);
+
+Route::get('/users', [
+    'as' => 'api.users',
+    'uses' => 'UserController@index'
+]);

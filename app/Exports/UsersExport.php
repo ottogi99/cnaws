@@ -19,15 +19,13 @@ class UsersExport implements FromQuery, WithMapping, WithColumnFormatting, WithH
 
     public function query()
     {
-        $business_year = $this->year;
+        // $business_year = $this->year;
         $sigun_code = $this->sigun_code;
         $keyword = $this->keyword;
 
         $query = \App\User::with('sigun')
                     ->join('siguns', 'users.sigun_code', 'siguns.code')
-                    ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
-                    ->select('activated_users.business_year as business_year', 'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name')
-                    ->where('activated_users.business_year', $business_year)
+                    ->select('users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name')
                     ->when($sigun_code, function($query, $sigun_code) {
                         return $query->where('users.sigun_code', $sigun_code);
                     })
@@ -48,17 +46,18 @@ class UsersExport implements FromQuery, WithMapping, WithColumnFormatting, WithH
     {
         return [
             [
-                $user->business_year,
-                $user->sigun_name,
-                $user->nonghyup_id,
-                $user->name,
-                $user->address,
-                $user->contact,
-                $user->representative,
-                ($user->activated) ? '활성' : '비활성',
-                ($user->is_admin) ? '관리자' : '사용자',
-                Date::dateTimeToExcel($user->created_at),
-                ($user->deleted_at) ? Date::dateTimeToExcel($user->deleted_at) : '',
+                // $user->business_year,
+                $user->sigun_name
+                ,$user->name
+                ,$user->nonghyup_id
+                ,$user->address
+                ,$user->contact
+                ,$user->representative
+                ,($user->activated) ? '활성' : '비활성'
+                ,($user->is_input_allowed) ? '허용' : '불가'
+                ,($user->is_admin) ? '관리자' : '사용자'
+                ,$user->sequence
+                ,Date::dateTimeToExcel($user->created_at)
             ],
         ];
     }
@@ -66,26 +65,28 @@ class UsersExport implements FromQuery, WithMapping, WithColumnFormatting, WithH
     public function columnFormats(): array
     {
         return [
-            'J' => NumberFormat::FORMAT_DATE_YYYYMMDD,
-            'K' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'K' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            // 'J' => NumberFormat::FORMAT_DATE_YYYYMMDD,
         ];
     }
 
     public function headings(): array
     {
         return [
-            '대상년도',
-            '시군명', '농협ID', '농협명',
-            '주소', '연락처', '대표자',
-            '활성화', '권한', '등록일자', '삭제일자'
+            // '대상년도',
+            '시군명', '농협명', '농협ID'
+            ,'주소', '연락처', '대표자'
+            ,'사용자 활성화', '입력 허용', '사용자 권한', '순서'
+            , '등록일자'
+            // ,'삭제일자'
         ];
     }
 
-    public function forYear($year)
-    {
-        $this->year = ($year) ? $year : now()->year;
-        return $this;
-    }
+    // public function forYear($year)
+    // {
+    //     $this->year = ($year) ? $year : now()->year;
+    //     return $this;
+    // }
 
     public function forSigun($sigun_code)
     {

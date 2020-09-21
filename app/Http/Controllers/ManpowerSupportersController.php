@@ -80,7 +80,7 @@ class ManpowerSupportersController extends Controller
                     ->orderby('users.sequence')
                     ->orderby('manpower_supporters.created_at', 'desc')
                     //->orderby($sort, $order)
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;
@@ -105,7 +105,8 @@ class ManpowerSupportersController extends Controller
 
     public function create()
     {
-        $siguns = \App\Sigun::orderBy('sequence')->get();
+        // $siguns = \App\Sigun::orderBy('sequence')->get();
+        $siguns = $this->siguns;
         $nonghyups = $this->nonghyups;
         $supporter = new \App\ManpowerSupporter;
 
@@ -120,6 +121,15 @@ class ManpowerSupportersController extends Controller
         $payload = array_merge($request->all(), [
             'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
         ]);
+
+        // 동일한 농협에 동일한 이름 및 연락처를 가진 사람 중복 방지
+        if (\App\ManpowerSupporter::where('business_year', $business_year)
+                                  ->where('nonghyup_id', $user->user_id)
+                                  ->where('name', $request->input('name'))->exists())
+        {
+            flash('해당농협에 동일한 이름의 인력지원반이 이미 존재하고 있습니다. 중복을 확인하여 주세요.')->error();
+            return back()->withInput();
+        }
 
         try {
             $supporter = \App\ManpowerSupporter::create($payload);

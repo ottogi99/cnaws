@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-  @php $viewName = 'small_farmers.create'; @endphp
+  @php $viewName = 'small_farmers.edit'; @endphp
   <div class="box col-md-4">
     <div class="box-inner" style="background-color:#ffffff;">
       <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
@@ -37,4 +37,29 @@
       </form>
     </div>
   </div>
+@stop
+
+@section('script')
+  @parent
+  <script type="text/javascript">
+    var get_nonghyups = function() {
+      var sigun_code = $('#sigun_code').val();
+
+      // 농협 목록 가져오기
+      var url = "{{ route('api.users') }}?sigun_code=" + sigun_code;
+
+      $.get(url, function(data) {
+        $('#nonghyup_id').html('');
+        $.each(data.users, function(index, item) {
+          var row = "<option value='" + item.nonghyup_id + "'>" + item.name + "</option>";
+          $('#nonghyup_id').append(row);
+        });
+      });
+    }
+
+    $(document).ready(function() {
+      $('#sigun_code').change(get_nonghyups);
+      get_nonghyups();
+    });
+  </script>
 @stop

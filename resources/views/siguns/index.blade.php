@@ -8,7 +8,6 @@
       <th>일련번호</th>
       <th>시군명</th>
       <th>갱신일자</th>
-      <th>삭제일자</th>
       <th>기능</th>
     </tr>
     @forelse($siguns as $sigun)
@@ -18,7 +17,6 @@
       <td>{!! $sigun->sequence !!}</td>
       <td>{!! $sigun->name !!}</td>
       <td>{!! $sigun->updated_at !!}</td>
-      <td>{!! $sigun->deleted_at !!}</td>
       <td>
         <a href="{{ route('siguns.edit',  $sigun->id) }}" class="btn btn-sm btn-primary">수정</a>
         <button class="btn btn-danger btn-sm button__delete" data-id="{{ $sigun->id }}">삭제</button>

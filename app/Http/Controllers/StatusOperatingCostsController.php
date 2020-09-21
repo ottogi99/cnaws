@@ -79,7 +79,7 @@ class StatusOperatingCostsController extends Controller
                     ->orderby('users.sequence')
                     ->orderby('status_operating_costs.created_at', 'desc')
                     //->orderby($sort, $order)
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;

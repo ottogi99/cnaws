@@ -1,9 +1,13 @@
 @if ($viewName === 'manpower_supporters.create')
-  <div class="input-group {{ $errors->has('sigun_code') ? 'has-error' : '' }}">
-    <input type="hidden" name="sigun_code" id="sigun_code" value="{{ old('sigun_code', auth()->user()->sigun->code) }}" class="form-control" readonly/>
-  </div>
-
   @if (auth()->user()->isAdmin())
+    <div class="input-group input-group-lg {{ $errors->has('sigun_code') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+      <span class="input-group-addon" style="width:150px; font-size:13px;">시군</span>
+      <select name="sigun_code" id="sigun_code">
+        {!! options_for_sigun($siguns, '', true, true) !!}
+      </select>
+      {!! $errors->first('nonghyup_id', '<span class="form-error">:message</span>') !!}
+    </div>
+
     <div class="input-group input-group-lg {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
       <span class="input-group-addon" style="width:150px; font-size:13px;">대상농협</span>
       <select name="nonghyup_id" id="nonghyup_id">
@@ -12,6 +16,9 @@
       {!! $errors->first('nonghyup_id', '<span class="form-error">:message</span>') !!}
     </div>
   @else
+    <div class="input-group {{ $errors->has('sigun_code') ? 'has-error' : '' }}">
+      <input type="hidden" name="sigun_code" id="sigun_code" value="{{ old('sigun_code', auth()->user()->sigun->code) }}" class="form-control" readonly/>
+    </div>
     <div class="input-group {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}">
       <input type="hidden" name="nonghyup_id" id="nonghyup_id" value="{{ old('nonghyup_id', auth()->user()->nonghyup_id) }}" class="form-control" readonly/>
     </div>

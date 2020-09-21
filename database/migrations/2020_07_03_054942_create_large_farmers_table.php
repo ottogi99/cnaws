@@ -33,7 +33,6 @@ class CreateLargeFarmersTable extends Migration
             $table->string('bank_account')->nullable();     // 입금정보(계좌번호)
             $table->text('remark')->nullable();             // 비고
             $table->timestamps();
-            $table->softDeletes('deleted_at', 0);           // 삭제일
 
             // 키 지정
             $table->unique(['business_year', 'nonghyup_id', 'name']);                  // 이름과 연락처로 중복 방지

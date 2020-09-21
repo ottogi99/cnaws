@@ -35,12 +35,6 @@ class CreateSmallFarmersTable extends Migration
             $table->decimal('sum_acreage', 8, 1)->nullable();   // 소유경지면적(계), 단위(ha)
             $table->text('remark')->nullable();                 // 비고
             $table->timestamps();
-            $table->softDeletes('deleted_at', 0);               // 삭제일
-
-            // $table->primary(['nonghyup_id', 'name']);
-            // $table->index('sigun');
-            // $table->index('user');
-            // $table->index(['nonghyup_id']);
 
             // Unique index 로 중복방지
             $table->unique(['business_year', 'nonghyup_id', 'name']);

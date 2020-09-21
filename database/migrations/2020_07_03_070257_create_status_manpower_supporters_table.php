@@ -48,7 +48,6 @@ class CreateStatusManpowerSupportersTable extends Migration
             $table->unsignedBigInteger('payment_unit');     //지역농협(10%)
 
             $table->string('remark')->nullable();   // 비고
-            $table->softDeletes('deleted_at', 0);   // 삭제일
 
             // 키 지정
             // $table->unique('nonghyup_id', 'name', 'supporter_id');                  // 키 확인 필요

@@ -114,7 +114,7 @@ class SmallFarmersController extends Controller
                                   ->orderby('siguns.sequence')
                                   ->orderby('users.sequence')
                                   ->orderby('small_farmers.created_at', 'desc')
-                                  ->paginate(10);
+                                  ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;
@@ -151,13 +151,11 @@ class SmallFarmersController extends Controller
         // $user = \App\User::findOrFail(1);
         // $nonghyup = auth()->user();
 
+        $siguns = $this->siguns;
         $nonghyups = $this->nonghyups;
         $farmer = new \App\SmallFarmer;
 
-        // $farmer->sigun_code = $nonghyup->sigun->code;
-        // $farmer->nonghyup_id = $nonghyup->user_id;
-
-        return view('small_farmers.create', compact('farmer', 'nonghyups'));
+        return view('small_farmers.create', compact('farmer', 'nonghyups', 'siguns'));
 
 // 관리자가 아닌 경우를 생각하자
         // $siguns = \App\Sigun::orderBy('sequence')->get();

@@ -35,7 +35,6 @@ class CreateStatusOperatingCostsTable extends Migration
             $table->unsignedBigInteger('payment_unit');     //지역농협(10%)
 
             $table->string('remark')->nullable();   // 비고
-            $table->softDeletes('deleted_at', 0);   // 삭제일
 
             // 외래키 정의
             $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');  //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????

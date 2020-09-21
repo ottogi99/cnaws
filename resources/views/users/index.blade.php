@@ -79,13 +79,6 @@
             <tr>
               <td colspan="12">항목이 존재하지 않습니다.</td>
             </tr>
-            @if (!(request()->input('year')) || request()->input('year') == now()->year)
-              @if (auth()->user()->isAdmin())
-              <tr>
-                <td colspan="12"><a href="{{ route('users.copy', now()->subYear()->format('Y')) }}" class="btn btn-sm btn-primary">전년 데이터 가져오기</td>
-              </tr>
-              @endif
-            @endif
           @endforelse
         </tbody>
       </table>
@@ -104,16 +97,31 @@
         @if($schedule->is_allow)
           @can('create-user', auth()->user()->nonghyup_id)
             <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('users.create') }}'">등록</button>
-            <button type="submit" class="btn btn-sm btn-success" onclick="openExcelPopup();">엑셀 업로드</button>
           @endcan
         @endif
 
-        @if (auth()->user()->isAdmin())
+        @if (auth()->user()->isAdmin() && $users->total() > 0)
         <a href="{{ route('users.export',
-            ['year'=>request()->input('year'), 'sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
+            ['sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
             class="btn btn-sm btn-primary">엑셀다운로드</a>
         @endif
+        <!-- <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button> -->
       </div>
+
+        @if($schedule->is_allow)
+        <div style="text-align:right; margin-top:45px;">
+          <div class="bg-light" style="padding-top:10px;">
+            <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data" class="form__upload">
+              @csrf
+              <div class="form-group {{ $errors->has('excel') ? 'has-error' : '' }}">
+                <input type="file" name="excel" id="excel" class="form-control" style="width:20%; display:inline-block;">
+                <button type="submit" class="btn btn-sm btn-success" style="margin-bottom:9px;">엑셀 업로드</button>										<!-- {!! $errors->first('excel', '<span class="form-error">:message</span>') !!} -->
+              </div>
+              {!! $errors->first('excel', '<span class="form-error">:message</span>') !!}
+            </form>
+          </div>
+        </div>
+        @endif
 
       <div class="bot_pagination">
         {{ $users->withQueryString()->links() }}

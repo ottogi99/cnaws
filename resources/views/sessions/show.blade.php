@@ -10,5 +10,4 @@
   <p>활성화: {{ $user->activated }}</p>
   <p>관리자: {{ ($user->is_admin) ? '관리자' : '농협' }}</p>
   <p>등록일자: {{ $user->created_at }}</p>
-  <p>삭제일자: {{ $user->deleted_at }}</p>
 @stop

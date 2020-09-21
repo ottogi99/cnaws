@@ -44,7 +44,6 @@ class CreateStatusLaborPaymentsTable extends Migration
 
             $table->text('remark')->nullable();   // 비고
             $table->timestamps();
-            $table->softDeletes('deleted_at', 0);   // 삭제일
 
             // 키 지정
             //$table->unique('name', 'contact');                  // 키 확인 필요

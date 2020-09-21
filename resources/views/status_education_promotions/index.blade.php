@@ -74,11 +74,11 @@
             <td>{{ $row->item }}</td>
             <td>{{ $row->target }}</td>
             <td>{{ $row->detail }}</td>
-            <td>{{ $row->payment_sum }}</td>
-            <td>{{ $row->payment_do }}</td>
-            <td>{{ $row->payment_sigun }}</td>
-            <td>{{ $row->payment_center }}</td>
-            <td>{{ $row->payment_unit }}</td>
+            <td>{{ number_format($row->payment_sum) }}</td>
+            <td>{{ number_format($row->payment_do) }}</td>
+            <td>{{ number_format($row->payment_sigun) }}</td>
+            <td>{{ number_format($row->payment_center) }}</td>
+            <td>{{ number_format($row->payment_unit) }}</td>
             <td>{{ $row->created_at->format('Y-m-d') }}</td>
             <td>
               <button class="btn btn-xs" onclick="location.href='{{ route('status_education_promotions.show', $row->id) }}'">보기</button>

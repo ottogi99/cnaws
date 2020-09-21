@@ -11,34 +11,70 @@ use Illuminate\Support\Facades\Hash;
 
 use App\User;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithChunkOffset;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\WithStartRow;
+use Illuminate\Validation\Rule;
 
-class UsersImport implements ToModel, WithBatchInserts, WithChunkReading
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+
+
+class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading//, WithEvents
 {
+    use Importable, SkipsFailures, SkipsErrors;
     // use RemembersChunkOffset;
+
+    private $rows = 0;
 
     public function model(array $row)
     {
-        // $chunkOffset = $this->getChunkOffset();
+        ++$this->rows;
+
+        // 공백 제거
         $row = array_map(function($value) {
             return trim($value);
         }, $row);
-        
+
+        // row[0] :시군명
+        // row[1] : 농협명
+        // row[2] : 농협ID (유효성 검사)
+        // row[3] : 비밀번호
+        // row[4] : 주소
+        // row[5] : 연락처
+        // row[6] : 대표자
+        // row[7] : 사용자 활성화
+        // row[8] : 입력 허용
+        // row[9] : 사용자 권한
+        // row[10] : 일련번호
+
+        $sigun = \App\Sigun::where('name', $row[0])->first();
+
         return new User([
-            'name' => $row[0],
-            'sigun_code'      => $row[0],
-            'user_id'         => $row[1],
-            'password'        => Hash::make($row[2]),
-            'name'            => $row[3],
-            'address'         => $row[4],
-            'contact'         => $row[5],
-            'representative'  => $row[6],
-            'activated'       => $row[7],
-            'is_admin'        => $row[8],
-            'sequence'        => $row[9],
+            'sigun_code'        => $sigun->code,
+            'name'              => $row[1],
+            'nonghyup_id'       => $row[2],
+            'password'          => Hash::make($row[3]),
+            'address'           => $row[4],
+            'contact'           => $row[5],
+            'representative'    => $row[6],
+            'activated'         => ($row[7] == '활성' ? 1 : 0),
+            'is_input_allowed'  => ($row[8] == '허용' ? 1 : 0),
+            'is_admin'          => ($row[9] == '관리자' ? 1 : 0),
+            'sequence'          => $row[10],
         ]);
+    }
+
+    public function startRow(): int
+    {
+        return 2;
     }
 
     public function batchSize(): int
@@ -50,129 +86,56 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading
     {
         return 1000;
     }
+
+    public function rules(): array
+    {
+        return [
+            '0' => [
+                      'required',
+                      function($attribute, $value, $onFailure) {
+                          $sigun = \App\Sigun::where('name', trim($value))->first();
+                          if (!$sigun) {
+                              $onFailure('해당 시군이 존재하지 않습니다: '.$value);
+                              return;
+                          }
+
+                          $user = auth()->user();
+                          if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
+                              $onFailure('타 지역의 데이터는 등록할 수 없습니다.: '.$value);
+                              return;
+                          }
+                      },
+                  ],
+            '1' => ['required', 'min:3', 'max:10'],                                                 //농협명
+            '2' => ['required', 'regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'],           //농협ID
+            '3' => ['required', 'regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],
+            // 사용자 활성화
+            '7' => Rule::in(['활성','비활성']),
+            // 입력허용
+            '8' => Rule::in(['허용', '불가']),
+            // 사용자 권한
+            '9' => Rule::in(['관리자', '사용자']),
+            // 순서
+            '10' => function ($attribute, $value, $onFailure) {
+                if (!$this->is_valid_numeric($value))
+                  $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+            }
+        ];
+    }
+
+    protected function is_valid_numeric($value) : bool
+    {
+        if (!empty($value)) {
+            if (!is_numeric($value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function getRowCount(): int
+    {
+        return $this->rows;
+    }
+
 }
-
-
-// // use App\Group;
-// use Maatwebsite\Excel\Row;
-// use Maatwebsite\Excel\Concerns\OnEachRow;
-// use Maatwebsite\Excel\Concerns\WithBatchInserts;
-// use Maatwebsite\Excel\Concerns\WithChunkReading;
-//
-//
-// class UsersImport implements OnEachRow, WithBatchInserts, WithChunkReading
-// {
-//     use RemembersChunkOffset;
-//
-//     public function onRow(Row $row)
-//     {
-//         $chunkOffset = $this->getChunkOffset();
-//
-//         $rowIndex = $row->getIndex();
-//         $row      = $row->toArray();
-//
-//         if ($chunkOffset != 1) {
-//           User::create([
-//               'sigun_code'      => $row[0],
-//               'user_id'         => $row[1],
-//               'password'        => Hash::make($row[2]),
-//               'name'            => $row[3],
-//               'address'         => $row[4],
-//               'contact'         => $row[5],
-//               'representative'  => $row[6],
-//               'activated'       => $row[7],
-//               'is_admin'        => $row[8],
-//               'sequence'        => $row[9],
-//           ]);
-//         }
-//         //
-//         // $group = Group::firstOrCreate([
-//         //     'name' => $row[1],
-//         // ]);
-//         //
-//         // $group->users()->create([
-//         //     'name' => $row[0],
-//         // ]);
-//     }
-//
-//     public function batchSize(): int
-//     {
-//         return 1000;
-//     }
-//
-//     public function chunkSize(): int
-//     {
-//         return 1000;
-//     }
-// }
-
-
-// class UsersImport implements ToModel
-// {
-//     use Importable;
-//
-//     /**
-//     * @param array $row
-//     *
-//     * @return \Illuminate\Database\Eloquent\Model|null
-//     */
-//     public function model(array $row)
-//     {
-//         return new User([
-//             'sigun_code'      => $row[0],
-//             'user_id'         => $row[1],
-//             'password'        => Hash::make($row[2]),
-//             'name'            => $row[3],
-//             'address'         => $row[4],
-//             'contact'         => $row[5],
-//             'representative'  => $row[6],
-//             'activated'       => $row[7],
-//             'is_admin'        => $row[8],
-//             'sequence'        => 10
-//         ]);
-//     }
-// }
-
-
-// use Maatwebsite\Excel\Concerns\WithHeadingRow;
-//
-// class UsersImport implements ToCollection, WithHeadingRow
-// {
-//     use Importable;
-//
-//     /**
-//     * @param array $row
-//     *
-//     * @return \Illuminate\Database\Eloquent\Model|null
-//     */
-//     public function collection(Collection $rows)
-//     {
-//         foreach ($rows as $row)
-//         {
-//           // User::create([
-//           //     'sigun_code'      => $row[0],               //$row['시군명']
-//           //     'user_id'         => $row[1],               //$row['사용자ID']
-//           //     'password'        => Hash::make($row[2]),   //$row['비밀번호']
-//           //     'name'            => $row[3],
-//           //     'address'         => $row[4],
-//           //     'contact'         => $row[5],
-//           //     'representative'  => $row[6],
-//           //     'activated'       => $row[7],
-//           //     'is_admin'        => $row[8],
-//           //     'sequence'        => 10
-//           // ]);
-//           User::create([
-//               'sigun_code'      => $row['sigun'],               //$row['시군명']
-//               'user_id'         => $row['userid'],               //$row['사용자ID']
-//               'password'        => Hash::make($row['password']),   //$row['비밀번호']
-//               'name'            => $row['name'],
-//               'address'         => $row['address'],
-//               'contact'         => $row['contact'],
-//               'representative'  => $row['representative'],
-//               'activated'       => $row['activated'],
-//               'is_admin'        => $row['isadmin'],
-//               'sequence'        => $row['sequence'],
-//           ]);
-//         }
-//     }
-// }

@@ -35,7 +35,6 @@ class CreateMachineSupportersTable extends Migration
             $table->string('bank_account')->nullable();   // 입금정보(계좌번호)
             $table->text('remark')->nullable();         // 비고
             $table->timestamps();
-            $table->softDeletes('deleted_at', 0);         // 삭제일
 
             // 키 지정
             $table->unique(['business_year', 'nonghyup_id', 'name']);      // 하나의 농협이 동일한 이름의 지원단 등록 제한

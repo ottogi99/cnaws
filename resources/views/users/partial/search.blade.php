@@ -6,7 +6,4 @@
   <select name="sigun_code" id="sigun_code" {{ auth()->user()->isAdmin() ? '' : 'style=display:none' }}>
     {!! options_for_sigun($siguns, request()->input('sigun_code')) !!}
   </select>
-  <select name="year" id="year" >
-    {!! options_for_year(request()->input('year')) !!}
-  </select>
 </form>

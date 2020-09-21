@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->command->info('Seeded: Users table');                    // 사용자(농협)
 
-        $this->call(ActivatedUsersTableSeeder::class);
-        $this->command->info('Seeded: Activated Users table');                    // 사용자(농협)
+        // $this->call(ActivatedUsersTableSeeder::class);
+        // $this->command->info('Seeded: Activated Users table');                    // 사용자(농협)
 
         $this->call(BudgetsTableSeeder::class);
         $this->command->info('Seeded: Budgets table');                  // 년도별 사업비

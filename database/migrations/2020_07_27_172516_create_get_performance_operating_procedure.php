@@ -40,12 +40,6 @@ class CreateGetPerformanceOperatingProcedure extends Migration
         		  ON T1.sigun_code = siguns.code
         		  LEFT OUTER JOIN
         		  (
-        			SELECT * FROM activated_users
-        			WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
-        		  ) T2
-        		  ON T1.sigun_code = T2.nonghyup_id
-        		  LEFT OUTER JOIN
-        		  (
         			SELECT *
         			FROM
         			(

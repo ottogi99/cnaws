@@ -79,8 +79,6 @@
             <td>{{ number_format($farmer->acreage2, 1) }}</td>
             <td>{{ number_format($farmer->acreage3, 1) }}</td>
             <td>{{ $farmer->created_at->format('Y-m-d') }}</td>
-            <!-- <td>{{ $farmer->updated_at }}</td> -->
-            <!-- <td>{{ $farmer->deleted_at }}</td> -->
             <td>
               @if($schedule->is_allow)
               <button class="btn btn-xs" onclick="location.href='{{ route('small_farmers.show', $farmer->id) }}'">보기</button>
@@ -162,49 +160,46 @@
   });
 
   $('#check_all').on('click', function(e) {
-      if($(this).is(':checked', true))
-      {
-          $(".check").prop('checked', true);
-      } else {
-          $(".check").prop('checked', false);
-      }
+    if($(this).is(':checked', true))
+    {
+      $(".check").prop('checked', true);
+    } else {
+      $(".check").prop('checked', false);
+    }
   });
 
   $('.delete-all').on('click', function(e) {
-      var idsArr = [];
-      $(".check:checked").each(function() {
-          idsArr.push($(this).attr('data-id'));
-      });
+    var idsArr = [];
+    $(".check:checked").each(function() {
+        idsArr.push($(this).attr('data-id'));
+    });
 
-      if (idsArr.length <= 0)
+    if (idsArr.length <= 0)
+    {
+      alert("삭제할 항목을 선택해 주세요.");
+    } else {
+      if (confirm("정말로 선택된 항목을 삭제하시겠습니까?"))
       {
-        alert("삭제할 항목을 선택해 주세요.");
-      } else {
-          if (confirm("정말로 선택된 항목을 삭제하시겠습니까?"))
-          {
-            var strIds = idsArr.join(",");
+        var strIds = idsArr.join(",");
 
-            $.ajax({
-                url: "{{ route('small_farmers.multiple-delete') }}",
-                type: 'DELETE',
-                data: 'ids=' + strIds,
-                success: function (data) {
-                    if (data['status'] == true) {
-                        // $(".check:checked").each(function() {
-                        //   $(this).parents("tr").remove();
-                        // });
-                        alert(data['message']);
-                        location.reload();
-                    } else {
-                        alert("삭제시 오류가 발생하였습니다.");
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseText);
+        $.ajax({
+            url: "{{ route('small_farmers.multiple-delete') }}",
+            type: 'DELETE',
+            data: 'ids=' + strIds,
+            success: function (data) {
+                if (data['status'] == true) {
+                    alert(data['message']);
+                    location.reload();
+                } else {
+                    alert("삭제시 오류가 발생하였습니다.");
                 }
-            });
-          }
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
       }
+    }
   });
 
   // $('.btn-open-form').on('click', function (e) {

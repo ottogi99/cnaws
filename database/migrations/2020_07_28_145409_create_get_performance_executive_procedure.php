@@ -41,12 +41,6 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
                 ROUND(ROUND(T3.amount * 0.10) - T4.payment_unit) AS balance_unit,
           			ROUND(T4.payment_sum / T3.amount, 1) AS execution_rate
           		FROM users T1
-              LEFT OUTER JOIN
-          		(
-          			SELECT * FROM activated_users
-          			WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
-          		) T5
-          		ON T1.nonghyup_id = T5.nonghyup_id
           		LEFT OUTER JOIN siguns T2
           		ON T1.sigun_code = T2.code
           		LEFT OUTER JOIN
@@ -59,7 +53,7 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
           		ON T1.nonghyup_id = T3.nonghyup_id
           		LEFT OUTER JOIN
           		(
-                SELECT 
+                SELECT
               		T1.nonghyup_id,
               		IFNULL(T2.payment_sum, 0)+IFNULL(T3.payment_sum, 0)+IFNULL(T4.payment_sum, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_sum,
               		IFNULL(T2.payment_do, 0)+IFNULL(T3.payment_do, 0)+IFNULL(T4.payment_do, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_do,

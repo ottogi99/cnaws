@@ -80,7 +80,7 @@ class StatusEducationPromotionsController extends Controller
                     ->orderby('users.sequence')
                     ->orderby('status_education_promotions.created_at', 'desc')
                     //->orderby($sort, $order)
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;

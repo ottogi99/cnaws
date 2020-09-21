@@ -10,7 +10,7 @@ class Budget extends Model
     protected $fillable = [
         'sigun_code', 'nonghyup_id',
         'business_year', 'amount'
-    ];//, 'updated_at', 'deleted_at'];
+    ];
 
     public function sigun()
     {

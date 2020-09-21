@@ -80,7 +80,7 @@ class MachineSupportersController extends Controller
                     ->orderby('users.sequence')
                     ->orderby('machine_supporters.created_at', 'desc')
                     //->orderby($sort, $order)
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;
@@ -105,7 +105,8 @@ class MachineSupportersController extends Controller
 
     public function create()
     {
-        $siguns = \App\Sigun::orderBy('sequence')->get();
+        // $siguns = \App\Sigun::orderBy('sequence')->get();
+        $siguns = $this->siguns;
         $nonghyups = $this->nonghyups;
         $supporter = new \App\MachineSupporter;
 

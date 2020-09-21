@@ -43,15 +43,14 @@ class CreateStatusMachineSupportersTable extends Migration
 
             $table->text('remark')->nullable();   // 비고
             $table->timestamps();
-            $table->softDeletes('deleted_at', 0);   // 삭제일
 
             // 키 지정
             //$table->unique('name', 'contact');                  // 키 확인 필요
 
             // 외래키 정의
-            $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade');//->onDelete('cascade');  //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????
-            $table->foreign('nonghyup_id')->references('nonghyup_id')->on('users')->onUpdate('cascade');//->onDelete('cascade'); //농협 사용자 ID
-            $table->foreign('supporter_id')->references('id')->on('machine_supporters')->onUpdate('cascade');//->onDelete('cascade'); //농협 사용자 ID
+            $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');  //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????
+            $table->foreign('nonghyup_id')->references('nonghyup_id')->on('users')->onUpdate('cascade')->onDelete('cascade'); //농협 사용자 ID
+            $table->foreign('supporter_id')->references('id')->on('machine_supporters')->onUpdate('cascade')->onDelete('cascade'); //농협 사용자 ID
         });
     }
 

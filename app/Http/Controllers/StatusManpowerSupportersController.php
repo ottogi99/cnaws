@@ -85,7 +85,7 @@ class StatusManpowerSupportersController extends Controller
                     ->orderby('users.name')
                     ->orderby('status_manpower_supporters.created_at', 'desc')
                     //->orderby($sort, $order)
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;

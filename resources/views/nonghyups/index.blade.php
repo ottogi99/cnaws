@@ -10,7 +10,6 @@
       <th>연락처</th>
       <th>대표자</th>
       <th>갱신일자</th>
-      <th>삭제일자</th>
       <th>기능</th>
     </tr>
     @forelse($nonghyups as $nonghyup)
@@ -22,7 +21,6 @@
       <td>{!! $nonghyup->contact !!}</td>
       <td>{!! $nonghyup->representative !!}</td>
       <td>{!! $nonghyup->updated_at !!}</td>
-      <td>{!! $nonghyup->deleted_at !!}</td>
       <td>
         <a href="{{ route('siguns.edit',  $nonghyup->id) }}" class="btn btn-sm btn-primary">수정</a>
         <button class="btn btn-danger btn-sm button__delete" data-id="{{ $nonghyup->id }}">삭제</button>
@@ -30,7 +28,7 @@
     </tr>
     @empty
     <tr>
-      <td colspan="9">항목이 존재하지 않습니다.</td>
+      <td colspan="8">항목이 존재하지 않습니다.</td>
     </tr>
     @endforelse
   </table>

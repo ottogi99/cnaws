@@ -28,7 +28,6 @@
       <th>활성화</th>
       <th>권한</th>
       <th>갱신일자</th>
-      <th>삭제일자</th>
       <th>기능</th>
     </tr>
     @forelse($users as $user)
@@ -43,7 +42,6 @@
       <td>{{ ($user->activated) ? '활성' : '비활성' }}</td>
       <td>{{ ($user->activated) ? '관리자' : '일반(농협)' }}</td>
       <td>{{ $user->updated_at }}</td>
-      <td>{{ $user->deleted_at }}</td>
       <td>
         <a href="{{ route('users.show',  $user->id) }}" class="btn btn-sm btn-primary">보기</a>
         <a href="{{ route('users.edit',  $user->id) }}" class="btn btn-sm btn-primary">수정</a>
@@ -52,7 +50,7 @@
     </tr>
     @empty
     <tr>
-      <td colspan="9">항목이 존재하지 않습니다.</td>
+      <td colspan="11">항목이 존재하지 않습니다.</td>
     </tr>
     @endforelse
   </table>

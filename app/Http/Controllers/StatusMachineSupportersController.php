@@ -84,7 +84,7 @@ class StatusMachineSupportersController extends Controller
                     ->orderby('users.sequence')
                     ->orderby('users.name')
                     ->orderby('status_machine_supporters.created_at', 'desc')
-                    ->paginate(10);
+                    ->paginate(20);
 
         if ($user->isAdmin()) {
             $nonghyups = $this->nonghyups;

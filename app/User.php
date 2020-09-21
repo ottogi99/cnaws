@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes; //softDelete(database/migrations/u
 class User extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;  //소프트 삭제하기
+    // use SoftDeletes;  //소프트 삭제하기
 
     /**
      * The attributes that are mass assignable.
@@ -46,7 +46,7 @@ class User extends Authenticatable
     ];
 
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at'
     ];
 
 

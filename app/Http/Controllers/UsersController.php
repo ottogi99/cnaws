@@ -44,11 +44,9 @@ class UsersController extends Controller
         if ($user->isAdmin()) {
             $users = \App\User::with('sigun')
                         ->join('siguns', 'users.sigun_code', 'siguns.code')
-                        ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
                         ->select(
                             'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name'
                           )
-                        ->where('activated_users.business_year', $year)
                         ->when($sigun_code, function($query, $sigun_code) {
                             return $query->where('users.sigun_code', $sigun_code);
                         }, function($query, $user) {
@@ -63,15 +61,13 @@ class UsersController extends Controller
                         ->orderby('siguns.sequence')
                         ->orderby('users.is_admin', 'DESC')
                         ->orderby('users.sequence')
-                        ->paginate(10);
+                        ->paginate(30);
         } else {
             $users = \App\User::with('sigun')
                         ->join('siguns', 'users.sigun_code', 'siguns.code')
-                        ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
                         ->select(
                             'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name'
                           )
-                        ->where('activated_users.business_year', $year)
                         ->where('users.nonghyup_id', $user->nonghyup_id)
                         ->when($sigun_code, function($query, $sigun_code) {
                             return $query->where('users.sigun_code', $sigun_code);
@@ -152,11 +148,6 @@ class UsersController extends Controller
         {
             // $users = \App\User::create($request->all());
             $nonghyup = \App\User::create($payload);
-
-            \App\ActivatedUser::create([
-                'nonghyup_id' => $request->nonghyup_id,
-                'business_year' => now()->format('Y'),
-            ]);
 
             $history = \App\UserHistory::create([
                 'worker_id' => auth()->user()->nonghyup_id,
@@ -269,11 +260,6 @@ class UsersController extends Controller
         {
             $nonghyup->delete();
 
-            $activated_user = \App\ActivatedUser::where('business_year', now()->format('Y'))
-                                              ->where('nonghyup_id', $nonghyup->nonghyup_id)
-                                              ->firstOrFail();
-            $activated_user->delete();
-
             $history = \App\UserHistory::create([
                 'worker_id' => auth()->user()->nonghyup_id,
                 'target_id' => $nonghyup->nonghyup_id,
@@ -355,42 +341,109 @@ class UsersController extends Controller
 
     public function export(Request $request)
     {
-        $year = (request()->input('year')) ? request()->input('year') : now()->year;
+        // $year = (request()->input('year')) ? request()->input('year') : now()->year;
         $sigun = $request->input('sigun');
         $keyword = $request->input('q');
 
         return (new UsersExport())
-                  ->forYear($year)
+                  // ->forYear($year)
                   ->forSigun($sigun)
                   ->forKeyword($keyword)
                   ->download('참여농협정보.xlsx');
     }
 
-    public function import(Request $request, $file)
+    public function import(Request $request)
     {
+        $allowed = ["xls", "xlsx"];
+
+        $rules = [
+            'excel' => ['required', 'file', 'mimes:xls,xlsx', 'max:20000'],  // 512: 512 kilobytes, 1024(1M)
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+            'mimes' => ':attribute은 엑셀파일(.xls, .xlsx)형식만 가능합니다.',
+            'size' => ':attribute의 용량은 20M 이하만 가능합니다'
+        ];
+
+        $attributes = [
+            'excel' => '업로드 파일',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
+        $excel = $request->file('excel');
+        Log::debug($excel->path());
+        Log::debug($excel->extension());
+        Log::debug($excel->getClientOriginalName());
+
         $import = new UsersImport();
-        $import->import('uploaded_users.xlsx', 'local', \Maatwebsite\Excel\Excel::XLSX);
+        // $import->import('uploaded_users.xlsx', 'local', \Maatwebsite\Excel\Excel::XLSX);
+        $import->import($excel, \Maatwebsite\Excel\Excel::XLSX);
+
+        $inserted_rows = $import->getRowCount();
 
         $failures = $import->failures();   // Import Failure
         $errors = $import->errors();    // Import Error
 
-        if ($failures) {
-            foreach($failures as $failure) {
-                $row = $failure->row();
-                $column = $failure->attribute();
-                Log::debug($row.'행 '.$column.'열: '.$failure->errors()[0]);
-            }
-        }
-
-        if ($errors->count() > 0) {
+        // 에러 검사 먼저 (에러가 난 경우 DB Insert가 모두 롤백된다)
+        if (count($errors) > 0) {
             foreach($errors as $error) {
-                Log::debug($error->getCode());      // DB 에러코드 (SQLSTATE error code)
-                Log::debug($error->getMessage());   // 에러 메시지-
-                // Log::debug($error->errorInfo);      // SQLSTATE error code / Driver-specific error code / Driver-specific error message
+                Log::error($error->getCode());      // DB 에러코드 (SQLSTATE error code)
+                Log::error($error->getMessage());   // 에러 메시지-
+                Log::error($error->errorInfo);      // SQLSTATE error code / Driver-specific error code / Driver-specific error message
+
+                if ($error->getCode() == '23000') {
+                    $first_quotes = strpos($error->getMessage(), '\'');
+                    $end_quotes = strpos($error->getMessage(), '\'', $first_quotes + 1);
+                    $duplicated = substr($error->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
+                    // Log::debug($duplicated);
+                    flash()->error('자료 중에 추가하려는 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+                } else {
+                    flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$error->errorInfo[2].')');
+                }
             }
+            // Log::debug($errors);
+        return redirect(route('users.index'));
         }
 
-        flash()->success('저장 되었습니다.');
+        $total_rows = 0;
+        $failure_rows = [];
+        if (count($failures) > 0) {
+            $failure_message = '[실패한 입력 데이터].<br/>';
+            foreach ($failures as $index => $failure) {
+                 // $failure->row(); // row that went wrong
+                 // $failure->attribute(); // either heading key (if using heading row concern) or column index
+                 // $failure->errors(); // Actual error messages from Laravel validator
+                 // $failure->values(); // The values of the row that has failed.
+
+                     $row = $failure->row();
+                     $value = isset($failure_rows[(string)$row]) ? $failure_rows[(string)$row] : 0;
+                     $failure_rows += [(string)$row => $value + 1];
+                     // array_push($failure_rows, (string)$row, );
+                     // dd($failure_rows[(string)$row]);
+                     $column = $failure->attribute();
+                     Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
+
+                 // if ($index <= 10)
+                $failure_message .= ($index+1). ')' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
+            }
+            $total_rows = $inserted_rows + count($failure_rows);
+
+            flash()->error('전체 '.$total_rows.'개의 데이터 중 '.$inserted_rows.' 건의 데이터가 입력 되었습니다.');
+            // success(), error(), warning(),
+
+            // $message = '입력한 데이터의 형식이 잘못되었습니다. 행 [';
+            // foreach($failure_rows as $row_number => $values) {
+            //     $message = $message . $row_number . ', ';
+            // }
+            // $message = $message . ']';
+
+            flash()->warning($failure_message);
+            return redirect(route('users.index'));
+        }
+
+        flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
         return redirect(route('users.index'));
     }
 
@@ -410,28 +463,26 @@ class UsersController extends Controller
         }
     }
 
-    public function copy(Request $request, $business_year)
-    {
-        $users = \App\User::join('siguns', 'users.sigun_code', 'siguns.code')
-                    ->join('activated_users', 'users.nonghyup_id', 'activated_users.nonghyup_id')
-                    ->select(
-                        'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name'
-                      )
-                    ->where('activated_users.business_year', $business_year)
-                    ->get();
-
-        $this->authorize('copy-users', $users[0]->nonghyup_id);
-
-        foreach ($users as $user) {
-            \App\ActivatedUser::create([
-              'business_year' => now()->format('Y'),
-              'nonghyup_id' => $user->nonghyup_id,
-            ]);
-        }
-
-        flash()->success('전년도 사용자 데이터를 금년도 사용자로 데이터로 복사 하였습니다.');
-        return redirect(route('users.index'));
-    }
+    // public function copy(Request $request, $business_year)
+    // {
+    //     $users = \App\User::join('siguns', 'users.sigun_code', 'siguns.code')
+    //                 ->select(
+    //                     'users.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name'
+    //                   )
+    //                 ->get();
+    //
+    //     $this->authorize('copy-users', $users[0]->nonghyup_id);
+    //
+    //     foreach ($users as $user) {
+    //         \App\ActivatedUser::create([
+    //           'business_year' => now()->format('Y'),
+    //           'nonghyup_id' => $user->nonghyup_id,
+    //         ]);
+    //     }
+    //
+    //     flash()->success('전년도 사용자 데이터를 금년도 사용자로 데이터로 복사 하였습니다.');
+    //     return redirect(route('users.index'));
+    // }
 
     public function list(Request $request)
     {

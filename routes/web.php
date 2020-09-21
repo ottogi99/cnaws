@@ -70,14 +70,14 @@ Route::get('users/export', [
     'as' => 'users.export',
     'uses' => 'UsersController@export'
 ]);
-Route::get('users/import/{file}', [
+Route::post('users/import', [
     'as' => 'users.import',
     'uses' => 'UsersController@import'
 ]);
-Route::get('users/copy/{business_year}', [
-    'as' => 'users.copy',
-    'uses' => 'UsersController@copy'
-]);
+// Route::get('users/copy/{business_year}', [
+//     'as' => 'users.copy',
+//     'uses' => 'UsersController@copy'
+// ]);
 Route::patch('users/activate/{id}', [
     'as' => 'users.activate',
     'uses' => 'UsersController@activate'

@@ -33,10 +33,9 @@ class CreateUsersTable extends Migration
             // $table->timestamp('email_verified_at')->nullable();
             // $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
 
             // 외래키 정의
-            $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');  //시군 코드
+            $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade');  //시군 코드
         });
     }
 

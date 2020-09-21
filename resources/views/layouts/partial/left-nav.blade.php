@@ -26,7 +26,7 @@
         </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
-        <img src="img/icon-3.png"/ style="margin:0px 10px 0px 10px;">
+        <img src="/img/icon-3.png"/ style="margin:0px 10px 0px 10px;">
           <span>모집등록</span></a>
           <ul class="nav nav-pills nav-stacked">
             <li class="smenu1"><a>농기계지원반</a>
@@ -44,7 +44,7 @@
           </ul>
       </li>
       <li class="accordion"><a class="ajax-link" href="#">
-        <img src="img/icon-4.png"/ style="margin:0px 10px 0px 10px;">
+        <img src="/img/icon-4.png"/ style="margin:0px 10px 0px 10px;">
           <span>지원현황</span></a>
             <ul class="nav nav-pills nav-stacked">
               <li><a href="{{ route('status_education_promotions.index') }}">교육·홍보비</a></li>
