@@ -25,11 +25,6 @@ class CreateUserHistoriesTable extends Migration
             // $table->foreign('target_id')->references('nonghyup_id')->on('users')->onUpdate('cascade'); //농협 사용자 ID
         });
     }
-user_histories_target_id_foreign
-user_histories_worker_id_foreign
-
-user_histories_target_id_foreign
-user_histories_worker_id_foreign
 
     /**
      * Reverse the migrations.
