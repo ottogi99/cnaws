@@ -60,7 +60,7 @@ class StatusManpowerSupportersController extends Controller
                         'status_manpower_supporters.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name',
                         'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name',
                         'large_farmers.name as farmer_name', 'large_farmers.address as farmer_address', 'large_farmers.sex as farmer_sex',
-                        'manpower_supporters.name as supporter_name',
+                        'manpower_supporters.name as supporter_name'
                       )
                     ->where('status_manpower_supporters.business_year', $year)
                     ->where('users.is_admin', '!=', 1)

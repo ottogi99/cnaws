@@ -281,6 +281,13 @@
 
 @section('script')
 <script>
+  function logout() {
+    var result = confirm("정말로 로그아웃 하시겠습니까?");
+    if (result) {
+      location.href = "{{ route('sessions.destroy') }}";
+    }
+  }
+
   window.onload = function () {
     var view = document.getElementById('hidebtn')
     var viewcon = document.getElementById('hidecontentsbtn')

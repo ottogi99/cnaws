@@ -60,7 +60,7 @@ class StatusMachineSupportersController extends Controller
                         'status_machine_supporters.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name',
                         'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name',
                         'small_farmers.name as farmer_name', 'small_farmers.address as farmer_address', 'small_farmers.sex as farmer_sex',
-                        'machine_supporters.name as supporter_name',
+                        'machine_supporters.name as supporter_name'
                       )
                     ->where('status_machine_supporters.business_year', $year)
                     ->where('users.is_admin', '!=', 1)
