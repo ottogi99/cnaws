@@ -209,7 +209,7 @@ class StatusManpowerSupportersController extends Controller
                                           ->select(
                                                 'status_manpower_supporters.*',
                                                 'large_farmers.name as farmer_name',
-                                                'manpower_supporters.name as supporter_name',
+                                                'manpower_supporters.name as supporter_name'
                                             )
                                           ->where('status_manpower_supporters.business_year', now()->year)
                                           ->findOrFail($id);
@@ -428,7 +428,7 @@ class StatusManpowerSupportersController extends Controller
                                           'status_manpower_supporters.*',
                                           'users.name as nonghyup_name',
                                           'large_farmers.name as farmer_name', 'large_farmers.address as farmer_address',
-                                          'manpower_supporters.name as supporter_name',
+                                          'manpower_supporters.name as supporter_name'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
                                       ->where('manpower_supporters.name', $supporter_name)
