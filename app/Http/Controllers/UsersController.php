@@ -63,6 +63,7 @@ class UsersController extends Controller
                         ->orderby('users.sequence')
                         ->paginate(30);
         } else {
+            // DB::enableQueryLog();
             $users = \App\User::with('sigun')
                         ->join('siguns', 'users.sigun_code', 'siguns.code')
                         ->select(
@@ -75,15 +76,18 @@ class UsersController extends Controller
                             return $query;
                         })
                         ->when($keyword, function($query, $keyword) {
-                            return $query->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
-                                          ->orWhere('users.name', 'like', '%'.$keyword.'%')
-                                          ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                            return $query->where(function ($q) use ($keyword) {
+                                          $q->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
+                                            ->orWhere('users.name', 'like', '%'.$keyword.'%')
+                                            ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                                          });
                         })
                         // ->orderby($sort, $order)
                         ->orderby('siguns.sequence')
                         ->orderby('users.is_admin', 'DESC')
                         ->orderby('users.sequence')
-                        ->paginate(10);
+                        ->paginate(30);
+            // Log::debug(DB::getQueryLog());
         }
 
         $siguns = $this->siguns;
@@ -196,7 +200,7 @@ class UsersController extends Controller
         $rules = [
             'sigun_code' => ['required'],
             'nonghyup_id' => ['required','regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'], // 아이디 4자리~12자리
-            'password' => ['required','regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],    // 영문,숫자 혼용해서 8~17자리
+            'password' => ['required','confirmed','regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],    // 영문,숫자 혼용해서 8~17자리
             'name' => ['required','min:3','max:255'],
             'address' => ['required','max:255'],
             'contact' => ['required','regex:/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/'],        // 전화번호 형식
@@ -209,6 +213,7 @@ class UsersController extends Controller
             'regex'   => ':attribute가 유효한 형식이 아닙니다',
             'min' => ':attribute은(는) 최소 :min 글자 이상이 필요합니다.',
             'max' => ':attribute은(는) 최대 :max 글자를 초과할 수 없습니다',
+            'confirmed' => ':attribute가 일치하지 않습니다.',
         ];
 
         $attributes = [

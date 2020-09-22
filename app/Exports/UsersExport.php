@@ -30,9 +30,11 @@ class UsersExport implements FromQuery, WithMapping, WithColumnFormatting, WithH
                         return $query->where('users.sigun_code', $sigun_code);
                     })
                     ->when($keyword, function($query, $keyword) {
-                        return $query->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
-                                      ->orWhere('users.name', 'like', '%'.$keyword.'%')
-                                      ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                        return $query->where(function ($q) use ($keyword) {
+                                      $q->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
+                                        ->orWhere('users.name', 'like', '%'.$keyword.'%')
+                                        ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                                      });
                     })
                     // ->orderby($sort, $order)
                     ->orderby('siguns.sequence')

@@ -182,7 +182,7 @@ class BudgetsController extends Controller
     public function show($id)
     {
         $budget = \App\Budget::findOrFail($id);
-        $this->authorize('show-budget', $budget);
+        $this->authorize('show-budgets', $budget);
 
         return view('budgets.show', compact('budget'));
     }
@@ -193,14 +193,14 @@ class BudgetsController extends Controller
         $nonghyups = $this->nonghyups;
         $budget = \App\Budget::findOrFail($id);
 
-        // $this->authorize('edit-budget', $budget);
+        // $this->authorize('edit-budgets', $budget);
         return view('budgets.edit', compact('siguns', 'nonghyups', 'budget'));
     }
 
     public function update(Request $request, $id)
     {
         $budget = \App\Budget::findOrFail($id);
-        $this->authorize('edit-budget', $budget);
+        $this->authorize('edit-budgets', $budget);
         $budget->update($request->all());
 
         flash()->success('수정하신 내용을 저장했습니다.');
@@ -210,7 +210,7 @@ class BudgetsController extends Controller
     public function destroy($id)
     {
         $budget = \App\Budget::findOrFail($id);
-        $this->authorize('delete-budget', $budget);
+        $this->authorize('delete-budgets', $budget);
         $budget->delete();
 
         flash()->success('삭제되었습니다');
@@ -221,7 +221,7 @@ class BudgetsController extends Controller
     {
         $ids = $request->ids;
 
-        // $this->authorize('delete-budget', $budgets);
+        // $this->authorize('delete-budgets', $budgets);
         $budgets = \App\Budget::whereIn('id', explode(",", $ids))->delete();
 
         return response()->json(['status'=>true, 'message'=>"삭제 되었습니다."], 200);
@@ -235,7 +235,7 @@ class BudgetsController extends Controller
         $keyword = $request->input('q');
         $user = auth()->user();
 
-        $this->authorize('export-large-farmer', $nonghyup);
+        // $this->authorize('export-large-farmer', $nonghyup);
 
         return (new BudgetsExport())
                   ->forYear($year)

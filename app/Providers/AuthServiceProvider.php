@@ -65,14 +65,14 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('create-budgets', function ($user, $nonghyup_id) {
             return false;
         });
-        Gate::define('edit-budgets', function ($user, $nonghyup_id) {
-            return $user->nonghyup_id === $nonghyup_id;
+        Gate::define('edit-budgets', function ($user, $budget) {
+            return $user->nonghyup_id == $budget->nonghyup_id;
         });
-        Gate::define('show-budgets', function ($user, $nonghyup_id) {
-            return $user->nonghyup_id === $nonghyup_id;
+        Gate::define('show-budgets', function ($user, $budget) {
+            return $user->nonghyup_id == $budget->$nonghyup_id;
         });
         Gate::define('delete-budgets', function ($user, $budget) {
-            return $user->nonghyup_id === $budget->$nonghyup_id;
+            return $user->nonghyup_id == $budget->$nonghyup_id;
         });
 
         // 일손필요농가(소규모·영세농)
