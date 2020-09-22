@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
+use Illuminate\Support\Facades\Log;
 
 class PerformanceExecutiveExport implements FromArray, WithMapping, WithColumnFormatting, WithHeadings, ShouldAutoSize
 {
@@ -37,6 +38,8 @@ class PerformanceExecutiveExport implements FromArray, WithMapping, WithColumnFo
         $nonghyup_id = $this->nonghyup_id;
 
         $raw = sprintf("CALL GetPerformanceExecutive('%s', '%s', '%s')", $year, $sigun_code, $nonghyup_id);
+
+        Log::debug($raw);
         $rows = DB::select(DB::raw($raw));
 
         return $rows;
@@ -46,7 +49,7 @@ class PerformanceExecutiveExport implements FromArray, WithMapping, WithColumnFo
     {
         return [
             [
-                $row->year,
+                $row->business_year,
                 $row->sigun_name,
                 $row->nonghyup_name,
                 ($row->budget_sum) ? $row->budget_sum : '0',

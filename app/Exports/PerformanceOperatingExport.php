@@ -46,7 +46,7 @@ class PerformanceOperatingExport implements FromArray, WithMapping, WithColumnFo
     {
         return [
             [
-                $row->year,
+                $row->business_year,
                 $row->sigun_name,
                 $row->nonghyup_name,
                 ($row->small_farmer_number) ? $row->small_farmer_number : '0',

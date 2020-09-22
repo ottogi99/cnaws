@@ -21,7 +21,7 @@ class CreateGetPerformanceOperatingProcedure extends Migration
           	)
           	BEGIN
               SELECT
-          			p_business_year as year,
+          			p_business_year as business_year,
           			siguns.name sigun_name,
           			T1.name nonghyup_name,
           			IFNULL(T3.small_farmer_number, 0) small_farmer_number,
