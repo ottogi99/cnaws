@@ -29,7 +29,7 @@
 <div class="box col-md-12">
   <div class="box-inner" style="background-color:#ffffff;">
     <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
-      <span>농기계지원반</span>
+      <span>농기계지원반 지원반모집</span>
     </div>
     <div class="box-content" style="padding-bottom:50px;">
       @include('machine_supporters.partial.search')

@@ -107,7 +107,7 @@
         <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('status_operating_costs.create') }}'">등록</button>
       @endif
       @if($rows->total() > 0)
-        <a href="{{ route('status_labor_payments.export',
+        <a href="{{ route('status_operating_costs.export',
               ['year'=>request()->input('year'), 'sigun'=>request()->input('sigun_code'), 'nonghyup'=>request()->input('nonghyup_id'), 'q'=>request()->input('q')]) }}"
       	   class="btn btn-sm btn-primary">엑셀다운로드</a>
         <!-- <button type="button" class="btn btn-sm btn-success btn-open-form">엑셀 업로드</button> -->

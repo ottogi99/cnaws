@@ -30,7 +30,7 @@
 <div class="box col-md-12">
   <div class="box-inner" style="background-color:#ffffff;">
     <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
-      <span>소규모·영세소농</span>
+      <span>농기계지원반</span>
     </div>
     <div class="box-content" style="padding-bottom:50px;">
       @include('status_machine_supporters.partial.search')

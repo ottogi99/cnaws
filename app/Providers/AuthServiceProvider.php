@@ -69,10 +69,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->nonghyup_id == $budget->nonghyup_id;
         });
         Gate::define('show-budgets', function ($user, $budget) {
-            return $user->nonghyup_id == $budget->$nonghyup_id;
+            return $user->nonghyup_id == $budget->nonghyup_id;
         });
         Gate::define('delete-budgets', function ($user, $budget) {
-            return $user->nonghyup_id == $budget->$nonghyup_id;
+            return $user->nonghyup_id == $budget->nonghyup_id;
         });
 
         // 일손필요농가(소규모·영세농)

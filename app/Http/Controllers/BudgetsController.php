@@ -124,11 +124,12 @@ class BudgetsController extends Controller
         $rules = [
             'sigun_code' => ['required'],
             'nonghyup_id' => ['required'],
-            'amount' => ['required'],
+            'amount' => ['required','numeric'],
         ];
 
         $messages = [
             'required' => ':attribute은(는) 필수 입력 항목입니다.',
+            'numeric' => ':attribute은(는) 숫자형태만 가능합니다.',
         ];
 
         $attributes = [
@@ -210,6 +211,8 @@ class BudgetsController extends Controller
     public function destroy($id)
     {
         $budget = \App\Budget::findOrFail($id);
+        Log::debug($budget->nonghyup_id);
+        Log::debug(auth()->user()->nonghyup_id);
         $this->authorize('delete-budgets', $budget);
         $budget->delete();
 

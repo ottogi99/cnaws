@@ -69,7 +69,7 @@ class StatusEducationPromotionsController extends Controller
                     ->when($keyword, function($query, $keyword) {
                         // 시군명, 대상농협, 지출항목, 지급대상으로 검색
                         return $query->whereRaw(
-                                      '(siguns.name like ? or users.name like ? or status_education_promotions.item like ? or status_education_promotions.targer like ?)',
+                                      '(siguns.name like ? or users.name like ? or status_education_promotions.item like ? or status_education_promotions.target like ?)',
                                       [$keyword, $keyword, $keyword, $keyword]
                                     );
                     })

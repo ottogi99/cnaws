@@ -30,7 +30,7 @@
 <div class="box col-md-12">
   <div class="box-inner" style="background-color:#ffffff;">
     <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
-      <span>대규모·전업농가</span>
+      <span>인력지원반</span>
     </div>
     <div class="box-content" style="padding-bottom:50px;">
         @include('status_manpower_supporters.partial.search')

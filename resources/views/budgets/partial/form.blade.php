@@ -33,8 +33,6 @@
   @endif
 @endif
 
-
-
 <div class="input-group input-group-lg {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">사업년도</span>
   <select name="business_year" id="business_year" {{ auth()->user()->isAdmin() ? '' : 'disabled' }}>
@@ -47,6 +45,6 @@
 
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">사업비(원)</span>
-  <input type="text" name="amount" id="amount" value="{{ old('amount', $budget->amount) }}" class="form-control" />
+  <input type="number" name="amount" id="amount" value="{{ old('amount', $budget->amount) }}" class="form-control"/>
   {!! $errors->first('amount', '<span class="form-error">:message</span>') !!}
 </div>

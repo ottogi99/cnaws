@@ -38,7 +38,7 @@ class StatusOperatingCostsExport implements FromQuery, WithMapping, WithColumnFo
                                       return $query;
                                   })
                                   ->when($year, function($query, $year) {
-                                      return $query->where('status_operating_costs.year', $year);
+                                      return $query->where('status_operating_costs.business_year', $year);
                                   })
                                   ->when($keyword, function($query, $keyword) {
                                       // 시군명, 대상농협, 농가명, 작업자명으로 검색
@@ -58,7 +58,7 @@ class StatusOperatingCostsExport implements FromQuery, WithMapping, WithColumnFo
     {
         return [
             [
-                $row->year,
+                $row->business_year,
                 $row->sigun_name,
                 $row->nonghyup_name,
                 Date::dateTimeToExcel($row->payment_date),

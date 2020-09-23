@@ -30,7 +30,7 @@
 <div class="box col-md-12">
   <div class="box-inner" style="background-color:#ffffff;">
     <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
-      <span>인력지원반</span>
+      <span>인력지원반 지원반모집</span>
     </div>
     <div class="box-content" style="padding-bottom:50px;">
       @include('manpower_supporters.partial.search')
@@ -103,7 +103,7 @@
       </table>
 
       <hr/>
-      
+
       <div style="float:left;">
         <button style="margin: 5px;" class="btn btn-danger btn-sm delete-all" data-url="">일괄삭제</button>
       </div>

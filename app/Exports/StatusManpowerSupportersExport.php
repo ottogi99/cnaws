@@ -45,9 +45,9 @@ class StatusManpowerSupportersExport implements FromQuery, WithMapping, WithColu
                                   ->when($keyword, function($query, $keyword) {
                                       // 시군명, 대상농협, 농가명, 작업자명으로 검색
                                       return $query->whereRaw(
-                                                    '(siguns.name like ? or users.name like ? or large_farmers.name like ? or status_manpower_supporters.name like ?)',
-                                                    [$keyword, $keyword, $keyword, $keyword]
-                                                  );
+                                                '(siguns.name like ? or users.name like ? or large_farmers.name like ? or large_farmers.name like ? or manpower_supporters.name like ?)',
+                                                [$keyword, $keyword, $keyword, $keyword, $keyword]
+                                              );
                                   })
                                   ->orderby('siguns.sequence')
                                   ->orderby('users.sequence')
