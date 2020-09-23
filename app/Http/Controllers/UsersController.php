@@ -409,7 +409,7 @@ class UsersController extends Controller
                 }
             }
             // Log::debug($errors);
-        return redirect(route('users.index'));
+            return redirect(route('users.index'));
         }
 
         $total_rows = 0;
