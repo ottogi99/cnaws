@@ -131,6 +131,7 @@
     }
   }
 
+  // Ajax를 통해 농협 항목을 갱신
   var get_nonghyups = function() {
     var sigun_code = $('.form-inline > select#sigun_code').val();
     if (!sigun_code) {

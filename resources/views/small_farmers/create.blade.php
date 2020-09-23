@@ -46,12 +46,13 @@
 
       // 농협 목록 가져오기
       var url = "{{ route('api.users') }}?sigun_code=" + sigun_code;
-
+      console.log('url:' + url)
       $.get(url, function(data) {
         $('#nonghyup_id').html('');
         $.each(data.users, function(index, item) {
           var row = "<option value='" + item.nonghyup_id + "'>" + item.name + "</option>";
           $('#nonghyup_id').append(row);
+          console.log('row: ' + row);
         });
       });
     }
