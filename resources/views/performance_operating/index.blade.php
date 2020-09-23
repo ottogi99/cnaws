@@ -105,3 +105,33 @@
   </div>
 </div>
 @stop
+
+@section('script')
+  @parent
+  <script type="text/javascript">
+    var get_nonghyups = function() {
+      var sigun_code = $('.form-inline > select#sigun_code').val();
+      if (!sigun_code) {
+        $('.form-inline > select#nonghyup_id').prop('disabled', true);
+      } else {
+        $('.form-inline > select#nonghyup_id').prop('disabled', false);
+      }
+
+      var url = "{{ route('users.list') }}?sigun_code=" + sigun_code;
+
+      $.get(url, function(data) {
+        $('.form-inline > select#nonghyup_id').html('');
+        $('.form-inline > select#nonghyup_id').append("<option value=''>전체</option>");
+        $.each(data, function(index, item) {
+          var row = "<option value='" + item.nonghyup_id + "'>" + item.name + "</option>";
+          $('.form-inline > select#nonghyup_id').append(row);
+        });
+      });
+    }
+
+    $(document).ready(function() {
+      $('#sigun_code').change(get_nonghyups);
+      get_nonghyups();
+    });
+  </script>
+@stop

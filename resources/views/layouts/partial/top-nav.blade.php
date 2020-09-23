@@ -15,7 +15,7 @@
     </div>
 
     <div class="btn-group pull-right">
-      <button id="adminname" class="btn btn-default btn-setting" style="background-color:#323333; border:1px solid #ffffff; background-image:none;">
+      <button id="adminname" class="btn btn-default btn-setting" onClick="location.href='{{ route("users.edit", auth()->user()->id) }}'" style="background-color:#323333; border:1px solid #ffffff; background-image:none;">
         <a href="#" class="" style="text-decoration:none;">
           <i class="glyphicon glyphicon-user" style="color:#ffffff;"></i>
           <span class="hidden-sm hidden-xs" style="color:#ffffff;">{{ auth()->user()->name }}</span>

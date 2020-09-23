@@ -246,21 +246,26 @@ class StatusMachineSupportersController extends Controller
         $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
 
-        $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
-
-        if (count($duplicated_items) > 0)
+        // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
+        if ($row->job_start_date->format('Y-m-d') != $job_start_date && $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-          // $error_message = '요청하신 데이터 정보<br/>';
-          flash()->error('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
+          $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
 
-          $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
-          foreach ($duplicated_items as $index => $item) {
-              $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                          . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
-          }
-          flash()->warning($warning_message);
-          return back()->withInput();
-      }
+            if (count($duplicated_items) > 0)
+            {
+                // $error_message = '요청하신 데이터 정보<br/>';
+                flash()->error('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
+
+                $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
+                foreach ($duplicated_items as $index => $item) {
+                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                }
+
+                flash()->warning($warning_message);
+                return back()->withInput();
+            }
+        }
         // << End.
 
         $job_start_date = new Carbon($request->input('job_start_date'));
