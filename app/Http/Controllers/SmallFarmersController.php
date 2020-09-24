@@ -289,7 +289,7 @@ class SmallFarmersController extends Controller
     public function example()
     {
         $pathToFile = storage_path('app/public/example/' . 'uploaded_small_farmers.xlsx');
-        return response()->download($pathToFile, '영세소농_샘플현황(예시).xlsx');
+        return response()->download($pathToFile, '농작업지원단(소규모영세농)_모집현황(예시).xlsx');
     }
 
     // public function export($nonghyup = '', $sigun = '')

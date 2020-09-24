@@ -226,7 +226,7 @@ class StatusOperatingCostsController extends Controller
                   ->forSigun($sigun, $user)
                   ->forNonghyup($nonghyup, $user)
                   ->forKeyword($keyword)
-                  ->download('센터운영비(운영비)_지급현황.xlsx');
+                  ->download('운영비_지원현황.xlsx');
     }
 
     // public function import(Request $request, $file)

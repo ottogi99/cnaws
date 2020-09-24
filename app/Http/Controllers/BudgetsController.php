@@ -153,12 +153,11 @@ class BudgetsController extends Controller
           $sigun_code = $user->sigun_code;
           $nonghyup_id = $user->nonghyup_id;
         }
-        $business_year = now()->format('Y');
-
+        $business_year = $request->input('business_year');//now()->format('Y');
         $payload = array_merge($request->all(), [
           'sigun_code' => $sigun_code,
           'nonghyup_id' => $nonghyup_id,
-          'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+          // 'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
         ]);
 
         if (\App\Budget::where('business_year', $business_year)
@@ -180,13 +179,13 @@ class BudgetsController extends Controller
         dd($payload);
     }
 
-    public function show($id)
-    {
-        $budget = \App\Budget::findOrFail($id);
-        $this->authorize('show-budgets', $budget);
-
-        return view('budgets.show', compact('budget'));
-    }
+    // public function show($id)
+    // {
+    //     $budget = \App\Budget::findOrFail($id);
+    //     $this->authorize('show-budgets', $budget);
+    //
+    //     return view('budgets.show', compact('budget'));
+    // }
 
     public function edit($id)
     {
@@ -202,6 +201,16 @@ class BudgetsController extends Controller
     {
         $budget = \App\Budget::findOrFail($id);
         $this->authorize('edit-budgets', $budget);
+
+        if ($request->input('business_year') != $budget->business_year) {
+          if (\App\Budget::where('business_year', $request->input('business_year'))
+                            ->where('nonghyup_id', $request->input('nonghyup_id'))->exists())
+          {
+              flash('해당 년도의 사업비는 이미 추가되어있습니다.')->error();
+              return back()->withInput();
+          }
+        }
+
         $budget->update($request->all());
 
         flash()->success('수정하신 내용을 저장했습니다.');

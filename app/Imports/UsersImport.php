@@ -106,7 +106,7 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailu
                           }
                       },
                   ],
-            '1' => ['required', 'min:3', 'max:10'],                                                 //농협명
+            '1' => ['required', 'min:3', 'max:10'],                                   //농협명
             '2' => ['required', 'regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'],           //농협ID
             '3' => ['required', 'regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],
             // 사용자 활성화
@@ -122,6 +122,41 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailu
             }
         ];
     }
+
+    public function customValidationMessages()
+    {
+        return [
+            '0.required' => ':attribute 값은 필수항목입니다.',     // 시군명
+            '1.required' => ':attribute 값은 필수항목입니다.',     // 농협명
+            '2.required' => ':attribute 값은 필수항목입니다.',     // 농협ID
+            '3.required' => ':attribute 값은 필수항목입니다.',     // 비밀번호
+            '4.required' => ':attribute 값은 필수항목입니다.',     // 주소
+            '5.required' => ':attribute 값은 필수항목입니다.',     // 연락처
+            '6.required' => ':attribute 값은 필수항목입니다.',     // 대표자
+            '7.required' => ':attribute 값은 필수항목입니다.',     // 사용자활성화
+            '8.required' => ':attribute 값은 필수항목입니다.',     // 입력 허용
+            '9.required' => ':attribute 값은 필수항목입니다.',     // 사용자 권한
+            '10.required' => ':attribute 값은 필수항목입니다.',    // 순서
+        ];
+    }
+
+    public function customValidationAttributes()
+    {
+        return [
+          '0' => '시군명',
+          '1' => '농협명',
+          '2' => '농협ID',
+          '3' => '비밀번호',
+          '4' => '주소',
+          '5' => '연락처',
+          '6' => '대표자',
+          '7' => '사용자 활성화',
+          '8' => '입력 허용',
+          '9' => '사용자 권한',
+          '10' => '순서',
+        ];
+    }
+
 
     protected function is_valid_numeric($value) : bool
     {

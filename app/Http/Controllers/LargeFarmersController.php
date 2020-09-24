@@ -255,7 +255,7 @@ class LargeFarmersController extends Controller
     public function example()
     {
         $pathToFile = storage_path('app/public/example/' . 'uploaded_large_farmers.xlsx');
-        return response()->download($pathToFile, '전업농_모집현황(예시).xlsx');
+        return response()->download($pathToFile, '농작업지원단(대규모전업농)_모집현황(예시).xlsx');
     }
 
     public function export(Request $request)

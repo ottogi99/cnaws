@@ -50,7 +50,13 @@ class SchedulesController extends Controller
 
         $this->authorize('edit-schedule', $schedule);
 
-        $schedule->update($request->all());
+        $payload = array_merge($request->all(), [
+          'is_period' => $request->input('is_period') ? $request->input('is_period') : 0,
+          'input_start_date' => $request->input('is_period') ? $request->input('input_start_date') : null,
+          'input_end_date' => $request->input('is_period') ? $request->input('input_end_date') : null
+        ]);
+
+        $schedule->update($payload);
 
         flash()->success('자료 입력 일정을 변경하였습니다.');
         return redirect(route('schedules.show'));

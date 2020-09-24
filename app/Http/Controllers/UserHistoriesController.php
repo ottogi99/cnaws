@@ -25,7 +25,14 @@ class UserHistoriesController extends Controller
                                           })
                                           ->orderby('created_at', 'DESC')->paginate(10);
         } else {
-          $histories = \App\UserHistory::orderby('created_at', 'DESC')->paginate(10);
+          $histories = \App\UserHistory::when($keyword, function($query, $keyword) {
+                                            return $query->whereRaw('worker_id like \'%'.$keyword.'%\'')
+                                                          ->orWhereRaw('target_id like \'%'.$keyword.'%\'')
+                                                          ->orWhereRaw('contents like \'%'.$keyword.'%\'');
+                                          }, function ($query) {
+                                            $histories = \App\UserHistory::orderby('created_at', 'DESC');
+                                          })
+                                          ->orderby('created_at', 'DESC')->paginate(20);
         }
 
         $siguns = $this->siguns;

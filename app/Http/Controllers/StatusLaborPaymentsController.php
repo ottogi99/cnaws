@@ -218,7 +218,7 @@ class StatusLaborPaymentsController extends Controller
                   ->forSigun($sigun, $user)
                   ->forNonghyup($nonghyup, $user)
                   ->forKeyword($keyword)
-                  ->download('센터운영비(인건비) 지급현황.xlsx');
+                  ->download('인건비_지원현황.xlsx');
     }
 
     // public function import(Request $request, $file)

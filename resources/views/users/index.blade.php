@@ -105,7 +105,7 @@
             ['sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
             class="btn btn-sm btn-primary">엑셀다운로드</a>
         @endif
-        <!-- <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button> -->
+        <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button>
       </div>
 
         @if($schedule->is_allow)
@@ -283,5 +283,9 @@
       }
     }
   });
+
+  $('.btn-down-example').on('click', function () {
+    window.location.href = '/users/example';
+  })
 </script>
 @stop

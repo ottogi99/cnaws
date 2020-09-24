@@ -38,6 +38,26 @@
 @section('script')
   @parent
   <script>
+      var get_nonghyups = function() {
+      var sigun_code = $('#sigun_code').val();
+
+      // 농협 목록 가져오기
+      var url = "{{ route('api.users') }}?sigun_code=" + sigun_code;
+
+      $.get(url, function(data) {
+        $('#nonghyup_id').html('');
+        $.each(data.users, function(index, item) {
+          var row = "<option value='" + item.nonghyup_id + "'>" + item.name + "</option>";
+          $('#nonghyup_id').append(row);
+        });
+      });
+    }
+
+    $(document).ready(function() {
+      $('#sigun_code').change(get_nonghyups);
+      get_nonghyups();
+    });
+    
     // 소규모.영세소농 데이터 가져오기
     var get_farmer_address_url = function () {
       var nonghyup_id = $('#nonghyup_id').val();

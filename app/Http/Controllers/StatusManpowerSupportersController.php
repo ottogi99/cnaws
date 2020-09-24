@@ -303,7 +303,7 @@ class StatusManpowerSupportersController extends Controller
     public function example()
     {
         $pathToFile = storage_path('app/public/example/' . 'uploaded_status_manpower_supporters.xlsx');
-        return response()->download($pathToFile, '전업농_지원현황(예시).xlsx');
+        return response()->download($pathToFile, '인력지원반_지원현황(예시).xlsx');
     }
 
     public function export(Request $request)

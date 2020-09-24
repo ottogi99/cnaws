@@ -67,10 +67,16 @@ class StatusEducationPromotionsController extends Controller
                         return $query->where('status_education_promotions.nonghyup_id', $nonghyup_id);
                     })
                     ->when($keyword, function($query, $keyword) {
-                        // 시군명, 대상농협, 지출항목, 지급대상으로 검색
+                        // 시군명, 대상농협, 지출항목, 지급대상, 지급내용으로 검색
                         return $query->whereRaw(
-                                      '(siguns.name like ? or users.name like ? or status_education_promotions.item like ? or status_education_promotions.target like ?)',
-                                      [$keyword, $keyword, $keyword, $keyword]
+                                      '(
+                                        siguns.name like ?
+                                        or users.name like ?
+                                        or status_education_promotions.item like ?
+                                        or status_education_promotions.target like ?
+                                        or status_education_promotions.detail like ?
+                                      )',
+                                      [$keyword, $keyword, $keyword, $keyword, $keyword]
                                     );
                     })
                     // ->when($keyword, function($query, $keyword) use ($raw) {
@@ -220,7 +226,7 @@ class StatusEducationPromotionsController extends Controller
                   ->forSigun($sigun, $user)
                   ->forNonghyup($nonghyup, $user)
                   ->forKeyword($keyword)
-                  ->download('농작업지원단(교육홍보비)_지출현황.xlsx');
+                  ->download('교육홍보비_지원현황.xlsx');
     }
 
     // public function import(Request $request, $file)

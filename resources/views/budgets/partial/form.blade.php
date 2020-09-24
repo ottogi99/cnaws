@@ -33,6 +33,15 @@
   @endif
 @endif
 
+@if ($viewName === 'budgets.edit')
+<div class="input-group {{ $errors->has('sigun_code') ? 'has-error' : '' }}">
+  <input type="hidden" name="sigun_code" id="sigun_code" value="{{ old('sigun_code', $budget->sigun_code) }}" class="form-control" readonly/>
+</div>
+<div class="input-group {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}">
+  <input type="hidden" name="nonghyup_id" id="nonghyup_id" value="{{ old('nonghyup_id', $budget->nonghyup_id) }}" class="form-control" readonly/>
+</div>
+@endif
+
 <div class="input-group input-group-lg {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">사업년도</span>
   <select name="business_year" id="business_year" {{ auth()->user()->isAdmin() ? '' : 'disabled' }}>

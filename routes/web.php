@@ -74,6 +74,10 @@ Route::post('users/import', [
     'as' => 'users.import',
     'uses' => 'UsersController@import'
 ]);
+Route::get('users/example', [
+    'as'  => 'users.example',
+    'uses' => 'UsersController@example'
+]);
 // Route::get('users/copy/{business_year}', [
 //     'as' => 'users.copy',
 //     'uses' => 'UsersController@copy'

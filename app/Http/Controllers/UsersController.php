@@ -49,13 +49,13 @@ class UsersController extends Controller
                           )
                         ->when($sigun_code, function($query, $sigun_code) {
                             return $query->where('users.sigun_code', $sigun_code);
-                        }, function($query, $user) {
-                            return $query;
                         })
                         ->when($keyword, function($query, $keyword) {
-                            return $query->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
-                                          ->orWhere('users.name', 'like', '%'.$keyword.'%')
-                                          ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                            return $query->where(function ($q) use ($keyword) {
+                                          $q->where('users.nonghyup_id', 'like', '%'.$keyword.'%')
+                                            ->orWhere('users.name', 'like', '%'.$keyword.'%')
+                                            ->orWhere('users.representative', 'like', '%'.$keyword.'%');
+                                          });
                         })
                         // ->orderby($sort, $order)
                         ->orderby('siguns.sequence')
@@ -72,8 +72,6 @@ class UsersController extends Controller
                         ->where('users.nonghyup_id', $user->nonghyup_id)
                         ->when($sigun_code, function($query, $sigun_code) {
                             return $query->where('users.sigun_code', $sigun_code);
-                        }, function($query, $user) {
-                            return $query;
                         })
                         ->when($keyword, function($query, $keyword) {
                             return $query->where(function ($q) use ($keyword) {
@@ -120,7 +118,7 @@ class UsersController extends Controller
     {
         $rules = [
             'sigun_code' => ['required'],
-            'nonghyup_id' => ['required','unique:users','regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'], // 아이디 4자리~12자리
+            'nonghyup_id' => ['required','unique:users','regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'],         // 아이디 4자리~12자리
             'password' => ['required','confirmed','regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],    // 영문,숫자 혼용해서 8~17자리
             'is_admin' => ['required'],
         ];
@@ -128,10 +126,11 @@ class UsersController extends Controller
         $messages = [
             'required' => ':attribute은(는) 필수 입력 항목입니다.',
             'unique'  => '이미 등록된 :attribute 항목이 존재합니다',
-            'regex'   => ':attribute가 유효한 형식이 아닙니다',
+            'nonghyup_id.regex'   => ':attribute는 유효한 형식이 아닙니다',
+            'password.regex'   => ':attribute는 영문,숫자로 혼용하여 8~17자 까지로 구성해야 합니다',
             'min' => ':attribute은(는) 최소 :min 글자 이상이 필요합니다.',
             'max' => ':attrubute은(는) 최대 :max 글자를 초과할 수 없습니다',
-            'confirmed' => ':attribute가 일치하지 않습니다.',
+            'confirmed' => ':attribute가 확인문자와 일치하지 않습니다.',
         ];
 
         $attributes = [
@@ -293,6 +292,12 @@ class UsersController extends Controller
         $users = \App\User::whereIn('id', explode(",", $ids))->delete();
 
         return response()->json(['status'=>true, 'message'=>"삭제 되었습니다."], 200);
+    }
+
+    public function example()
+    {
+        $pathToFile = storage_path('app/public/example/' . 'uploaded_users.xlsx');
+        return response()->download($pathToFile, '사용자(농협)(예시).xlsx');
     }
 
     // 선택 계정상태 변경

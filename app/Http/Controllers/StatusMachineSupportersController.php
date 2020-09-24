@@ -305,7 +305,7 @@ class StatusMachineSupportersController extends Controller
     public function example()
     {
         $pathToFile = storage_path('app/public/example/' . 'uploaded_status_machine_supporters.xlsx');
-        return response()->download($pathToFile, '영세소농_지원현황(예시).xlsx');
+        return response()->download($pathToFile, '농기계지원반_지원현황(예시).xlsx');
     }
 
     public function export(Request $request)
