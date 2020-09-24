@@ -33,7 +33,7 @@ class StatusManpowerSupportersExport implements FromQuery, WithMapping, WithColu
                                     'status_manpower_supporters.*', 'siguns.sequence', 'siguns.name as sigun_name',
                                     'users.sequence', 'users.name as nonghyup_name',
                                     'large_farmers.name as farmer_name', 'large_farmers.address as farmer_address', 'large_farmers.sex as farmer_sex',
-                                    'manpower_supporters.name as supporter_name',
+                                    'manpower_supporters.name as supporter_name'
                                   )
                                   ->where('status_manpower_supporters.business_year', $business_year)
                                   ->when($sigun_code, function($query, $sigun_code) {
