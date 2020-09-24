@@ -309,7 +309,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                           'status_machine_supporters.*',
                                           'users.name as nonghyup_name',
                                           'small_farmers.name as farmer_name', 'small_farmers.address as farmer_address',
-                                          'machine_supporters.name as supporter_name',
+                                          'machine_supporters.name as supporter_name'
                                         )
                                       ->where('status_machine_supporters.business_year', now()->year)
                                       // ->where('status_machine_supporters.supporter_id', $supporter_id)
