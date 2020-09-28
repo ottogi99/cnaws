@@ -61,6 +61,24 @@
 {!! $errors->first('is_admin', '<span class="form-error">:is_admin</span>') !!}
 
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">계정상태</span>
+  <span class="input-group-addon" style="width:41px; font-size:13px;">활성</span>
+  <input type="radio" id="activated" name="activated" value="1" class="form-control" style="width:18px;" {{ ($nonghyup->activated) ? 'checked' : '' }}>
+  <span class="input-group-addon" style="width:41px; font-size:13px;">비활성</span>
+  <input type="radio" id="deactivated" name="activated" value="0" class="form-control" style="width:18px;" {{ ($nonghyup->activated) ? '' : 'checked' }}>
+</div>
+{!! $errors->first('activated', '<span class="form-error">:activated</span>') !!}
+
+<div class="input-group input-group-lg" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">입력상태</span>
+  <span class="input-group-addon" style="width:41px; font-size:13px;">가능</span>
+  <input type="radio" id="allowed" name="is_input_allowed" value="1" class="form-control" style="width:18px;" {{ ($nonghyup->is_input_allowed) ? 'checked' : '' }}>
+  <span class="input-group-addon" style="width:41px; font-size:13px;">중지</span>
+  <input type="radio" id="blocked" name="is_input_allowed" value="0" class="form-control" style="width:18px;" {{ ($nonghyup->is_input_allowed) ? '' : 'checked' }}>
+</div>
+{!! $errors->first('is_input_allowed', '<span class="form-error">:is_input_allowed</span>') !!}
+
+<div class="input-group input-group-lg" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">주소</span>
   <input type="text" name="address" id="address" value="{{ old('address', $nonghyup->address) }}" class="form-control" />
   <input type="button" value="도로명주소 검색" onclick="openAddrPopup();">

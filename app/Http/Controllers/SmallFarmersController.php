@@ -424,4 +424,105 @@ class SmallFarmersController extends Controller
 
         return response()->json($farmers, 200);
     }
+
+
+    public function index2(Request $request)
+    {
+        $year = (request()->input('year')) ? request()->input('year') : now()->year;
+        $sigun_code = $request->input('sigun_code', '');
+        $nonghyup_id = $request->input('nonghyup_id', '');
+        $sort = $request->input('sort', 'users.created_at');
+        $order = $request->input('order', 'desc');
+        $keyword = request()->input('q');
+        $user = auth()->user();
+
+        // 농가명 검색
+        $keyword = $request->q;
+
+        if ($keyword = request()->input('q')) {
+            // $raw = 'MATCH(title, content) AGAINST (? IN BOOLEAN MODE)';
+            $raw = 'MATCH(name, address, remark) AGAINST (? IN BOOLEAN MODE)';
+            $query = $query->whereRaw($raw, [$keyword]);
+        }
+
+        if (!$user->isAdmin()) {
+            if (!$sigun_code) {
+                $sigun_code = $user->sigun->code;
+            }
+            if (!$nonghyup_id) {
+                $nonghyup_id = $user->nonghyup_id;
+            }
+        }
+
+        if ($keyword = request()->input('q')) {
+            $raw = 'MATCH(small_farmers.name, small_farmers.address, small_farmers.remark) AGAINST (? IN BOOLEAN MODE)';
+            $keyword = '%'.$keyword.'%';
+        } else {
+            $raw = '';
+        }
+
+        $farmers = \App\SmallFarmer::with('sigun')->with('nonghyup')
+                                  ->join('siguns', 'small_farmers.sigun_code', 'siguns.code')
+                                  ->join('users', 'small_farmers.nonghyup_id', 'users.nonghyup_id')
+                                  ->select(
+                                      'small_farmers.*', 'siguns.sequence as sigun_sequence', 'siguns.name as sigun_name',
+                                      'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
+                                    )
+                                  ->where('small_farmers.business_year', $year)
+                                  // ->when($user, function($query, $user) {
+                                  //     if (!$user->isAdmin())  // 관리자인 모든 시군이 보이도록
+                                  //       return $query->where('small_farmers.sigun_code', $user->sigun_code);
+                                  //     else
+                                  //       return $query;
+                                  // })
+                                  ->when($sigun_code, function($query, $sigun_code) {
+                                      return $query->where('small_farmers.sigun_code', $sigun_code);
+                                  })
+                                  ->when($nonghyup_id, function($query, $nonghyup_id) {
+                                      return $query->where('small_farmers.nonghyup_id', $nonghyup_id);
+                                  })
+                                  ->when($keyword, function($query, $keyword) {
+                                      // 시군명, 대상농협, 농가명으로 검색
+                                      return $query->whereRaw(
+                                                    '(siguns.name like ? or users.name like ? or small_farmers.name like ?)',
+                                                    [$keyword, $keyword, $keyword]
+                                                  );
+                                  })
+                                  // // FullTextSearch
+                                  // ->when($keyword, function($query, $keyword) use ($raw) {
+                                  //     return $query->whereRaw($raw, [$keyword]);
+                                  // })
+                                  // ->when($keyword, function($query, $keyword) use ($raw) {
+                                  //     return $query->whereRaw($raw, [$keyword]);
+                                  // })
+                                  // ->orderby('users.sequence')
+                                  // ->orderby('users.created_at', 'desc')
+                                  // ->orderby($sort, $order)
+                                  ->orderby('siguns.sequence')
+                                  ->orderby('users.sequence')
+                                  ->orderby('small_farmers.created_at', 'desc')
+                                  ->paginate(20);
+
+        if ($user->isAdmin()) {
+            $nonghyups = $this->nonghyups;
+        } else {
+            // $nonghyups = \App\User::when($sigun_code, function($query, $sigun_code) {
+            //                                 return $query->where('sigun_code', $sigun_code)->orderBy('sequence')->get();
+            //                               });
+            $nonghyups = \App\User::where('sigun_code', $sigun_code)
+                                  ->orderBy('sequence')
+                                  ->get();
+        }
+
+        // 데이터 입력 일정 적용
+        $schedule = \App\Schedule::first();
+        if ($schedule->is_period) {
+            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
+                $schedule->is_allow = false;
+        }
+
+        $siguns = $this->siguns;
+
+        return view('small_farmers.index', compact('farmers', 'siguns', 'nonghyups', 'schedule'));
+    }
 }

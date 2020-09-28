@@ -88,8 +88,8 @@
       @if (auth()->user()->isAdmin())
       <div style="float:left;">
         <button style="margin: 5px;" class="btn btn-danger btn-sm delete-all" data-url="">선택삭제</button>
-        <button style="margin: 5px;" class="btn btn-wanrning btn-sm activated-all" data-url="">계정상태변경</button>
-        <button style="margin: 5px;" class="btn btn-wanrning btn-sm input-allowed-all" data-url="">입력상태변경</button>
+        <button style="margin: 5px;" class="btn btn-wanrning btn-sm activated-all" data-url="">선택 계정상태변경</button>
+        <button style="margin: 5px;" class="btn btn-wanrning btn-sm input-allowed-all" data-url="">선택 입력상태변경</button>
       </div>
       @endif
 

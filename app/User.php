@@ -23,7 +23,7 @@ class User extends Authenticatable
         'sigun_code',
         'nonghyup_id', 'password',
         'name', 'address', 'contact', 'representative',
-        'activated', 'is_admin', 'sequence'
+        'activated', 'is_admin', 'is_input_allowed', 'sequence'
     ];
 
     /**

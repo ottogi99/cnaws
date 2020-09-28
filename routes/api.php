@@ -39,3 +39,9 @@ Route::get('/users', [
     'as' => 'api.users',
     'uses' => 'UserController@index'
 ]);
+
+// 키워드 검색을 통한 농가 조회 API
+Route::get('/small_farmers', [
+    'as' => 'api.small_farmers',
+    'uses' => 'SamllFarmers@index2'
+]);
