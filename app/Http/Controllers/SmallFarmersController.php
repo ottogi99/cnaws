@@ -127,16 +127,9 @@ class SmallFarmersController extends Controller
                                   ->get();
         }
 
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
-
         $siguns = $this->siguns;
 
-        return view('small_farmers.index', compact('farmers', 'siguns', 'nonghyups', 'schedule'));
+        return view('small_farmers.index', compact('farmers', 'siguns', 'nonghyups'));
     }
 
     /**
@@ -514,15 +507,8 @@ class SmallFarmersController extends Controller
                                   ->get();
         }
 
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
-
         $siguns = $this->siguns;
 
-        return view('small_farmers.index', compact('farmers', 'siguns', 'nonghyups', 'schedule'));
+        return view('small_farmers.index', compact('farmers', 'siguns', 'nonghyups'));
     }
 }

@@ -94,16 +94,10 @@ class StatusManpowerSupportersController extends Controller
                                   ->orderBy('sequence')
                                   ->get();
         }
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
 
         $siguns = $this->siguns;
 
-        return view('status_manpower_supporters.index', compact('rows', 'siguns', 'nonghyups', 'schedule'));
+        return view('status_manpower_supporters.index', compact('rows', 'siguns', 'nonghyups'));
     }
 
     public function create()
@@ -159,7 +153,19 @@ class StatusManpowerSupportersController extends Controller
             return back()->withInput();
         }
 
-        $payment_sum = $request->input('payment_sum');
+        $payment_sum = 0;
+        if ($request->has('payment_item1'))
+            $payment_sum = $request->input('payment_item1');
+        if ($request->has('payment_item2'))
+            $payment_sum += $request->input('payment_item2');
+        if ($request->has('payment_item3'))
+            $payment_sum += $request->input('payment_item3');
+
+        $payload = array_merge($request->all(), [
+            'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+            'payment_sum' => $payment_sum,
+        ]);
+
         $job_start_date = new Carbon($request->input('job_start_date'));
         $job_end_date   = new Carbon($request->input('job_end_date'));
         $working_days = $job_start_date->diffInDays($job_end_date) + 1;//->format('%H:%I:%S');
@@ -167,6 +173,7 @@ class StatusManpowerSupportersController extends Controller
         $payload = array_merge($request->all(), [
           'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
           'working_days' => $working_days,
+          'payment_sum' => $payment_sum,
           'payment_do' => $payment_sum * 0.21,
           'payment_sigun' => $payment_sum * 0.49,
           'payment_center' => $payment_sum * 0.2,
@@ -274,7 +281,7 @@ class StatusManpowerSupportersController extends Controller
             'working_days' => $working_days,
         ]);
 
-        $row->update($request->all());
+        $row->update($payload);
 
         flash()->success('수정하신 내용을 저장했습니다.');
         return redirect(route('status_manpower_supporters.index'));

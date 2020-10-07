@@ -45,9 +45,11 @@
               <th>주소</th>
               <th>연락처</th>
               <th>대표자</th>
+              @if (auth()->user()->isAdmin())
               <th>입력상태</th>
               <th>계정상태</th>
               <th>권한</th>
+              @endif
               <th>갱신일자</th>
               <th>기능</th>
             </tr>
@@ -63,9 +65,11 @@
               <td>{{ $user->address }}</td>
               <td>{{ $user->contact }}</td>
               <td>{{ $user->representative }}</td>
+              @if (auth()->user()->isAdmin())
               <td>{{ ($user->is_input_allowed) ? '가능' : '중지' }}
               <td>{{ ($user->activated) ? '활성' : '비활성' }}</td>
               <td>{{ ($user->isAdmin()) ? '관리자' : '사용자' }}</td>
+              @endif
               <td>{{ $user->updated_at->format('Y-m-d') }}</td>
               <td>
                 <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button>
@@ -77,7 +81,11 @@
             </tr>
             @empty
             <tr>
+              @if (auth()->user()->isAdmin())
               <td colspan="12">항목이 존재하지 않습니다.</td>
+              @else
+              <td colspan="9">항목이 존재하지 않습니다.</td>
+              @endif
             </tr>
           @endforelse
         </tbody>
@@ -94,7 +102,7 @@
       @endif
 
       <div style="float:right;">
-        @if($schedule->is_allow)
+        @if (auth()->user()->is_input_allowed)
           @can('create-user', auth()->user()->nonghyup_id)
             <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('users.create') }}'">등록</button>
           @endcan
@@ -104,11 +112,11 @@
         <a href="{{ route('users.export',
             ['sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
             class="btn btn-sm btn-primary">엑셀다운로드</a>
-        @endif
         <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button>
+        @endif
       </div>
 
-        @if($schedule->is_allow)
+        @if (auth()->user()->isAdmin() && $users->total() > 0)
         <div style="text-align:right; margin-top:45px;">
           <div class="bg-light" style="padding-top:10px;">
             <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data" class="form__upload">

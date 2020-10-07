@@ -87,16 +87,9 @@ class BudgetsController extends Controller
                                   ->get();
         }
 
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
-
         $siguns = $this->siguns;
 
-        return view('budgets.index', compact('budgets', 'siguns', 'nonghyups', 'schedule'));
+        return view('budgets.index', compact('budgets', 'siguns', 'nonghyups'));
     }
 
     /**
@@ -160,8 +153,9 @@ class BudgetsController extends Controller
           // 'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
         ]);
 
+        Log::debug($request->all());
         if (\App\Budget::where('business_year', $business_year)
-                          ->where('nonghyup_id', $user->nonghyup_id)->exists())
+                          ->where('nonghyup_id', $nonghyup_id)->exists())
         {
             flash('해당 년도의 사업비는 이미 추가되어있습니다.')->error();
             return back()->withInput();

@@ -75,13 +75,13 @@
     @endforelse
   </table>
   {{ $rows->withQueryString()->links() }}
-  @if($schedule->is_allow)
+  @if (auth()->user()->is_input_allowed)
   <a href="{{ route('status_labor_payments.create') }}" class="btn btn-sm btn-primary">추가</a>
   @endif
   <a href="{{ route('status_labor_payments.export',
         ['year'=>request()->input('year'), 'nonghyup'=>request()->input('nonghyup_id'), 'sigun'=>request()->input('sigun_code'), 'q'=>request()->input('q')]) }}"
 	class="btn btn-sm btn-primary">엑셀다운로드</a>
-  @if($schedule->is_allow)
+  @if (auth()->user()->is_input_allowed)
   <div class="container">
     <div class="bg-light">
       <form action="{{ route('status_labor_payments.import') }}" method="POST" enctype="multipart/form-data" class="form__article">

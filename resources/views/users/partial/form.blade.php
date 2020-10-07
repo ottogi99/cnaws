@@ -39,6 +39,7 @@
   {!! $errors->first('name', '<span class="form-error">:message</span>') !!}
 </div>
 
+@if ($viewName === 'users.create')
 <div class="input-group input-group-lg {{ $errors->has('password') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호</span>
   <input type="password" name="password" id="password" placeholder="비밀번호" value="" class="form-control" />
@@ -50,7 +51,9 @@
   <input type="password" name="password_confirmation" id="password_confirmation" placeholder="비밀번호 확인" value="" class="form-control" />
   {!! $errors->first('password_confirmation', '<span class="form-error">:message</span>') !!}
 </div>
+@endif
 
+@if (auth()->user()->isAdmin())
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">권한</span>
   <span class="input-group-addon" style="width:41px; font-size:13px;">일반(농협)</span>
@@ -77,6 +80,7 @@
   <input type="radio" id="blocked" name="is_input_allowed" value="0" class="form-control" style="width:18px;" {{ ($nonghyup->is_input_allowed) ? '' : 'checked' }}>
 </div>
 {!! $errors->first('is_input_allowed', '<span class="form-error">:is_input_allowed</span>') !!}
+@endif
 
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">주소</span>

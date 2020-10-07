@@ -82,7 +82,7 @@
             <td>{{ $row->created_at->format('Y-m-d') }}</td>
             <td>
               <button class="btn btn-xs" onclick="location.href='{{ route('status_education_promotions.show', $row->id) }}'">보기</button>
-              @if($schedule->is_allow)
+              @if (auth()->user()->is_input_allowed)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('status_education_promotions.edit', $row->id) }}'">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $row->id }}">삭제</button>
               @endif
@@ -103,7 +103,7 @@
       </div>
 
       <div style="float:right;">
-        @if($schedule->is_allow)
+        @if (auth()->user()->is_input_allowed)
         <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('status_education_promotions.create') }}'">등록</button>
         @endif
         @if($rows->total() > 0)
@@ -115,6 +115,7 @@
         <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button>										<!-- {!! $errors->first('excel', '<span class="form-error">:message</span>') !!} -->
       </div>
 
+      @if (auth()->user()->is_input_allowed)
       <div style="text-align:right; margin-top:45px;">
         <div class="bg-light" style="padding-top:10px;">
           <form action="{{ route('status_education_promotions.import') }}" method="POST" enctype="multipart/form-data" class="form__upload">
@@ -127,6 +128,7 @@
           </form>
         </div>
       </div>
+      @endif
 
       <div class="bot_pagination">
         {{ $rows->withQueryString()->links() }}

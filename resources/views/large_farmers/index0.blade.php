@@ -57,7 +57,7 @@
       <td>{{ $farmer->remark }}</td>
       <td>{{ $farmer->created_at->format('Y-m-d') }}</td>
       <td>
-        @if($schedule->is_allow)
+        @if (auth()->user()->is_input_allowed)
         <a href="{{ route('large_farmers.show',  $farmer->id) }}" class="btn btn-sm btn-primary">보기</a>
         <a href="{{ route('large_farmers.edit',  $farmer->id) }}" class="btn btn-sm btn-primary">수정</a>
         <button class="btn btn-danger btn-sm button__delete" data-id="{{ $farmer->id }}">삭제</button>
@@ -71,13 +71,13 @@
     @endforelse
   </table>
   {{ $farmers->withQueryString()->links() }}
-  @if($schedule->is_allow)
+  @if (auth()->user()->is_input_allowed)
   <a href="{{ route('large_farmers.create') }}" class="btn btn-sm btn-primary">추가</a>
   @endif
-  <a href="{{ route('large_farmers.export', 
+  <a href="{{ route('large_farmers.export',
   	['year'=>request()->input('year'), 'sigun'=>request()->input('sigun_code'), 'nonghyup'=>request()->input('nonghyup_id'), 'q'=>request()->input('q')]) }}"
 	class="btn btn-sm btn-primary">엑셀다운로드</a>
-  @if($schedule->is_allow)
+  @if (auth()->user()->is_input_allowed)
   <div class="container">
     <div class="bg-light">
       <form action="{{ route('large_farmers.import') }}" method="POST" enctype="multipart/form-data" class="form__article">

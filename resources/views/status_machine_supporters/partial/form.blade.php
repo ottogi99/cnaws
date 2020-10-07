@@ -76,16 +76,24 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('working_area') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적(㏊)</span>
   <input type="text" name="working_area" id="working_area" value="{{ old('working_area', $row->working_area) }}" class="form-control"/>
   {!! $errors->first('working_area', '<span class="form-error">:message</span>') !!}
 </div>
 
+@if ($viewName === 'status_machine_supporters.create')
 <div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
   <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" numberOnly/>
   {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
 </div>
+@else
+<div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
+  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" readonly/>
+  {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
+</div>
+@endif
 
 @if ($viewName === 'status_machine_supporters.edit')
 <div class="input-group input-group-lg {{ $errors->has('payment_do') ? 'has-error' : '' }}" style="padding-bottom:10px;">

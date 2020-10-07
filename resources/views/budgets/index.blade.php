@@ -84,7 +84,7 @@
       </div>
 
       <div style="float:right;">
-        @if($schedule->is_allow)
+        @if (auth()->user()->is_input_allowed)
         <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('budgets.create') }}'">등록</button>
         @endif
         <a href="{{ route('budgets.export',

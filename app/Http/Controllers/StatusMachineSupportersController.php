@@ -93,16 +93,10 @@ class StatusMachineSupportersController extends Controller
                                   ->orderBy('sequence')
                                   ->get();
         }
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
 
         $siguns = $this->siguns;
 
-        return view('status_machine_supporters.index', compact('rows', 'siguns', 'nonghyups', 'schedule'));
+        return view('status_machine_supporters.index', compact('rows', 'siguns', 'nonghyups'));
     }
 
     public function create()

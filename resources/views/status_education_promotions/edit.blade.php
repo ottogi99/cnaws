@@ -16,7 +16,7 @@
   <div class="box col-md-4">
     <div class="box-inner" style="background-color:#ffffff;">
       <div class="box-header well" data-original-title="" style="background:none; height:70px; line-height:60px; font-size:23px;">
-        <span>인력지원반 수정</span>
+        <span>농작업지원단(교육·홍보비) 지출현황 수정</span>
       </div>
       <form class="box-content" id="form__edit" action="{{ route('status_education_promotions.update', $row->id) }}" method="POST" style="padding-bottom:50px;">
         @csrf
@@ -54,6 +54,20 @@
     }
 
     $(document).ready(function() {
+      $('#form__edit').submit(function() {
+          var payment_sum = parseInt($('#payment_sum').val());
+          var payment_do = parseInt($('#payment_do').val());
+          var payment_sigun = parseInt($('#payment_sigun').val());
+          var payment_center = parseInt($('#payment_center').val());
+          var payment_unit = parseInt($('#payment_unit').val());
+          var sum = (payment_do + payment_sigun + payment_center + payment_unit);
+
+          if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
+            alert('지급액 합계와 일치하지 않습니다.(' + sum + ')');
+            return false;
+          }
+      });
+
       $('#sigun_code').change(get_nonghyups);
       get_nonghyups();
     });

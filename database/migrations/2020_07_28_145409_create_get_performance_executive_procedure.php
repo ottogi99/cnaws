@@ -56,10 +56,10 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
                 SELECT
               		T1.nonghyup_id,
               		IFNULL(T2.payment_sum, 0)+IFNULL(T3.payment_sum, 0)+IFNULL(T4.payment_sum, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_sum,
-              		IFNULL(T2.payment_do, 0)+IFNULL(T3.payment_do, 0)+IFNULL(T4.payment_do, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_do,
-              		IFNULL(T2.payment_sigun, 0)+IFNULL(T3.payment_sigun, 0)+IFNULL(T4.payment_sigun, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_sigun,
-              		IFNULL(T2.payment_center, 0)+IFNULL(T3.payment_center, 0)+IFNULL(T4.payment_center, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_center,
-              		IFNULL(T2.payment_unit, 0)+IFNULL(T3.payment_unit, 0)+IFNULL(T4.payment_unit, 0)+IFNULL(T5.payment_sum, 0)+IFNULL(T6.payment_sum, 0) AS payment_unit
+              		IFNULL(T2.payment_do, 0)+IFNULL(T3.payment_do, 0)+IFNULL(T4.payment_do, 0)+IFNULL(T5.payment_do, 0)+IFNULL(T6.payment_do, 0) AS payment_do,
+              		IFNULL(T2.payment_sigun, 0)+IFNULL(T3.payment_sigun, 0)+IFNULL(T4.payment_sigun, 0)+IFNULL(T5.payment_sigun, 0)+IFNULL(T6.payment_sigun, 0) AS payment_sigun,
+              		IFNULL(T2.payment_center, 0)+IFNULL(T3.payment_center, 0)+IFNULL(T4.payment_center, 0)+IFNULL(T5.payment_center, 0)+IFNULL(T6.payment_center, 0) AS payment_center,
+              		IFNULL(T2.payment_unit, 0)+IFNULL(T3.payment_unit, 0)+IFNULL(T4.payment_unit, 0)+IFNULL(T5.payment_unit, 0)+IFNULL(T6.payment_unit, 0) AS payment_unit
               	FROM
               	users T1
               	LEFT OUTER JOIN	-- 교육.홍보비
@@ -136,6 +136,7 @@ class CreateGetPerformanceExecutiveProcedure extends Migration
           		ON T1.nonghyup_id = T4.nonghyup_id
               WHERE T2.code = IF(p_sigun_code = '', T2.code, p_sigun_code)
               AND T1.nonghyup_id = IF(p_nonghyup_id = '', T1.nonghyup_id, p_nonghyup_id)
+              AND T1.activated = 1
               AND T1.is_admin != 1
           		ORDER BY T2.sequence, T1.sequence;
           	END

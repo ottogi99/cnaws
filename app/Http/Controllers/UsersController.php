@@ -90,17 +90,10 @@ class UsersController extends Controller
 
         $siguns = $this->siguns;
 
-        // 데이터 입력 일정 적용
-        $schedule = \App\Schedule::first();
-        if ($schedule->is_period) {
-            if (now() < $schedule->input_start_date || now() > $schedule->input_end_date)
-                $schedule->is_allow = false;
-        }
-
         $this->authorize('index-user', $user->nonghyup_id);
 
         // return view('users.index', compact(['siguns', 'nonghyups', 'users']));
-        return view('users.index', compact(['siguns', 'users', 'schedule']));
+        return view('users.index', compact(['siguns', 'users']));
     }
 
 
@@ -199,7 +192,7 @@ class UsersController extends Controller
         $rules = [
             'sigun_code' => ['required'],
             'nonghyup_id' => ['required','regex:/^[A-Za-z]{1}[A-Za-z0-9_]{3,11}$/'], // 아이디 4자리~12자리
-            'password' => ['required','confirmed','regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],    // 영문,숫자 혼용해서 8~17자리
+            // 'password' => ['required','confirmed','regex:/^.*(?=.{8,17})(?=.*[0-9])(?=.*[a-zA-Z]).*$/'],    // 영문,숫자 혼용해서 8~17자리
             'name' => ['required','min:3','max:255'],
             'address' => ['required','max:255'],
             'contact' => ['required','regex:/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/'],        // 전화번호 형식
@@ -218,7 +211,7 @@ class UsersController extends Controller
         $attributes = [
             'sigun_code'      => '시군항목',
             'nonghyup_id'     => '농협ID',
-            'password'        => '비밀번호',
+            // 'password'        => '비밀번호',
             'name'            => '농협명',
             'address'         => '도로명 주소',
             'contact'         => '연락처',
@@ -228,7 +221,7 @@ class UsersController extends Controller
         $this->validate($request, $rules, $messages, $attributes);
 
         $payload = array_merge($request->all(), [
-          'password' => bcrypt($request->input('password'))
+          // 'password' => bcrypt($request->input('password'))    // 비밀번호는 별도로 처리
         ]);
         // $user->update($request->all());
         $nonghyup = \App\User::findOrFail($id);
@@ -288,10 +281,35 @@ class UsersController extends Controller
     public function deleteMultiple(Request $request)
     {
         $ids = $request->ids;
-        // $this->authorize('delete-small-farmer', $farmer);
-        $users = \App\User::whereIn('id', explode(",", $ids))->delete();
+        $ids = explode(",", $ids);
+        Log::debug($ids);
 
-        return response()->json(['status'=>true, 'message'=>"삭제 되었습니다."], 200);
+        DB::beginTransaction();
+        try
+        {
+            foreach($ids as $id) {
+                $nonghyup = \App\User::findOrFail($id);
+                $history = \App\UserHistory::create([
+                    'worker_id' => auth()->user()->nonghyup_id,
+                    'target_id' => $nonghyup->nonghyup_id,
+                    'contents' => '사용자 삭제',
+                ]);
+            }
+
+            // $this->authorize('delete-small-farmer', $farmer);
+            $users = \App\User::whereIn('id', $ids)->delete();
+
+            DB::commit();
+
+            return response()->json(['status'=>true, 'message'=>"삭제 되었습니다."], 200);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+
+            return response()->json(['status'=>false, 'message'=>"오류가 발생 되었습니다."], 500);
+        }
+        //
     }
 
     public function example()

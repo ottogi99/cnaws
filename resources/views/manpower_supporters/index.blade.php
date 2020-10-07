@@ -87,7 +87,7 @@
             <td>{{ $supporter->bank_account }}</td>
             <td>{{ $supporter->created_at->format('Y-m-d') }}</td>
             <td>
-              @if($schedule->is_allow)
+              @if (auth()->user()->is_input_allowed)
               <button class="btn btn-xs" onclick="location.href='{{ route('manpower_supporters.show', $supporter->id) }}'">보기</button>
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('manpower_supporters.edit', $supporter->id) }}'">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $supporter->id }}">삭제</button>
@@ -109,7 +109,7 @@
       </div>
 
       <div style="float:right;">
-        @if($schedule->is_allow)
+        @if (auth()->user()->is_input_allowed)
         <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('manpower_supporters.create') }}'">등록</button>
         @endif
         @if($supporters->total() > 0)
@@ -121,7 +121,7 @@
         <button type="button" class="btn btn-sm btn-down-example">샘플 다운로드</button>										<!-- {!! $errors->first('excel', '<span class="form-error">:message</span>') !!} -->
       </div>
 
-      @if($schedule->is_allow)
+      @if (auth()->user()->is_input_allowed)
       <div style="text-align:right; margin-top:45px;">
         <div class="bg-light" style="padding-top:10px;">
           <form action="{{ route('manpower_supporters.import') }}" method="POST" enctype="multipart/form-data" class="form__upload">

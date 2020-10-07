@@ -54,10 +54,24 @@
     }
 
     $(document).ready(function() {
+      $('#form__edit').submit(function() {
+          var payment_sum = parseInt($('#payment_sum').val());
+          var payment_do = parseInt($('#payment_do').val());
+          var payment_sigun = parseInt($('#payment_sigun').val());
+          var payment_center = parseInt($('#payment_center').val());
+          var payment_unit = parseInt($('#payment_unit').val());
+          var sum = (payment_do + payment_sigun + payment_center + payment_unit);
+
+          if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
+            alert('지급액 합계와 일치하지 않습니다.(' + sum + ')');
+            return false;
+          }
+      });
+      
       $('#sigun_code').change(get_nonghyups);
       get_nonghyups();
     });
-    
+
     // 소규모.영세소농 데이터 가져오기
     var get_farmer_address_url = function () {
       var nonghyup_id = $('#nonghyup_id').val();
