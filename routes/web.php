@@ -86,6 +86,14 @@ Route::patch('users/activate/{id}', [
     'as' => 'users.activate',
     'uses' => 'UsersController@activate'
 ]);
+Route::get('users/{id}/password/', [
+    'as' => 'users.password',
+    'uses' => 'ChangePasswordController@index'
+]);
+Route::patch('users/{id}/password/', [
+    'as' => 'users.changePassword',
+    'uses' => 'ChangePasswordController@store'
+]);
 Route::delete('users/delete-multiple', [
     'as'  => 'users.multiple-delete',
     'uses' => 'UsersController@deleteMultiple'

@@ -82,7 +82,7 @@
 {!! $errors->first('is_input_allowed', '<span class="form-error">:is_input_allowed</span>') !!}
 @endif
 
-<div class="input-group input-group-lg" style="padding-bottom:10px;">
+<div class="input-group input-group-lg {{ $errors->has('address') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">주소</span>
   <input type="text" name="address" id="address" value="{{ old('address', $nonghyup->address) }}" class="form-control" />
   <input type="button" value="도로명주소 검색" onclick="openAddrPopup();">
@@ -102,3 +102,10 @@
   {!! $errors->first('representative', '<span class="form-error">:message</span>') !!}
 </div>
 @endif
+
+<div class="input-group input-group-lg">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호</span>
+  <button id="adminname" class="btn btn-default btn-setting" onclick="location.href='{{ route("users.password", $nonghyup->id) }}'" style="background-color:#323333; border:1px solid #ffffff; background-image:none;">
+      <span class="hidden-sm hidden-xs" style="color:#ffffff;">비밀번호 변경</span></a>
+  </button>
+</div>

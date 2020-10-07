@@ -29,7 +29,7 @@
             </div>
             {!! $errors->first('password', '<span class="form-error">:message</span>')!!}
             <div class="clearfix"></div>
-
+            @include('flash::message')
             <div class="clearfix"></div><br>
             <p class="center col-md-13" style="">
               <button type="submit" class="btn btn-primary" style="border:none; height:54px;">로그인</button>

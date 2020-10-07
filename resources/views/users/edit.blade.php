@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '모집현황')
+@section('title', '사용자(항목) 수정')
 
 @section('style')
 <style>
@@ -9,6 +9,28 @@
   .input-group > .form-control {width:330px; font-size:15px;}
   input[type="radio"] {margin:0; box-shadow:none; }
 </style>
+@stop
+
+@section('script')
+<script>
+$('.btn-setting').click(function (e) {
+    e.preventDefault();
+    $('#myModal').modal('show');
+});
+
+$('#savebtn').on('click', function() {
+    var new_password = $('#newPassword').val().trim();
+    var password_confirm = $('#passwordConfirm').val().trim();
+
+    if (new_password != password_confirm){
+      alert('비밀번호가 일치하지 않습니다. 다시 시도해주세요');
+      return false;
+    }
+
+    $('.modal-body').submit();
+});
+
+</script>
 @stop
 
 @section('content')

@@ -9,6 +9,8 @@ use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\support\Facades\Hash;
+use App\Rules\MatchOldPassword;
 
 class UsersController extends Controller
 {
