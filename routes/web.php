@@ -82,6 +82,10 @@ Route::get('users/example', [
 //     'as' => 'users.copy',
 //     'uses' => 'UsersController@copy'
 // ]);
+Route::patch('users/{id}/resetPassword', [
+    'as' => 'users.resetPassword',
+    'uses' => 'UsersController@resetPassword'
+]);
 Route::patch('users/activate/{id}', [
     'as' => 'users.activate',
     'uses' => 'UsersController@activate'

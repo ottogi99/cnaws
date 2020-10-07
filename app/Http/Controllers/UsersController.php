@@ -538,4 +538,17 @@ class UsersController extends Controller
         // return response()->json([], 204);
         return response()->json($nonghyups, 200);
     }
+
+    public function resetPassword(Request $request, $id)
+    {
+        if ($request->ajax() & $request->isMethod('PATCH')) {
+            $user = \App\User::findOrFail($id);
+
+            $user->update(['password' => bcrypt('secret1@')]);
+
+            $message = sprintf('사용자 비밀번호를 초기화 하였습니다.');
+            flash()->success($message);
+            return response()->json([], 204);
+        }
+    }
 }

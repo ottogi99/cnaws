@@ -55,12 +55,15 @@
 
       <div style="float:right; margin-right:30px;">
         @can('activate-user', auth()->user()->nonghyup_id)
-        <button class="btn btn-danger btn-sm button__activate" data-id="{{ $nonghyup->id }}" data-activated="{{ $nonghyup->activated }}">{{ ($nonghyup->activated) ? '비활성화' : '활성화' }}</button>
+        <button class="btn btn btn-sm button__activate" data-id="{{ $nonghyup->id }}" data-activated="{{ $nonghyup->activated }}">{{ ($nonghyup->activated) ? '비활성화' : '활성화' }}</button>
         @endcan
         <a href="{{ route('users.edit', $nonghyup->id) }}" class="btn btn-sm btn-primary">수정</a>
         @can('delete-user', auth()->user()->nonghyup_id)
         <button class="btn btn-danger btn-sm button__delete" data-id="{{ $nonghyup->id }}">삭제</button>
         @endcan
+        @if (auth()->user()->isAdmin())
+        <button class="btn btn btn-sm button__resetPassword" data-id="{{ $nonghyup->id }}">비밀번호 초기화</button>
+        @endif
       </div>
     </div>
   </div>
@@ -104,6 +107,24 @@
             //   alert(str_activated + '하였습니다');
             // }
           }).then(function() {
+            window.location.href = '/users';
+          });
+        }
+      });
+
+      $('.button__resetPassword').on('click', function(e) {
+        var userId = $(this).data('id');
+
+        if (confirm('정말로 비밀번호를 초기화하시겠습니까?')) {
+          $.ajax({
+            type: 'PATCH',
+            url: '/users/' + userId + '/resetPassword',
+            data: { _method: 'PATCH' },
+            // success: function() {
+            //   alert('비밀번호를 초기화 하였습니다');
+            // }
+          }).then(function() {
+            // alert('비밀번호를 초기화 하였습니다');
             window.location.href = '/users';
           });
         }
