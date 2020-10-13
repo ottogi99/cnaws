@@ -221,7 +221,7 @@ function getSearchResult(type, pageNo){
 
 function setMappingFarmer(type, idx) {
 	var name = $("#name"+idx).text();
-	var id = $("#id"+idx).text();
+	var id = $("#name"+idx).data('id');//text();
 	var address = $("#address"+idx).text();
 	// var setDataOpener(roadAddr);
 
@@ -243,20 +243,28 @@ function makeListJsonSearch(type, jsonStr){
 	var htmlStr = "";
 	htmlStr += "<p>검색 결과(" + jsonStr.results.total +")";
 	htmlStr += "<table>";
-	htmlStr += "<tr><th>농가명</th><th>성별</th><th>나이</th><th>연락처</th><th>주소</th><th style='visibility:hidden'>아이디</th>";
+	htmlStr += "<tr><th style='width:80px;'>농가명</th><th style='width:50px;'>성별</th><th style='width:50px;'>나이</th><th>연락처</th><th style='width:200px;'>주소</th>";
 	$(jsonStr.results.data).each(function(){
 		num++;
 
 		htmlStr += "<tr>";
-		htmlStr += "<td>";
+		htmlStr += "<td >";
 		htmlStr += '<a href="#" onclick="setMappingFarmer(\'' + type + '\',' + num + ')">';
-		htmlStr += "<div id='name" + num + "'><b>"+this.name+"</b></a></div>";
+		htmlStr += "<div id='name" + num + "' data-id='"+this.id+"' ><b>"+this.name+"</b></a></div>";
 		htmlStr += "</td>";
-		htmlStr += "<td>"+this.sex+"</td>";
+		if (this.sex == 'M')
+			htmlStr += "<td>남</td>";
+		else
+			htmlStr += "<td>여</td>";
+
 		htmlStr += "<td>"+this.age+"</td>";
 		htmlStr += "<td>"+this.contact+"</td>";
-		htmlStr += "<td><div id='address" + num + "'>"+this.address+"</div></td>";
-		htmlStr += "<td><div id='id" + num + "' style='visibility:hidden'>"+this.id+"</div></td>";
+		if (this.address == "")
+			htmlStr += "<td><div id='address" + num + "'></div></td>";
+		else
+			htmlStr += "<td><div id='address" + num + "'>"+this.address+"</div></td>";
+
+		// htmlStr += "<td><div id='id" + num + "' style='visibility:hidden'>"+this.id+"</div></td>";
 		htmlStr += "</tr>";
 	});
 	htmlStr += "</table>";

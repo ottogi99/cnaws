@@ -130,7 +130,7 @@ function pagingSmallFarmer(total, perPage, groupSize, currentPage, type) {
 		html.push('<li><a href="#" onclick="getSearchResult(\'' + type + '\',');
 		html.push(s2);
 		html.push(');">');
-		html.push('◀');
+		html.push('&lt;');
 		html.push('</a></li>');
 	} else {
 		// html.push('<li class="page-item disabled">');
@@ -163,7 +163,7 @@ function pagingSmallFarmer(total, perPage, groupSize, currentPage, type) {
 		html.push('<li class="page-item"><a class="page-link" href="#" onclick="getSearchResult(\'' + type + '\',');
 		html.push((countPrevGroup + 1) * groupSize + 1);
 		html.push(');">');
-		html.push('>');
+		html.push('&gt;');
 		html.push('</a></li>');
 	} else {
 		// html.push('<a href="#">\n');
