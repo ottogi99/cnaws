@@ -6,12 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class SmallFarmer extends Model
 {
+    use FullTextSearch;
+    
     protected $fillable = [
         'business_year',
         'sigun_code', 'nonghyup_id',
         'name', 'age', 'sex', 'contact', 'address',
         'acreage1', 'acreage2', 'acreage3', 'sum_acreage',
         'remark'
+    ];
+
+    protected $searchable = [
+        'name'
     ];
 
     public function sigun()

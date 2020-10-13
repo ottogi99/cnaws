@@ -41,7 +41,48 @@ Route::get('/users', [
 ]);
 
 // 키워드 검색을 통한 농가 조회 API
-// Route::get('/small_farmers', [
-//     'as' => 'api.small_farmers',
-//     'uses' => 'SmallFarmers@index2'
+// Route::get('/search/small_farmers/{keyword}', [
+//     'as' => 'api.searchSmallFarmers',
+//     'uses' => 'SmallFarmerController@search'
 // ]);
+
+// Route::get('/search/small_farmers', [
+//     'as' => 'api.searchSmallFarmers',
+//     'uses' => 'SmallFarmerController@search2'
+// ]);
+
+Route::post('/search/small_farmers', [
+    'as' => 'api.searchSmallFarmers',
+    'uses' => 'SmallFarmerController@search'
+])->middleware('auth');
+
+Route::post('/search/machine_supporters', [
+    'as' => 'api.searchMachineSupporters',
+    'uses' => 'MachineSupporterController@search'
+])->middleware('auth');
+
+Route::post('/search/large_farmers', [
+    'as' => 'api.searchLargeFarmers',
+    'uses' => 'LargeFarmerController@search'
+])->middleware('auth');
+
+Route::post('/search/manpower_supporters', [
+    'as' => 'api.searchManpowerSupporters',
+    'uses' => 'ManpowerSupporterController@search'
+])->middleware('auth');
+
+// Route::group('middleware' => ['api', ['auth:api']], function () {
+//   Route::get('/search/small_farmers/{keyword}', function ($keyword) {
+//       return 'Hello Api'.$keyword;
+//   });
+// })
+//
+
+// Route::get('/search/small_farmers/{keyword}', function ($keyword) {
+//     return 'Hello Api'.$keyword;
+// })->middleware('auth');
+
+// Route::get('/search/small_farmers/{keyword}', [
+//   'as' => 'api.searchSmallFarmers',
+//   'uses' => 'SmallFarmerController@searchTest'
+// ])->middleware('auth');

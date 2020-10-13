@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MachineSupporter extends Model
 {
+    use FullTextSearch;
+
     protected $fillable = [
       'business_year',
       'sigun_code', 'nonghyup_id',
@@ -13,6 +15,10 @@ class MachineSupporter extends Model
       'machine1', 'machine2', 'machine3', 'machine4',
       'bank_name', 'bank_account',
       'remark',
+    ];
+
+    protected $searchable = [
+        'name'
     ];
 
     public function sigun()

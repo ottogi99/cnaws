@@ -34,12 +34,15 @@
   </div>
 @endif
 
-<div class="input-group input-group-lg {{ $errors->has('farmer_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+<div class="input-group input-group-lg {{ $errors->has('farmer_name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">농가명</span>
-  <select name="farmer_id" id="farmer_id">
-    {!! options_for_farmers($farmers, ($row->farmer) ? $row->farmer->id : '', true) !!}
-  </select>
+  <input type="text" name="farmer_name" id="farmer_name" value="{{ old('farmer_name', ($row->farmer) ? $row->farmer->name : '') }}" class="form-control" readonly/>
   {!! $errors->first('farmer_id', '<span class="form-error">:message</span>') !!}
+  <input type="button" value="농가 검색" onclick="openSearchPopup('small');">
+</div>
+
+<div class="input-group input-group-lg {{ $errors->has('farmer_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <input type="hidden" name="farmer_id" id="farmer_id" value="{{ old('farmer_id', ($row->farmer) ? $row->farmer->id : '') }}" class="form-control"/>
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('address') ? 'has-error' : '' }}" style="padding-bottom:10px;">
@@ -47,12 +50,15 @@
   <input type="text" name="address" id="address" value="{{ old('address', ($row->farmer) ? $row->farmer->address : '') }}" class="form-control" readonly/>
 </div>
 
-<div class="input-group input-group-lg {{ $errors->has('supporter_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+<div class="input-group input-group-lg {{ $errors->has('supporter_name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">작업자명</span>
-  <select name="supporter_id" id="supporter_id">
-    {!! options_for_supporters($supporters, ($row->supporter) ? $row->supporter->id : '', true) !!}
-  </select>
-  {!! $errors->first('supporter_id', '<span class="form-error">:message</span>') !!}
+  <input type="text" name="supporter_name" id="supporter_name" value="{{ old('supporter_name', ($row->supporter) ? $row->supporter->name : '') }}" class="form-control" readonly/>
+  {!! $errors->first('supporter_name', '<span class="form-error">:message</span>') !!}
+  <input type="button" value="지원반 검색" onclick="openSearchPopup('machine');">
+</div>
+
+<div class="input-group input-group-lg {{ $errors->has('supporter_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <input type="hidden" name="supporter_id" id="supporter_id" value="{{ old('supporter_id', ($row->supporter) ? $row->supporter->id : '') }}" class="form-control"/>
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('job_start_date') ? 'has-error' : '' }}" style="padding-bottom:10px;">

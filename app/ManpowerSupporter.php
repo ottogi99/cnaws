@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ManpowerSupporter extends Model
 {
+    use FullTextSearch;
+
     protected $fillable = [
       'business_year',
       'sigun_code', 'nonghyup_id',
@@ -15,6 +17,10 @@ class ManpowerSupporter extends Model
       'remark',
     ];
 
+    protected $searchable = [
+        'name'
+    ];
+    
     public function sigun()
     {
         return $this->belongsTo(Sigun::class, 'sigun_code', 'code');

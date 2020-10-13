@@ -24,6 +24,25 @@ class ApisController extends Controller
         return view('apis.popup');
     }
 
+    public function searchPopup(Request $request)
+    {
+        $type = $request->input('type');
+        $nid = $request->input('nid');
+
+        if ($type == 'small') {
+            return view('apis.popup_search', ['nonghyup_id' => $nid]);
+        }
+        elseif ($type == 'large') {
+            return view('apis.popup_search_large', ['nonghyup_id' => $nid]);
+        }
+        elseif ($type == 'machine') {
+            return view('apis.popup_search_machine', ['nonghyup_id' => $nid]);
+        }
+        else {
+            return view('apis.popup_search_manpower', ['nonghyup_id' => $nid]);
+        }
+    }
+
     public function callback(Request $request)
     {
         $post_data = $request->post();

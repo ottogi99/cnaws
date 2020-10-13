@@ -9,12 +9,17 @@ function paging(total, perPage, groupSize, currentPage, token) {
 		return "";
 	}
 
-	// 페이지 카운트
+	// 페이지 그룹 카운트
 	var countPage = countTotal % countPerPage;						// 페이지수 = 전체항목수 / 페이지당 항목수(또는 페이자당 항목수 + 1)
 	if (countPage == 0) {
 		countPage = parseInt(countTotal / countPerPage);
 	} else {
 		countPage = parseInt(countTotal / countPerPage) + 1;
+	}
+
+	// 페이지 그룹보다 전체 항목의 개수가 적은 경우
+	if (countPage < groupSize) {
+		 groupSize = countPage;
 	}
 
 	var countPrevGroup = parseInt(currentPage / groupSize);					// 현제페이지 번호 / 페이지 그룹 범위   pRCnt = 5 / 5, pRCnt = 1, pRCnt = 6 / 5, pRCnt = 1, pRCnt = 10 / 5, pRCnt = 2
@@ -34,12 +39,12 @@ function paging(total, perPage, groupSize, currentPage, token) {
 		html.push("<li><a href='#' onclick='getAddr(");
 		html.push(s2);
 		html.push(");'>");
-		html.push('◀');
+		html.push('&lt;');
 		html.push('</a></li>');
 	} else {
-		html.push('<li class="page-item disabled">');
-		html.push('<span class="page-link"><</span>');
-		html.push('</li>');
+		// html.push('<li class="page-item disabled">');
+		// html.push('<span class="page-link"></span>');
+		// html.push('</li>');
 	}
 
 	//페이지 바
@@ -61,7 +66,7 @@ function paging(total, perPage, groupSize, currentPage, token) {
 		// } else {
 		// 	html.push('|');
 		// }
-		console.log(index);
+		// console.log(index);
 	}
 
 	//다음 화살표
@@ -69,6 +74,95 @@ function paging(total, perPage, groupSize, currentPage, token) {
 		html.push("<li class='page-item'><a class='page-link' href='#' onclick='getAddr(");
 		html.push((countPrevGroup + 1) * groupSize + 1);
 		html.push(");'>");
+		html.push('&gt;');
+		html.push('</a></li>');
+	} else {
+		// html.push('<a href="#">\n');
+		// html.push('▶');
+		// html.push('</a>');
+	}
+	html.push('</ul>');
+
+	return html.join("");
+}
+
+/**
+* 농가 검색 페이지네이션
+*/
+function pagingSmallFarmer(total, perPage, groupSize, currentPage, type) {
+	countTotal = parseInt(total);							//전체 레코드수
+	countPerPage = parseInt(perPage);					//페이지당 보여줄 데이터수
+	groupSize = parseInt(groupSize);				//페이지 그룹 범위 (1 2 3 4 5 6 7 8 9 10)
+	currentPage = parseInt(currentPage);	//현재 페이지
+
+	var html = new Array();
+	if (total == 0) {
+		return "";
+	}
+
+	// 페이지 카운트
+	var countPage = countTotal % countPerPage;						// 페이지수 = 전체항목수 / 페이지당 항목수(또는 페이자당 항목수 + 1)
+	if (countPage == 0) {
+		countPage = parseInt(countTotal / countPerPage);
+	} else {
+		countPage = parseInt(countTotal / countPerPage) + 1;
+	}
+
+	// 페이지 그룹보다 전체 항목의 개수가 적은 경우
+	if (countPage < groupSize) {
+		 groupSize = countPage;
+	}
+
+	var countPrevGroup = parseInt(currentPage / groupSize);					// 현제페이지 번호 / 페이지 그룹 범위   pRCnt = 5 / 5, pRCnt = 1, pRCnt = 6 / 5, pRCnt = 1, pRCnt = 10 / 5, pRCnt = 2
+	if (currentPage % groupSize == 0) {										// 5 / 5 == true, 			6 / 5 == false,					10 / 5 == true
+		countPrevGroup = parseInt(currentPage / groupSize) - 1;				// pRCnt = (5 / 5) - 1, pRCnt = 0								pRCnt = 1
+	}																											// 1, 2, 3, 4, 5 까지는 pRCnt = 0이고 6, 7, 8, 9, 10 까지는 pRCnt = 1이다
+
+	html.push('<ul class="pagination">');
+	//이전 화살표 : 현재페이지 번호가 페이지 그룹 범위를 넘어선 경우 (currentPage:6, pageSize:5)
+	if (currentPage > groupSize) {
+		var s2;
+		if (currentPage % groupSize == 0) {
+			s2 = currentPage - groupSize;										// s2 = 10 - 5, s2 = 5;
+		} else {
+			s2 = currentPage - (currentPage % groupSize);		// s2 = 6 - (6 % 5), s2 = 5;  s2 = 7 - (7 % 5), s2 = 5
+		}
+		html.push('<li><a href="#" onclick="getSearchResult(\'' + type + '\',');
+		html.push(s2);
+		html.push(');">');
+		html.push('◀');
+		html.push('</a></li>');
+	} else {
+		// html.push('<li class="page-item disabled">');
+		// html.push('<span class="page-link">&lt;</span>');
+		// html.push('</li>');
+	}
+
+	//페이지 바
+	for(var index = countPrevGroup * groupSize + 1; index < (countPrevGroup + 1) * groupSize + 1; index++) {
+		if (index == currentPage) {
+			html.push('<li class="page-item active"><span class="page-link">');
+			html.push(index);
+			html.push('</span></li>');
+		} else {
+			html.push('<li class="page-item"><a class="page-link" href="#" onclick="getSearchResult(\''+type+'\','+index+')";>');
+			html.push(index);
+			html.push('</a></li>');
+		}
+
+		// if (index == countPage) {
+		// 	break;
+		// } else {
+		// 	html.push('|');
+		// }
+		// console.log(index);
+	}
+
+	//다음 화살표
+	if (countPage > (countPrevGroup + 1) * groupSize) {
+		html.push('<li class="page-item"><a class="page-link" href="#" onclick="getSearchResult(\'' + type + '\',');
+		html.push((countPrevGroup + 1) * groupSize + 1);
+		html.push(');">');
 		html.push('>');
 		html.push('</a></li>');
 	} else {
@@ -89,6 +183,8 @@ function getAddr(pageNo){
 
 	if (pageNo > 1) {
 		document.getElementsByName('currentPage')[0].value = pageNo;
+	} else {
+		document.getElementsByName('currentPage')[0].value = 1;
 	}
 
 	$.ajax({
@@ -109,9 +205,11 @@ function getAddr(pageNo){
 				}
 			}
 		}
-	    ,error: function(xhr,status, error){
-	    	alert("에러발생");
-	    }
+		,error: function(xhr, status, error){
+			console.log(status);
+			console.log(error);
+			alert("에러발생");
+		}
 	});
 }
 
@@ -224,6 +322,134 @@ var addrWindow;
 
 function openAddrPopup(){
   addrWindow = window.open("/apis/popup", "도로명주소 검색", "height=700,width=500,resizable=yes");
+}
+
+// 농가검색
+function openSearchPopup(type){
+	var nid = $('#nonghyup_id').val();
+	addrWindow = window.open("/apis/searchPopup?type="+type+"&nid="+nid, "검색", "height=700,width=500,resizable=yes");
+}
+
+function enterSearchKeyword(type) {
+	var evt_code = (window.netscape) ? ev.which : event.keyCode;
+	if (evt_code == 13) {
+		event.keyCode = 0;
+
+		console.log(type);
+		if (type == 'small') {
+			getSearchResult(type);
+		} else if (type == 'large') {
+			getSearchResult(type);
+		} else if (type == 'machine') {
+			getSearchResult(type);
+		} else if (type == 'manpower') {
+			getSearchResult(type);
+		}
+	}
+}
+
+function getSearchResult(type, pageNo){
+	// 적용예 (api 호출 전에 검색어 체크)
+	if (!checkSearchedWord(document.form.keyword)) {
+		return;
+	}
+
+	if (pageNo > 1) {
+		document.getElementsByName('currentPage')[0].value = pageNo;
+	} else {
+		document.getElementsByName('currentPage')[0].value = 1;
+	}
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')   // X-CSRF-TOKEN HTTP 요청 헤더
+			}
+	});
+
+	var url = '';
+	if (type == 'small')
+		url = "/api/search/small_farmers";
+	else if (type == 'large')
+		url = "/api/search/large_farmers";
+	else if (type == 'machine')
+		url = "/api/search/machine_supporters";
+	else if (type == 'manpower')
+		url = "/api/search/manpower_supporters";
+
+	$.ajax({
+		 // url :"http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do"  //인터넷망
+		 // url :"{{ route('api.searchSmallFarmers') }}"  //인터넷망
+		 // url: "/api/search/small_farmers"
+		 url: url
+		,type:"post"
+		,data:$("#form").serialize()
+		,dataType:"json"
+		// ,crossDomain:true
+		,success: function(jsonStr){
+			$("#list").html("");
+			$(".bot_pagination").html("");
+			makeListJsonSearch(type, jsonStr);
+		}
+    ,error: function(xhr, status, error){
+			console.log(error);
+			alert("에러발생");
+    }
+	});
+}
+
+function setMappingFarmer(type, idx) {
+	var name = $("#name"+idx).text();
+	var id = $("#id"+idx).text();
+	var address = $("#address"+idx).text();
+	// var setDataOpener(roadAddr);
+
+	if (type == 'small' || type == 'large') {
+		opener.document.getElementById('farmer_name').value = name;
+		opener.document.getElementById('farmer_id').value = id;
+		opener.document.getElementById('address').value = address;
+	}
+	else {
+		opener.document.getElementById('supporter_name').value = name;
+		opener.document.getElementById('supporter_id').value = id;
+	}
+
+	self.close();
+}
+
+function makeListJsonSearch(type, jsonStr){
+	var num = 0;
+	var htmlStr = "";
+	htmlStr += "<p>검색 결과(" + jsonStr.results.total +")";
+	htmlStr += "<table>";
+	htmlStr += "<tr><th>농가명</th><th>성별</th><th>나이</th><th>연락처</th><th>주소</th><th style='visibility:hidden'>아이디</th>";
+	$(jsonStr.results.data).each(function(){
+		num++;
+
+		htmlStr += "<tr>";
+		htmlStr += "<td>";
+		htmlStr += '<a href="#" onclick="setMappingFarmer(\'' + type + '\',' + num + ')">';
+		htmlStr += "<div id='name" + num + "'><b>"+this.name+"</b></a></div>";
+		htmlStr += "</td>";
+		htmlStr += "<td>"+this.sex+"</td>";
+		htmlStr += "<td>"+this.age+"</td>";
+		htmlStr += "<td>"+this.contact+"</td>";
+		htmlStr += "<td><div id='address" + num + "'>"+this.address+"</div></td>";
+		htmlStr += "<td><div id='id" + num + "' style='visibility:hidden'>"+this.id+"</div></td>";
+		htmlStr += "</tr>";
+	});
+	htmlStr += "</table>";
+	$("#list").html(htmlStr);
+
+	//Paging(전체데이타수, 페이지당 보여줄 데이타수, 페이지 그룹 범위, 현재페이지 번호, token명)
+	var totalCount = jsonStr.results.total;
+	var perPage = jsonStr.results.per_page;
+	var groupRange = 5;
+	var currentPage = jsonStr.results.current_page;
+	// var page_viewList = Paging(27, 10, 10 ,1, "PagingView");
+
+	console.log(totalCount, perPage, groupRange, currentPage);
+	var page_viewList = pagingSmallFarmer(totalCount, perPage, groupRange, currentPage, type);
+	// $("#paginate").html(page_viewList);
+	$(".bot_pagination").html(page_viewList);
 }
 
 /* =========================================================

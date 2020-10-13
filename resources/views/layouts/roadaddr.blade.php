@@ -72,7 +72,7 @@
     <div class="navbar-inner">
       <a class="navbar-brand" href="index.html" style="width:210px; height:90px; background-color:#188859;">
       <img src="/img/logo.png"/ style="width:96px; height:68px;"></a>
-      <span style="color:#ffffff; font-family:'ngb'; font-size:30px; margin-left:100px; line-height:80px;">주소검색</span>
+      <span style="color:#ffffff; font-family:'ngb'; font-size:30px; margin-left:100px; line-height:80px;">@yield('title')</span>
     </div>
   </div>
 

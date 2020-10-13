@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateSmallFarmersTable extends Migration
 {
@@ -47,6 +48,9 @@ class CreateSmallFarmersTable extends Migration
             $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');  //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????
             $table->foreign('nonghyup_id')->references('nonghyup_id')->on('users')->onUpdate('cascade')->onDelete('cascade'); //농협 사용자 ID
         });
+
+        // Full Text Index
+        DB::statement('ALTER TABLE small_farmers ADD FULLTEXT fulltext_index (name)');
     }
 
     /**

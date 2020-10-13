@@ -56,6 +56,9 @@ Route::get('apis/popup', 'ApisController@popup');
 Route::post('apis/popup', 'ApisController@callback');
 Route::get('apis/excel', 'ApisController@excel');
 
+/* 검색 팝업 */
+Route::get('apis/searchPopup', 'ApisController@searchPopup');
+
 Route::resource('siguns', 'SigunsController');
 
 
