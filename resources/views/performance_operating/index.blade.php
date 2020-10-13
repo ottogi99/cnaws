@@ -73,7 +73,7 @@
             <td>{{ number_format($row->machine_supporter_number) }}</td>
             <td>{{ number_format($row->machine_supporter_supported_farmers) }}</td>
             <td>{{ number_format($row->machine_supporter_performance_days) }}</td>
-            <td>{{ number_format($row->machine_supporter_working_area, 1) }}</td>
+            <td>{{ number_format($row->machine_supporter_working_area / 10000, 1) }}</td>
             <td>{{ number_format($row->large_farmer_number) }}</td>
             <td>{{ number_format($row->manpower_supporter_number) }}</td>
             <td>{{ number_format($row->manpower_supporter_supported_farmers) }}</td>       <!-- 하루라도 지원받은 농가수 -->

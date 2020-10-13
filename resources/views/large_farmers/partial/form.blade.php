@@ -68,7 +68,7 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('acreage') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">소유경지면적(ha)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">소유경지면적(m<sup>2</sup>)</span>
   <input type="number" step="0.1" name="acreage" id="acreage" value="{{ old('acreage', $farmer->acreage) }}" class="form-control" numberOnly/>
   {!! $errors->first('acreage', '<span class="form-error">:message</span>') !!}
 </div>

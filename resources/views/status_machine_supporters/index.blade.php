@@ -84,7 +84,7 @@
             <td>{{ $row->job_end_date->format('Y-m-d') }}</td>
             <td>{{ $row->working_days }}</td>
             <td>{{ $row->work_detail }}</td>
-            <td>{{ number_format($row->working_area, 1) }}</td>
+            <td>{{ number_format($row->working_area / 10000, 1) }}</td>
             <td>{{ number_format($row->payment_sum) }}</td>
             <td>{{ number_format($row->payment_do) }}</td>
             <td>{{ number_format($row->payment_sigun) }}</td>

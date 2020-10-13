@@ -75,7 +75,7 @@
             <td>{{ ($farmer->sex == 'M') ? '남' : '여' }}</td>
             <td>{{ $farmer->address }}</td>
             <td>{{ $farmer->contact }}</td>
-            <td>{{ number_format($farmer->acreage, 1) }}</td>
+            <td>{{ number_format($farmer->acreage / 10000, 1) }}</td>
             <td>{{ $farmer->cultivar }}</td>
             <td>{{ $farmer->bank_name }}</td>
             <td>{{ $farmer->bank_account }}</td>

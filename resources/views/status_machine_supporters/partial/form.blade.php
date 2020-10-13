@@ -82,7 +82,7 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('working_area') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적(㏊)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적(m<sup>2</sup>)</span>
   <input type="text" name="working_area" id="working_area" value="{{ old('working_area', $row->working_area) }}" class="form-control"/>
   {!! $errors->first('working_area', '<span class="form-error">:message</span>') !!}
 </div>
