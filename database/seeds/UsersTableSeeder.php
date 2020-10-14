@@ -14,8 +14,24 @@ class UsersTableSeeder extends Seeder
     {
         $nonghyups = [
             // 관리자(2)
-            [ 'nonghyup_id'=>'cnadmin', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'sequence'=>1, 'name'=>'충남도청' ],
-            [ 'nonghyup_id'=>'nhadmin', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'sequence'=>2, 'name'=>'충남농협' ],
+            // [ 'nonghyup_id'=>'cnadmin', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'sequence'=>1, 'name'=>'충남도청' ],
+            // [ 'nonghyup_id'=>'nhadmin', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'sequence'=>2, 'name'=>'충남농협' ],
+            // 시군담당자(15)
+            [ 'nonghyup_id'=>'cnadmin01', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'천안시' ],
+            [ 'nonghyup_id'=>'cnadmin02', 'sigun_code'=>'gj', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'공주시' ],
+            [ 'nonghyup_id'=>'cnadmin03', 'sigun_code'=>'br', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'보령시' ],
+            [ 'nonghyup_id'=>'cnadmin04', 'sigun_code'=>'as', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'아산시' ],
+            [ 'nonghyup_id'=>'cnadmin05', 'sigun_code'=>'ss', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'서산시' ],
+            [ 'nonghyup_id'=>'cnadmin06', 'sigun_code'=>'ns', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'논산시' ],
+            [ 'nonghyup_id'=>'cnadmin07', 'sigun_code'=>'dj', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'당진시' ],
+            [ 'nonghyup_id'=>'cnadmin08', 'sigun_code'=>'sj', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'세종시' ],
+            [ 'nonghyup_id'=>'cnadmin09', 'sigun_code'=>'gs', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'금산군' ],
+            [ 'nonghyup_id'=>'cnadmin10', 'sigun_code'=>'by', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'부여군' ],
+            [ 'nonghyup_id'=>'cnadmin11', 'sigun_code'=>'sc', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'서천군' ],
+            [ 'nonghyup_id'=>'cnadmin12', 'sigun_code'=>'cy', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'청양군' ],
+            [ 'nonghyup_id'=>'cnadmin13', 'sigun_code'=>'hs', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'홍성군' ],
+            [ 'nonghyup_id'=>'cnadmin14', 'sigun_code'=>'ys', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'예산군' ],
+            [ 'nonghyup_id'=>'cnadmin15', 'sigun_code'=>'ta', 'activated'=>1, 'is_admin'=>1, 'is_input_allowd'=> 1, 'sequence'=>0, 'name'=>'태안군' ],
             // // 천안시(7)
             // [ 'nonghyup_id'=>'nh485014', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>0, 'sequence'=>1, 'name'=>'천안농협' ],
             // [ 'nonghyup_id'=>'nh485047', 'sigun_code'=>'ca', 'activated'=>1, 'is_admin'=>0, 'sequence'=>2, 'name'=>'동천안농협' ],

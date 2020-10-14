@@ -13,7 +13,7 @@
         <ul class="nav nav-pills nav-stacked">
           <li><a href="{{ route('users.index') }}">사용자(농협)</a></li>
           @if (auth()->user()->isAdmin())
-          <li><a href="{{ route('schedules.show') }}">입력관리</a></li>
+          <!-- <li><a href="{{ route('schedules.show') }}">입력관리</a></li> -->
           <li><a href="{{ route('user_histories.index') }}">이력조회</a></li>
           @endif
         </ul>
