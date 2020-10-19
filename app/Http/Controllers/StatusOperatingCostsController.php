@@ -111,12 +111,19 @@ class StatusOperatingCostsController extends Controller
         $business_year = now()->format('Y');
         $payment_sum = $request->input('payment_sum');
 
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         $payload = array_merge($request->all(), [
           'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
-          'payment_do' => $payment_sum * 0.21,
-          'payment_sigun' => $payment_sum * 0.49,
-          'payment_center' => $payment_sum * 0.2,
-          'payment_unit' => $payment_sum * 0.1,
+          'working_days' => $working_days,
+          'payment_do' => $payment_do + $payment_diff,
+          'payment_sigun' => $payment_sigun,
+          'payment_center' => $payment_center,
+          'payment_unit' => $payment_unit,
         ]);
 
         try {

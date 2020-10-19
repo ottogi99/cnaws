@@ -156,51 +156,22 @@
             </tr>
           </thead>
           <tbody>
+            @forelse($rows_notices as $row)
             <tr>
-              <td>6</td>
-              <td class="center">공지사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center">12</td>
+              <td>{{ ($rows_notices->currentPage()-1) * $rows_notices->perPage() + $loop->iteration }}</td>
+              <td>{{ $row->title }}</td>
+              <td>{{ $row->user->name }}</td>
+              <td>{{ $row->created_at->format('Y-m-d') }}</td>
+              <td>{{ $row->hit }}</td>
             </tr>
+            @empty
             <tr>
-              <td>5</td>
-              <td class="center">공지사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center">12</td>
+              <td colspan="5">항목이 존재하지 않습니다.</td>
             </tr>
-            <tr>
-              <td>4</td>
-              <td class="center">공지사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center">12</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td class="center">공지사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center">12</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td class="center">공지사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center">12</td>
-            </tr>
+            @endforelse
           </tbody>
         </table>
-        <ul class="pagination pagination-centered">
-          <li><a href="#">◀</a></li>
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">▶</a></li>
-        </ul>
+        {{ $rows_notices->withQueryString()->links() }}
       </div>
     </div>
   </div>
@@ -228,50 +199,22 @@
             </tr>
           </thead>
           <tbody>
+            @forelse($rows_suggestions as $row)
             <tr>
-              <td>6</td>
-              <td class="center">건의사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center"><i class="glyphicon glyphicon-lock"></i></td>
+              <td>{{ ($rows_suggestions->currentPage()-1) * $rows_suggestions->perPage() + $loop->iteration }}</td>
+              <td>{{ $row->title }}</td>
+              <td>{{ $row->user->name }}</td>
+              <td>{{ $row->created_at->format('Y-m-d') }}</td>
+              <td>{{ $row->hit }}</td>
             </tr>
+            @empty
             <tr>
-              <td>5</td>
-              <td class="center">건의사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center"><i class="glyphicon glyphicon-lock"></i></td>
+              <td colspan="5">항목이 존재하지 않습니다.</td>
             </tr>
-            <tr>
-              <td>4</td>
-              <td class="center">건의사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center"><i class="glyphicon glyphicon-lock"></i></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td class="center">건의사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center"><i class="glyphicon glyphicon-lock"></i></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td class="center">건의사항입니다.</td>
-              <td class="center">관리자</td>
-              <td class="center">2020.08.01.09:00</td>
-              <td class="center"><i class="glyphicon glyphicon-lock"></i></td>
-            </tr>
+            @endforelse
           </tbody>
         </table>
-        <ul class="pagination pagination-centered">
-          <li><a href="#">◀</a></li>
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">▶</a></li>
+        {{ $rows_suggestions->withQueryString()->links() }}
         </ul>
       </div>
     </div>

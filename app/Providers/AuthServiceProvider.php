@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -220,6 +221,45 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('edit-schedule', function ($user, $schedule) {
             return false;
+        });
+
+        /* 공지사항 */
+        Gate::define('notice-create', function ($user, $notice) {
+        });
+
+        Gate::define('notice-edit', function ($user, $notice) {
+            return $user->id === $notice->user->id;
+        });
+        Gate::define('notice-delete', function ($user, $notice) {
+            return $user->id === $notice->user->id;
+        });
+
+        /* 사용자매뉴얼 */
+        Gate::define('user-manual-create', function ($user, $manual) {
+        });
+
+        Gate::define('user-manual-edit', function ($user, $manual) {
+            return $user->id === $manual->user->id;
+        });
+        Gate::define('user-manual-delete', function ($user, $manual) {
+            return $user->id === $manual->user->id;
+        });
+
+        /* 건의사항 */
+        Gate::define('suggestion-show', function ($user, $suggestion) {
+            if ($suggestion->disclose) {
+                if (!($user->id === $suggestion->user->id)) {
+                    throw new AuthorizationException('해당 게시물에 접근 권한이 없습니다.');
+                }
+            }
+
+            return true;
+        });
+        Gate::define('suggestion-edit', function ($user, $suggestion) {
+            return $user->id === $suggestion->user->id;
+        });
+        Gate::define('suggestion-delete', function ($user, $suggestion) {
+            return $user->id === $suggestion->user->id;
         });
     }
 }

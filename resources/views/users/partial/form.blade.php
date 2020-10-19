@@ -105,7 +105,10 @@
 
 <div class="input-group input-group-lg">
   <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호</span>
-  <button id="adminname" class="btn btn-default btn-setting" onclick="location.href='{{ route("users.password", $nonghyup->id) }}'" style="background-color:#323333; border:1px solid #ffffff; background-image:none;">
+  <button id="adminname" class="btn btn-sm btn-default btn-setting" onclick="location.href='{{ route("users.password", $nonghyup->id) }}'" style="background-color:#323333; border:1px solid #ffffff; background-image:none;">
       <span class="hidden-sm hidden-xs" style="color:#ffffff;">비밀번호 변경</span></a>
   </button>
+  @if (auth()->user()->isAdmin())
+  <button type="button" class="btn btn btn-sm button__resetPassword" data-id="{{ $nonghyup->id }}">비밀번호 초기화</button>
+  @endif
 </div>

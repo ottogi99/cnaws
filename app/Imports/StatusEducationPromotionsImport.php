@@ -35,6 +35,13 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
         $sigun = \App\Sigun::where('name', $row[1])->first();
         $nonghyup = \App\User::where('name', $row[2])->first();
 
+        $payment_sum = $row[7];
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         if ($sigun && $nonghyup) {
             $row = new StatusEducationPromotion([
                 'business_year'   => $row[0],
@@ -43,12 +50,12 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
                 'payment_date'    => Date::excelToTimestamp($row[3]),
                 'item'            => $row[4],
                 'target'          => $row[5],
-                'detail'        => $row[6],
-                'payment_sum'     => $row[7],
-                'payment_do'      => $row[7] * 0.21,
-                'payment_sigun'   => $row[7] * 0.49,
-                'payment_center'  => $row[7] * 0.2,
-                'payment_unit'    => $row[7] * 0.1,
+                'detail'          => $row[6],
+                'payment_sum'     => $payment_sum,
+                'payment_do'      => $payment_do + $payment_diff,
+                'payment_sigun'   => $payment_sigun,
+                'payment_center'  => $payment_center,
+                'payment_unit'    => $payment_unit,
                 'remark'          => $row[8],
             ]);
 

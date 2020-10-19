@@ -55,11 +55,11 @@
 
     $(document).ready(function() {
       $('#form__edit').submit(function() {
-          var payment_sum = parseInt($('#payment_sum').val());
-          var payment_do = parseInt($('#payment_do').val());
-          var payment_sigun = parseInt($('#payment_sigun').val());
-          var payment_center = parseInt($('#payment_center').val());
-          var payment_unit = parseInt($('#payment_unit').val());
+          var payment_sum = parseInt($('#payment_sum').val()) || 0;
+          var payment_do = parseInt($('#payment_do').val()) || 0;
+          var payment_sigun = parseInt($('#payment_sigun').val()) || 0;
+          var payment_center = parseInt($('#payment_center').val()) || 0;
+          var payment_unit = parseInt($('#payment_unit').val()) || 0;
           var sum = (payment_do + payment_sigun + payment_center + payment_unit);
 
           if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
@@ -67,7 +67,7 @@
             return false;
           }
       });
-      
+
       $('#sigun_code').change(get_nonghyups);
       get_nonghyups();
     });

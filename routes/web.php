@@ -411,3 +411,49 @@ Route::put('schedules/{id}', [
   'as'    => 'schedules.update',
   'uses'  => 'SchedulesController@update',
 ]);
+
+/* 공지사항 */
+Route::delete('notice/delete-multiple', [
+    'as'  => 'notice.multiple-delete',
+    'uses' => 'NoticeController@deleteMultiple'
+]);
+Route::get('notice/{id}/download_file', [
+    'as'    => 'notice.download_file',
+    'uses'  => 'NoticeController@download_file'
+]);
+Route::delete('notice/{id}/delete_file', [
+    'as'    => 'notice.delete_file',
+    'uses'  => 'NoticeController@delete_file'
+]);
+Route::resource('notice', 'NoticeController');
+
+
+/* 사용자매뉴얼 */
+Route::delete('user_manual/delete-multiple', [
+    'as'  => 'user_manual.multiple-delete',
+    'uses' => 'UserManualController@deleteMultiple'
+]);
+Route::get('user_manual/{id}/download_file', [
+    'as'    => 'user_manual.download_file',
+    'uses'  => 'UserManualController@download_file'
+]);
+Route::delete('user_manual/{id}/delete_file', [
+    'as'    => 'user_manual.delete_file',
+    'uses'  => 'UserManualController@delete_file'
+]);
+Route::resource('user_manual', 'UserManualController');
+
+/* 건의사항 */
+Route::delete('suggestion/delete-multiple', [
+    'as'  => 'suggestion.multiple-delete',
+    'uses' => 'SuggestionController@deleteMultiple'
+]);
+Route::get('suggestion/{id}/download_file', [
+    'as'    => 'suggestion.download_file',
+    'uses'  => 'SuggestionController@download_file'
+]);
+Route::delete('suggestion/{id}/delete_file', [
+    'as'    => 'suggestion.delete_file',
+    'uses'  => 'SuggestionController@delete_file'
+]);
+Route::resource('suggestion', 'SuggestionController');

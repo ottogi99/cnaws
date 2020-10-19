@@ -35,6 +35,13 @@ class StatusLaborPaymentsImport implements ToModel, WithStartRow, WithValidation
         $sigun = \App\Sigun::where('name', $row[1])->first();
         $nonghyup = \App\User::where('name', $row[2])->first();
 
+        $payment_sum = $row[9];
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         if ($sigun && $nonghyup) {
             $row = new StatusLaborPayment([
                 'business_year'   => $row[0],
@@ -46,11 +53,11 @@ class StatusLaborPaymentsImport implements ToModel, WithStartRow, WithValidation
                 'bank_name'       => $row[6],
                 'bank_account'    => $row[7],
                 'detail'          => $row[8],
-                'payment_sum'     => $row[9],
-                'payment_do'      => $row[9] * 0.21,
-                'payment_sigun'   => $row[9] * 0.49,
-                'payment_center'  => $row[9] * 0.2,
-                'payment_unit'    => $row[9] * 0.1,
+                'payment_sum'     => $payment_sum,
+                'payment_do'      => $payment_do + $payment_diff,
+                'payment_sigun'   => $payment_sigun,
+                'payment_center'  => $payment_center,
+                'payment_unit'    => $payment_unit,
                 'remark'          => $row[10],
             ]);
 

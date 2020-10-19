@@ -75,4 +75,27 @@ class User extends Authenticatable
     // {
     //     return $this->activated_user()->
     // }
+
+    // 공지사항 구현
+    public function notices()
+    {
+        return $this->hasMany(Notice::class);
+    }
+
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class);
+    // }
+
+    // 공지사항 구현
+    public function manuals()
+    {
+        return $this->hasMany(UserManual::class);
+    }
+
+    // 건의사항 구현
+    public function suggestions()
+    {
+        return $this->hasMany(Suggestion::class);
+    }
 }

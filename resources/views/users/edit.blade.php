@@ -11,28 +11,6 @@
 </style>
 @stop
 
-@section('script')
-<script>
-$('.btn-setting').click(function (e) {
-    e.preventDefault();
-    $('#myModal').modal('show');
-});
-
-$('#savebtn').on('click', function() {
-    var new_password = $('#newPassword').val().trim();
-    var password_confirm = $('#passwordConfirm').val().trim();
-
-    if (new_password != password_confirm){
-      alert('비밀번호가 일치하지 않습니다. 다시 시도해주세요');
-      return false;
-    }
-
-    $('.modal-body').submit();
-});
-
-</script>
-@stop
-
 @section('content')
   @php $viewName = 'users.edit'; @endphp
 
@@ -57,4 +35,46 @@ $('#savebtn').on('click', function() {
       </form>
     </div>
   </div>
+@stop
+
+@section('script')
+  @parent
+  <script>
+    $('.btn-setting').click(function (e) {
+        e.preventDefault();
+        $('#myModal').modal('show');
+    });
+
+    $('#savebtn').on('click', function() {
+        var new_password = $('#newPassword').val().trim();
+        var password_confirm = $('#passwordConfirm').val().trim();
+
+        if (new_password != password_confirm){
+          alert('비밀번호가 일치하지 않습니다. 다시 시도해주세요');
+          return false;
+        }
+
+        $('.modal-body').submit();
+    });
+
+    $('.button__resetPassword').on('click', function(e) {
+      var userId = $(this).data('id');
+
+      if (confirm('정말로 비밀번호를 초기화하시겠습니까?')) {
+        $.ajax({
+          type: 'PATCH',
+          url: '/users/' + userId + '/resetPassword',
+          data: { _method: 'PATCH' },
+          // success: function() {
+          //   alert('비밀번호를 초기화 하였습니다');
+          // }
+        }).then(function() {
+          alert('비밀번호를 초기화 하였습니다');
+          // window.location.href = '/users';
+        }).fail(function() {
+          alert('오류가 발생하였습니다');
+        });
+      }
+    });
+  </script>
 @stop

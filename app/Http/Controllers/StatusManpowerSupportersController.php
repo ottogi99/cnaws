@@ -170,14 +170,19 @@ class StatusManpowerSupportersController extends Controller
         $job_end_date   = new Carbon($request->input('job_end_date'));
         $working_days = $job_start_date->diffInDays($job_end_date) + 1;//->format('%H:%I:%S');
 
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         $payload = array_merge($request->all(), [
           'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
           'working_days' => $working_days,
-          'payment_sum' => $payment_sum,
-          'payment_do' => $payment_sum * 0.21,
-          'payment_sigun' => $payment_sum * 0.49,
-          'payment_center' => $payment_sum * 0.2,
-          'payment_unit' => $payment_sum * 0.1,
+          'payment_do' => $payment_do + $payment_diff,
+          'payment_sigun' => $payment_sigun,
+          'payment_center' => $payment_center,
+          'payment_unit' => $payment_unit,
         ]);
 
         try {
@@ -278,6 +283,10 @@ class StatusManpowerSupportersController extends Controller
         $working_days = $job_start_date->diffInDays($job_end_date) + 1;//->format('%H:%I:%S');
 
         $payload = array_merge($request->all(), [
+            'payment_sum' => $request->input('payment_sum', 0),
+            'payment_sigun' => $request->input('payment_sigun', 0),
+            'payment_center' => $request->input('payment_center', 0),
+            'payment_unit' => $request->input('payment_unit', 0),
             'working_days' => $working_days,
         ]);
 

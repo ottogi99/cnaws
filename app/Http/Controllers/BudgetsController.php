@@ -143,14 +143,19 @@ class BudgetsController extends Controller
             $sigun_code = $request->input('sigun_code');
             $nonghyup_id = $request->input('nonghyup_id');
         } else {
-          $sigun_code = $user->sigun_code;
-          $nonghyup_id = $user->nonghyup_id;
+            $sigun_code = $user->sigun_code;
+            $nonghyup_id = $user->nonghyup_id;
         }
+
         $business_year = $request->input('business_year');//now()->format('Y');
+        if (! $business_year) {
+            $business_year = now()->format('Y');
+        }
+
         $payload = array_merge($request->all(), [
-          'sigun_code' => $sigun_code,
-          'nonghyup_id' => $nonghyup_id,
-          // 'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+            'sigun_code' => $sigun_code,
+            'nonghyup_id' => $nonghyup_id,
+            'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
         ]);
 
         Log::debug($request->all());
@@ -170,7 +175,6 @@ class BudgetsController extends Controller
 
         flash('사업비 항목이 저장되었습니다.');
         return redirect(route('budgets.index'));
-        dd($payload);
     }
 
     // public function show($id)

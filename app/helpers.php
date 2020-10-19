@@ -1,10 +1,25 @@
 <?php
-
+/** 첨부파일 **/
 function attachments_path($path = '')
 {
     return public_path('files'.($path ? DIRECTORY_SEPARATOR.$path : $path));
 }
 
+function format_filesize($bytes)
+{
+    if (! is_numeric($bytes)) return 'NaN';
+
+    $decr = 1024;
+    $step = 0;
+    $suffix = ['bytes', 'KB', 'MB'];
+
+    while (($bytes / $decr) > 0.9) {
+        $bytes = $bytes / $decr;
+        $step++;
+    }
+
+    return round($bytes, 2) . $suffix[$step];
+}
 
 function str_insert_pattern($str, $len, $pattern)
 {
@@ -140,6 +155,7 @@ function link_for_sort($column, $text, $params = [])
         $text
     );
 }
+
 // 첫번째 인자는 정렬 기준이 되는 테이블의 열 이름이다. -->
 // 두번째 인자는 링크 텍스트로 표시할 문자열이다. -->
 // 세번째 인자는 링크 태그에 더 추가할 속성값이다. -->

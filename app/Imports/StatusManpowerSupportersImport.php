@@ -56,6 +56,12 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
         $payment_sum = $row[9] + $row[10] + $row[11];
 
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         if ($sigun && $nonghyup && $farmer && $supporter) {
             $row = new StatusManpowerSupporter([
                 'business_year'   => $row[0],
@@ -72,10 +78,10 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 'payment_item2'   => $row[10],
                 'payment_item3'   => $row[11],
                 'payment_sum'     => $payment_sum,
-                'payment_do'      => $payment_sum * 0.21,
-                'payment_sigun'   => $payment_sum * 0.49,
-                'payment_center'  => $payment_sum * 0.2,
-                'payment_unit'    => $payment_sum * 0.1,
+                'payment_do'      => $payment_do + $payment_diff,
+                'payment_sigun'   => $payment_sigun,
+                'payment_center'  => $payment_center,
+                'payment_unit'    => $payment_unit,
                 'remark'          => $row[12],
             ]);
 

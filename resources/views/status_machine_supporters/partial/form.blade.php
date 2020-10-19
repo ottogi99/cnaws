@@ -96,7 +96,7 @@
 @else
 <div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
-  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" readonly/>
+  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control"/>
   {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
 </div>
 @endif

@@ -57,6 +57,13 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
+        $payment_sum = $row[9];
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         if ($sigun && $nonghyup && $farmer && $supporter) {
             $row = new StatusMachineSupporter([
                 'business_year'   => $row[0],
@@ -69,11 +76,11 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'working_days'    => $working_days,
                 'work_detail'     => $row[7],
                 'working_area'    => $row[8],
-                'payment_sum'     => $row[9],
-                'payment_do'      => $row[9] * 0.21,
-                'payment_sigun'   => $row[9] * 0.49,
-                'payment_center'  => $row[9] * 0.2,
-                'payment_unit'    => $row[9] * 0.1,
+                'payment_sum'     => $payment_sum,
+                'payment_do'      => $payment_do + $payment_diff,
+                'payment_sigun'   => $payment_sigun,
+                'payment_center'  => $payment_center,
+                'payment_unit'    => $payment_unit,
                 'remark'          => $row[10],
             ]);
 

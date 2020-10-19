@@ -59,7 +59,7 @@
             <th width="6%">작업종료일</th>
             <th width="3%">작업일수</th>
             <th width="3%">작업내용</th>
-            <th width="3%">작업면적(㏊)</th>
+            <th width="5%">작업면적(m<sup>2</sup>)</th>
             <th>합계</th>
             <th>도비</th>
             <th>시군비</th>
@@ -84,7 +84,7 @@
             <td>{{ $row->job_end_date->format('Y-m-d') }}</td>
             <td>{{ $row->working_days }}</td>
             <td>{{ $row->work_detail }}</td>
-            <td>{{ number_format($row->working_area / 10000, 1) }}</td>
+            <td>{{ number_format($row->working_area) }}</td>
             <td>{{ number_format($row->payment_sum) }}</td>
             <td>{{ number_format($row->payment_do) }}</td>
             <td>{{ number_format($row->payment_sigun) }}</td>

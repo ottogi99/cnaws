@@ -70,9 +70,9 @@
         <img src="/img/icon-6.png"/ style="margin:0px 10px 0px 10px;">
         <span>업무포털</span></a>
         <ul class="nav nav-pills nav-stacked">
-          <li><a href="6task.html">공지사항</a></li>
-          <li><a href="6task-2.html">사용자매뉴얼</a></li>
-          <li><a href="6task-3.html">건의사항</a></li>
+          <li><a href="{{ route('notice.index') }}">공지사항</a></li>
+          <li><a href="{{ route('user_manual.index') }}">사용자매뉴얼</a></li>
+          <li><a href="{{ route('suggestion.index') }}">건의사항</a></li>
         </ul>
       </li>
 
