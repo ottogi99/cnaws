@@ -76,7 +76,7 @@
           </thead>
           <tbody>
             @forelse($rows_machine as $row)
-            <tr>
+            <tr onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">
               <td>{{ ($rows_machine->currentPage()-1) * $rows_machine->perPage() + $loop->iteration }}</td>
               <td>{{ $row->sigun->name }}</td>
               <td>{{ $row->nonghyup->name }}</td>
@@ -114,7 +114,7 @@
           </thead>
           <tbody>
             @forelse($rows_manpower as $row)
-            <tr>
+            <tr onclick="location.href='{{ route('status_manpower_supporters.show', $row->id) }}'">
               <td>{{ ($rows_manpower->currentPage()-1) * $rows_manpower->perPage() + $loop->iteration }}</td>
               <td>{{ $row->sigun->name }}</td>
               <td>{{ $row->nonghyup->name }}</td>
@@ -157,7 +157,7 @@
           </thead>
           <tbody>
             @forelse($rows_notices as $row)
-            <tr>
+            <tr onclick="location.href='{{ route('notice.show', $row->id) }}'">
               <td>{{ ($rows_notices->currentPage()-1) * $rows_notices->perPage() + $loop->iteration }}</td>
               <td>{{ $row->title }}</td>
               <td>{{ $row->user->name }}</td>
@@ -200,12 +200,12 @@
           </thead>
           <tbody>
             @forelse($rows_suggestions as $row)
-            <tr>
+            <tr onclick="location.href='{{ route('suggestion.show', $row->id) }}'">
               <td>{{ ($rows_suggestions->currentPage()-1) * $rows_suggestions->perPage() + $loop->iteration }}</td>
               <td>{{ $row->title }}</td>
               <td>{{ $row->user->name }}</td>
               <td>{{ $row->created_at->format('Y-m-d') }}</td>
-              <td>{{ $row->hit }}</td>
+              <td>{{ ($row->disclose) ? '비공개' : '공개'  }}</td>
             </tr>
             @empty
             <tr>

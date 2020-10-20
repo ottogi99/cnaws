@@ -85,7 +85,7 @@
       </div>
 
 <!-- 댓글 영역 -->
-      <div class="input-group input-group-lg {{ $errors->has('content') ? 'has-error' : '' }}" style="padding-top:20px; border-top:2px solid #efefef;">
+      <div class="input-group input-group-lg {{ $errors->has('content') ? 'has-error' : '' }}" style="clear:both; width:100%; padding-top:20px; border-top:2px solid #efefef;">
         <span class="input-group-addon" style="width:20%; font-size:13px; height:10px;">댓글</span>
         <input type="text" class="form-control" id="comment_content" placeholder="내용을 입력하세요." style="height:40px;">
         <a id="#" href="#" class="btn btn-primary btn__add__comment" style="position:absolute; height:40px; line-height:20px;">등록</a>
@@ -105,9 +105,11 @@
           <tr class="item__comment__{{ $comment->id }}" data-id="{{ $comment->id }}">
             <th style="border-right:1px solid #efefef;">{{ $comment->user->name }}</th>
             <td style="">{{ nl2br($comment->content) }}</td>
-            <td class="center" style=" border-right:1px solid #efefef;">{{ $comment->created_at->format('Y-m-d') }}<br/>{{ $comment->created_at->format('h:i:s') }}</td>
+            <td class="center" style=" border-right:1px solid #efefef;">{{ $comment->created_at->format('Y-m-d h:i:s') }}</td>
             <td class="center">
+              @can('delete-comment', $comment)
               <a href="#" class="btn__delete__comment"><i class="glyphicon glyphicon-trash"></i></a>
+              @endcan
             </td>
           </tr>
           @empty

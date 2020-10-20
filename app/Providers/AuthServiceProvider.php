@@ -252,7 +252,6 @@ class AuthServiceProvider extends ServiceProvider
                     throw new AuthorizationException('해당 게시물에 접근 권한이 없습니다.');
                 }
             }
-
             return true;
         });
         Gate::define('suggestion-edit', function ($user, $suggestion) {
@@ -260,6 +259,10 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('suggestion-delete', function ($user, $suggestion) {
             return $user->id === $suggestion->user->id;
+        });
+
+        Gate::define('delete-comment', function ($user, $comment) {
+            return $user->id === $comment->user->id;
         });
     }
 }
