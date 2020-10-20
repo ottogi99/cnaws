@@ -21,7 +21,7 @@
 <img src="/img/main-logo.png"/ style="width:274px; height:160px; margin-bottom:100px;">
 <div class="row" >
   <div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="최신 6건" class="well top-block" href="#">
+    <a data-toggle="tooltip" class="well top-block" href="{{ route('status_machine_supporters.index') }}">
       <!-- <i class="glyphicon glyphicon-user blue"></i> -->
       <div>농기계지원반 모집</div>
       <!-- <div>507</div> -->
@@ -30,7 +30,7 @@
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="최신 4건" class="well top-block" href="#">
+    <a data-toggle="tooltip" class="well top-block" href="{{ route('status_manpower_supporters.index') }}">
       <!-- <i class="glyphicon glyphicon-star green"></i> -->
       <div>인력지원반 모집</div>
       <!-- <div>228</div> -->
@@ -39,7 +39,7 @@
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="최신 34건" class="well top-block" href="#">
+    <a data-toggle="tooltip" class="well top-block" href="{{ route('notice.index') }}">
       <!-- <i class="glyphicon  glyphicon glyphicon-volume-up yellow"></i> -->
       <div>공지사항</div>
       <!-- <div>52</div> -->
@@ -48,7 +48,7 @@
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="최신 12건" class="well top-block" href="#">
+    <a data-toggle="tooltip" class="well top-block" href="{{ route('suggestion.index') }}">
       <!-- <i class="glyphicon glyphicon-envelope red"></i> -->
       <div>건의사항</div>
       <!-- <div>25</div> -->
