@@ -29,7 +29,7 @@
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:20%; font-size:13px;">내용</span>
-        <span class="form-control" style="height:200px;">{!! nl2br($notice->content) !!}</span>
+        <span class="form-control" style="height:auto; min-height:200px;">{!! nl2br($notice->content) !!}</span>
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:20%; font-size:13px;">첨부파일</span>
