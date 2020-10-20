@@ -457,3 +457,7 @@ Route::delete('suggestion/{id}/delete_file', [
     'uses'  => 'SuggestionController@delete_file'
 ]);
 Route::resource('suggestion', 'SuggestionController');
+
+
+Route::resource('comments', 'CommentController');
+Route::resource('suggestion.comments', 'CommentController', ['only' => 'store']);

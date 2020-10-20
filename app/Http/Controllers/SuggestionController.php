@@ -103,7 +103,10 @@ class SuggestionController extends Controller
 
         $suggestion->update(['hit' => $suggestion->hit + 1]);
 
-        return view('suggestion.show', compact('suggestion', 'previous', 'next'));
+        // 댓글
+        $comments = $suggestion->comments()->latest()->get();
+
+        return view('suggestion.show', compact('suggestion', 'previous', 'next', 'comments'));
     }
 
     public function edit($id)

@@ -21,4 +21,9 @@ class Suggestion extends Model
     {
         return $this->hasMany(Attachment::class, 'suggestion_id', 'id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
