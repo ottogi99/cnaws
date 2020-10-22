@@ -453,11 +453,11 @@ class StatusManpowerSupportersController extends Controller
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
                                           //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-                                              $query->whereRaw(
-                                                (`status_manpower_supporters`.`job_start_date` <= ? and ? <= `status_manpower_supporters`.`job_end_date`)
+                                              $query->whereRaw('
+                                                (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
                                             		or
-                                            		(`status_manpower_supporters`.`job_start_date` <= ? and ? <= `status_manpower_supporters`.`job_end_date`)
-                                              , [$job_start_date, $job_start_date, $job_end_date, $job_end_date]);
+                                            		(status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
+                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date]);
                                       })->get();
 
         // dd(DB::getQueryLog());                                      // ->exists())
