@@ -75,9 +75,7 @@
       <hr/>
 
       <div style="float:right;">
-        @can('suggestion-create')
         <button type="button" class="btn btn-sm btn-primary" onclick="location.href='{{ route('suggestion.create') }}'">등록</button>
-        @endcan
       </div>
 
       <div class="bot_pagination">

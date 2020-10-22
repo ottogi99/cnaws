@@ -224,7 +224,8 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         /* 공지사항 */
-        Gate::define('notice-create', function ($user, $notice) {
+        Gate::define('notice-create', function ($user) {
+            return $user->isAdmin();
         });
 
         Gate::define('notice-edit', function ($user, $notice) {
@@ -235,7 +236,8 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         /* 사용자매뉴얼 */
-        Gate::define('user-manual-create', function ($user, $manual) {
+        Gate::define('user-manual-create', function ($user) {
+            return $user->isAdmin();
         });
 
         Gate::define('user-manual-edit', function ($user, $manual) {
