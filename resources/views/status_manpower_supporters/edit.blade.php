@@ -55,6 +55,11 @@
 
     $(document).ready(function() {
       $('#form__edit').submit(function() {
+
+          var payment_item1 = parseInt($('#payment_item1').val()) || 0;
+          var payment_item2 = parseInt($('#payment_item2').val()) || 0;
+          var payment_item3 = parseInt($('#payment_item3').val()) || 0;
+
           var payment_sum = parseInt($('#payment_sum').val()) || 0;
           var payment_do = parseInt($('#payment_do').val()) || 0;
           var payment_sigun = parseInt($('#payment_sigun').val()) || 0;
@@ -63,7 +68,12 @@
           var sum = (payment_do + payment_sigun + payment_center + payment_unit);
 
           if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
-            alert('지급액 합계와 일치하지 않습니다.(' + sum + ')');
+            alert('각 지급액 항목의 합과 지급액 합계가 일치하지 않습니다.( 항목의 합:' + sum + ')');
+            return false;
+          }
+
+          if (payment_sum != (payment_item1 + payment_item2 + payment_item3)){
+            alert('지급내역(교통비 외) 항목의 합과 지급액 합계가 일치하지 않습니다.( 항목의 합:' + sum + ')');
             return false;
           }
       });

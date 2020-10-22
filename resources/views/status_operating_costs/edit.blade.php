@@ -55,6 +55,20 @@
     }
 
     $(document).ready(function() {
+      $('#form__edit').submit(function() {
+          var payment_sum = parseInt($('#payment_sum').val());
+          var payment_do = parseInt($('#payment_do').val());
+          var payment_sigun = parseInt($('#payment_sigun').val());
+          var payment_center = parseInt($('#payment_center').val());
+          var payment_unit = parseInt($('#payment_unit').val());
+          var sum = (payment_do + payment_sigun + payment_center + payment_unit);
+
+          if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
+            alert('지급액 항목의 합과 합계가 일치하지 않습니다.( 항목의 합:' + sum + ')');
+            return false;
+          }
+      });
+
       $('#sigun_code').change(get_nonghyups);
       get_nonghyups();
     });

@@ -42,7 +42,7 @@
             <th colspan='2'>지역정보</th>
             <th colspan='3'>지원농가</th>
             <th colspan='5'>지원작업</th>
-            <th colspan='4'>지급내역</th>
+            <th colspan='5'>지급내역</th>
             <th colspan='5'>지급액(원)</th>
             <th width="6%"></th>
             <th width="8%"></th>
@@ -61,6 +61,7 @@
             <th>작업일수</th>
             <th>작업내용</th>
             <th>제공자</th>
+            <th>합계</th>
             <th>교통비</th>
             <th>간식비</th>
             <th>마스크구입비</th>
@@ -89,6 +90,7 @@
             <td>{{ $row->working_days }}</td>
             <td>{{ $row->work_detail }}</td>
             <td>{{ ($row->recipient == 'S') ? '지원단' : '농가'}}</td>
+            <td>{{ number_format($row->payment_sum) }}</td>
             <td>{{ number_format($row->payment_item1) }}</td>
             <td>{{ number_format($row->payment_item2) }}</td>
             <td>{{ number_format($row->payment_item3) }}</td>
@@ -108,7 +110,7 @@
           </tr>
           @empty
           <tr>
-            <td colspan="23">항목이 존재하지 않습니다.</td>
+            <td colspan="24">항목이 존재하지 않습니다.</td>
           </tr>
           @endforelse
         </tbody>

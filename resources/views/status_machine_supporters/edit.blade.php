@@ -63,7 +63,7 @@
           var sum = (payment_do + payment_sigun + payment_center + payment_unit);
 
           if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
-            alert('지급액 합계와 일치하지 않습니다.(' + sum + ')');
+            alert('각 지급액 항목의 합과 지급액 합계가 일치하지 않습니다.( 항목의 합:' + sum + ')');
             return false;
           }
       });

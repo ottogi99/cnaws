@@ -88,9 +88,9 @@
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">상해보험 가입여부</span>
   <span class="input-group-addon" style="width:41px; font-size:13px;">가입</span>
-  <input type="radio" id="join" name="has_insurance" class="form-control" style="width:18px;" value="1" {{ ($supporter->has_insurance == '1') ? 'checked' : '' }}>
+  <input type="radio" id="join" name="has_insurance" class="form-control" style="width:18px;" value="1" {{ ($supporter->has_insurance) ? 'checked' : '' }}>
   <span class="input-group-addon" style="width:41px; font-size:13px;">미가입</span>
-  <input type="radio" id="not_join" name="has_insurance" class="form-control" style="width:18px;" value="0" {{ ($supporter->has_insurance == '0') ? 'checked' : '' }}>
+  <input type="radio" id="not_join" name="has_insurance" class="form-control" style="width:18px;" value="0" {{ (!$supporter->has_insurance) ? 'checked' : '' }}>
   {!! $errors->first('has_insurance', '<span class="form-error">:message</span>') !!}
 </div>
 

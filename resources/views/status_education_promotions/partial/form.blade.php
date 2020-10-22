@@ -59,19 +59,11 @@
   {!! $errors->first('detail', '<span class="form-error">:message</span>') !!}
 </div>
 
-@if ($viewName === 'status_education_promotions.create')
 <div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(계)</span>
   <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" numberOnly/>
   {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
 </div>
-@else
-<div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(계)</span>
-  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" readonly/>
-  {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
-</div>
-@endif
 
 @if ($viewName === 'status_education_promotions.edit')
 <div class="input-group input-group-lg {{ $errors->has('payment_do') ? 'has-error' : '' }}" style="padding-bottom:10px;">
