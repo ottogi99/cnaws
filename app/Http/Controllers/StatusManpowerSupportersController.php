@@ -9,6 +9,7 @@ use App\Imports\StatusManpowerSupportersImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class StatusManpowerSupportersController extends Controller
 {
@@ -435,8 +436,9 @@ class StatusManpowerSupportersController extends Controller
 
     private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
     {
+        DB::enableQueryLog();
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
-        return $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
+        $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
                                       ->join('large_farmers', 'status_manpower_supporters.farmer_id', 'large_farmers.id')
                                       ->join('manpower_supporters', 'status_manpower_supporters.supporter_id', 'manpower_supporters.id')
@@ -451,8 +453,10 @@ class StatusManpowerSupportersController extends Controller
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
                                                 ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-                                      })
-                                      ->get();
-                                      // ->exists())
+                                      })->get();
+
+        dd(DB::getQueryLog());                                      // ->exists())
+
+        return $duplicated_items;
     }
 }
