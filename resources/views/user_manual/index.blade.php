@@ -66,7 +66,7 @@
               @can('user-manual-edit', $manual)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('user_manual.edit', $manual->id) }}'">수정</button>
               @endcan
-              @can('user-manual-delete', $notice)
+              @can('user-manual-delete', $manual)
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $manual->id }}">삭제</button>
               @endcan
               @endif
