@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '업무포탈')
+@section('title', '업무포털')
 
 @section('style')
 <style>
