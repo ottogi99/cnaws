@@ -71,12 +71,13 @@ class UserManualController extends Controller
 
            foreach($files as $file) {
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+              $filesize = $file->getSize();
               $file->move(attachments_path(), $filename);
 
               $manual->attachments()->create([
                   'stored_name' => $filename,
                   'original_name' => $file->getClientOriginalName(),
-                  'bytes' => $file->getSize(),
+                  'bytes' => $filesize,
                   'mime' => $file->getClientMimeType()
               ]);
            }
@@ -120,12 +121,13 @@ class UserManualController extends Controller
 
            foreach($files as $file) {
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+              $filesize = $file->getSize();
               $file->move(attachments_path(), $filename);
 
               $manual->attachments()->create([
                   'stored_name' => $filename,
                   'original_name' => $file->getClientOriginalName(),
-                  'bytes' => $file->getSize(),
+                  'bytes' => $filesize,
                   'mime' => $file->getClientMimeType()
               ]);
            }

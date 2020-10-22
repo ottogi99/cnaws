@@ -69,8 +69,6 @@ class NoticeController extends Controller
         $notice = $request->user()->notices()->create($payload);
 
         // 파일 저장
-        Log::debug($request->hasFile('files'));
-
         if ($request->hasFile('files')) {
            $files = $request->file('files');
 
@@ -120,8 +118,6 @@ class NoticeController extends Controller
     {
         $notice = \App\Notice::findOrFail($id);
         $notice->update($request->all());
-
-        Log::debug($request->hasFile('files'));
 
         if ($request->hasFile('files')) {
            $files = $request->file('files');
