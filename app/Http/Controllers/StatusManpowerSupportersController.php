@@ -436,7 +436,7 @@ class StatusManpowerSupportersController extends Controller
 
     private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
     {
-        DB::enableQueryLog();
+        // DB::enableQueryLog();
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
@@ -451,11 +451,16 @@ class StatusManpowerSupportersController extends Controller
                                       ->where('status_manpower_supporters.business_year', now()->year)
                                       ->where('manpower_supporters.name', $supporter_name)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                          $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                                ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
+                                          // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
+                                          //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
+                                              $query->whereRaw(
+                                                (`status_manpower_supporters`.`job_start_date` <= ? and ? <= `status_manpower_supporters`.`job_end_date`)
+                                            		or
+                                            		(`status_manpower_supporters`.`job_start_date` <= ? and ? <= `status_manpower_supporters`.`job_end_date`)
+                                              , [$job_start_date, $job_start_date, $job_end_date, $job_end_date]);
                                       })->get();
 
-        dd(DB::getQueryLog());                                      // ->exists())
+        // dd(DB::getQueryLog());                                      // ->exists())
 
         return $duplicated_items;
     }
