@@ -227,7 +227,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('notice-create', function ($user) {
             return $user->isAdmin();
         });
-
         Gate::define('notice-edit', function ($user, $notice) {
             return $user->id === $notice->user->id;
         });
@@ -239,7 +238,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('user-manual-create', function ($user) {
             return $user->isAdmin();
         });
-
         Gate::define('user-manual-edit', function ($user, $manual) {
             return $user->id === $manual->user->id;
         });

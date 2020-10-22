@@ -63,8 +63,12 @@
             <td>
               @if (auth()->user()->is_input_allowed)
               <button class="btn btn-xs" onclick="location.href='{{ route('notice.show', $notice->id) }}'">보기</button>
+              @can('notice-edit', $notice)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('notice.edit', $notice->id) }}'">수정</button>
+              @endcan
+              @can('notice-delete', $notice)
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $notice->id }}">삭제</button>
+              @endcan
               @endif
             </td>
           </tr>
