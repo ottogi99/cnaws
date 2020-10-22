@@ -26,6 +26,6 @@
 </div>
 
 <div style="width:210px; height:40px; background-color:#085e38; margin-top:-20px; position:relative;">
-	<span style="font-family:'ng'; color:#ffffff; line-height:38px; padding-left:15px;">{{ config('app.name', 'cnaws') }}</span>
+	<span style="font-family:'ng'; color:#ffffff; line-height:38px; padding-left:15px;">{{ config('app.name', '충남농작업지원단 업무시스템') }}</span>
 </div>
 <!-- topbar ends -->
