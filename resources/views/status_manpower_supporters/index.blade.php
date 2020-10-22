@@ -89,9 +89,9 @@
             <td>{{ $row->working_days }}</td>
             <td>{{ $row->work_detail }}</td>
             <td>{{ ($row->recipient == 'S') ? '지원단' : '농가'}}</td>
-            <td>{{ $row->payment_item1 }}</td>
-            <td>{{ $row->payment_item2 }}</td>
-            <td>{{ $row->payment_item3 }}</td>
+            <td>{{ number_format($row->payment_item1) }}</td>
+            <td>{{ number_format($row->payment_item2) }}</td>
+            <td>{{ number_format($row->payment_item3) }}</td>
             <td>{{ number_format($row->payment_sum) }}</td>
             <td>{{ number_format($row->payment_do) }}</td>
             <td>{{ number_format($row->payment_sigun) }}</td>

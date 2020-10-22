@@ -20,25 +20,19 @@
 @section('content')
 <img src="/img/main-logo.png"/ style="width:274px; height:160px; margin-bottom:100px;">
 <div class="row" >
-  <div class="col-md-3 col-sm-3 col-xs-6">
+  <!-- <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" class="well top-block" href="{{ route('status_machine_supporters.index') }}">
-      <!-- <i class="glyphicon glyphicon-user blue"></i> -->
       <div>농기계지원반 모집</div>
-      <!-- <div>507</div> -->
-      <!-- <span class="notification">6</span> -->
     </a>
   </div>
 
   <div class="col-md-3 col-sm-3 col-xs-6">
     <a data-toggle="tooltip" class="well top-block" href="{{ route('status_manpower_supporters.index') }}">
-      <!-- <i class="glyphicon glyphicon-star green"></i> -->
       <div>인력지원반 모집</div>
-      <!-- <div>228</div> -->
-      <!-- <span class="notification green">4</span> -->
     </a>
-  </div>
+  </div> -->
 
-  <div class="col-md-3 col-sm-3 col-xs-6">
+  <div class="col-md-6 col-sm-6 col-xs-12">
     <a data-toggle="tooltip" class="well top-block" href="{{ route('notice.index') }}">
       <!-- <i class="glyphicon  glyphicon glyphicon-volume-up yellow"></i> -->
       <div>공지사항</div>
@@ -47,7 +41,7 @@
     </a>
   </div>
 
-  <div class="col-md-3 col-sm-3 col-xs-6">
+  <div class="col-md-6 col-sm-6 col-xs-12">
     <a data-toggle="tooltip" class="well top-block" href="{{ route('suggestion.index') }}">
       <!-- <i class="glyphicon glyphicon-envelope red"></i> -->
       <div>건의사항</div>
@@ -58,7 +52,7 @@
 </div>
 
 <div class="row">
-  <div class="box col-md-3">
+  <!-- <div class="box col-md-3">
     <div class="box-inner" style="background-color:#ffffff;">
       <div class="box-header well" data-original-title="" style="background:none; height:70px; text-align:center; line-height:60px; font-size:15px;">
         <span>농기계지원반 지원현황</span>
@@ -131,9 +125,9 @@
         {{ $rows_manpower->withQueryString()->links() }}
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <div class="box col-md-3">
+  <div class="box col-md-6">
     <div class="box-inner" style="background-color:#ffffff;">
       <div class="box-header well" data-original-title=""
       style="background:none; height:70px; text-align:center; line-height:60px; font-size:15px;">
@@ -176,7 +170,7 @@
     </div>
   </div>
 
-  <div class="box col-md-3">
+  <div class="box col-md-6">
     <div class="box-inner" style="background-color:#ffffff;">
       <div class="box-header well" data-original-title=""
       style="background:none; height:70px; text-align:center; line-height:60px; font-size:15px;">

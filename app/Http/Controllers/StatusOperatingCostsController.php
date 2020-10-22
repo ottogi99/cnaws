@@ -119,7 +119,6 @@ class StatusOperatingCostsController extends Controller
 
         $payload = array_merge($request->all(), [
           'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
-          'working_days' => $working_days,
           'payment_do' => $payment_do + $payment_diff,
           'payment_sigun' => $payment_sigun,
           'payment_center' => $payment_center,

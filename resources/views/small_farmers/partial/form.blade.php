@@ -68,19 +68,19 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('acreage1') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">답작(m<sup>2</sup>)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">답작(ha)</span>
   <input type="number" step="0.1" name="acreage1" id="acreage1" value="{{ old('acreage1', $farmer->acreage1) }}" class="form-control" numberOnly/>
   {!! $errors->first('acreage1', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('acreage2') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">전작(m<sup>2</sup>)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">전작(ha)</span>
   <input type="number" step="0.1" name="acreage2" id="acreage2" value="{{ old('acreage2', $farmer->acreage2) }}" class="form-control" numberOnly/>
   {!! $errors->first('acreage2', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('acreage3') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">기타(m<sup>2</sup>)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">기타(ha)</span>
   <input type="number" step="0.1" name="acreage3" id="acreage3" value="{{ old('acreage3', $farmer->acreage3) }}" class="form-control" numberOnly/>
   {!! $errors->first('acreage3', '<span class="form-error">:message</span>') !!}
 </div>

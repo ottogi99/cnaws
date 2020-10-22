@@ -173,6 +173,51 @@
     get_nonghyups();
   });
 
+  // 한글을 지우는 부분,
+  function delHangle(evt) {
+    var objTarget = evt.srcElement || evt.target;
+    var _value = event.srcElement.value;
+    if (/[ㄱ-ㅎㅏ-ㅡ가-핳]/g.test(_value)) {
+      objTarget.value = null;
+    }
+  }
+
+  // 숫자를 제외한 값을 입력하지 못하게 한다.
+  function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    var _value = event.srcElement.value;
+
+    if (event.keyCode < 48 || event.keyCode > 57) {
+      if (event.keyCode != 46) {  // 숫자와 . 만 입력가능하도록 함.
+        return false;
+      }
+    }
+
+    // 소수점(.)이 두번 이상 나오지 못하게
+    var _pattern0 = /^\d*[.]\d*$/;
+    if (_pattern0.test(_value)) {
+      if (charCode == 46) {
+        return false;
+      }
+    }
+
+    // 두자리 이하의 숫자만 입력가능
+    // var _pattern1 = /^\d{2}$/;
+    // if (_pattern1.test(_value)) {
+    //   if (charCode != 46) {
+    //     alert("두자리 이하의 숫자만 입력가능합니다");
+    //     return false;
+    //   }
+    // }
+
+    // 소수점 첫째자리까지만 입력가능
+    var _pattern2 = /^\d*[.]\d{1}$/;
+    if (_pattern2.test(_value)) {
+      alert("소수점 둘째자리까지만 입력가능합니다.");
+      return false;
+    }
+    return true;
+  }
 
 </script>
 @yield('script')

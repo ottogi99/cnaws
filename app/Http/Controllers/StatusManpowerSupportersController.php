@@ -153,6 +153,10 @@ class StatusManpowerSupportersController extends Controller
             return back()->withInput();
         }
 
+        $job_start_date = new Carbon($request->input('job_start_date'));
+        $job_end_date   = new Carbon($request->input('job_end_date'));
+        $working_days = $job_start_date->diffInDays($job_end_date) + 1;//->format('%H:%I:%S');
+
         $payment_sum = 0;
         if ($request->has('payment_item1'))
             $payment_sum = $request->input('payment_item1');
@@ -160,15 +164,6 @@ class StatusManpowerSupportersController extends Controller
             $payment_sum += $request->input('payment_item2');
         if ($request->has('payment_item3'))
             $payment_sum += $request->input('payment_item3');
-
-        $payload = array_merge($request->all(), [
-            'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
-            'payment_sum' => $payment_sum,
-        ]);
-
-        $job_start_date = new Carbon($request->input('job_start_date'));
-        $job_end_date   = new Carbon($request->input('job_end_date'));
-        $working_days = $job_start_date->diffInDays($job_end_date) + 1;//->format('%H:%I:%S');
 
         $payment_do = floor($payment_sum * 0.21);
         $payment_sigun = floor($payment_sum * 0.49);
@@ -183,6 +178,7 @@ class StatusManpowerSupportersController extends Controller
           'payment_sigun' => $payment_sigun,
           'payment_center' => $payment_center,
           'payment_unit' => $payment_unit,
+          'payment_sum' => $payment_sum,
         ]);
 
         try {

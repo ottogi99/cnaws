@@ -49,12 +49,10 @@
 
 <div class="input-group input-group-lg {{ $errors->has('target') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지급대상</span>
-  <select name="target" id="target">
-    <option value="지원단">지원단</option>
-    <option value="농가">농가</option>
-  </select>
+  <input type="text" name="target" id="target" value="{{ old('target', $row->target) }}" class="form-control"/>
   {!! $errors->first('target', '<span class="form-error">:message</span>') !!}
 </div>
+
 
 <div class="input-group input-group-lg {{ $errors->has('details') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지출내용</span>
