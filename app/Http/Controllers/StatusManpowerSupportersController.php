@@ -139,9 +139,8 @@ class StatusManpowerSupportersController extends Controller
 
         $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
 
-        // dd($duplicated_items);
-          if (count($duplicated_items) > 0)
-          {
+        if (count($duplicated_items) > 0)
+        {
             // $error_message = '요청하신 데이터 정보<br/>';
             flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
@@ -260,17 +259,20 @@ class StatusManpowerSupportersController extends Controller
 
             if (count($duplicated_items) > 0)
             {
-                // $error_message = '요청하신 데이터 정보<br/>';
-                flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
+                // dd($duplicated_items[0]->id, $id);
+                if ($duplicated_items[0]->id != $id) {
+                    // $error_message = '요청하신 데이터 정보<br/>';
+                    flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
-                $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
-                foreach ($duplicated_items as $index => $item) {
-                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
+                    foreach ($duplicated_items as $index => $item) {
+                        $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                    . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    }
+
+                    flash()->warning($warning_message);
+                    return back()->withInput();
                 }
-
-                flash()->warning($warning_message);
-                return back()->withInput();
             }
         }
         // << End.
