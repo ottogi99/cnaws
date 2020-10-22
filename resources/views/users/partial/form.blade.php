@@ -101,7 +101,6 @@
   <input type="text" name="representative" id="representative" value="{{ old('representative', $nonghyup->representative) }}" class="form-control" />
   {!! $errors->first('representative', '<span class="form-error">:message</span>') !!}
 </div>
-@endif
 
 <div class="input-group input-group-lg">
   <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호</span>
@@ -112,3 +111,4 @@
   <button type="button" class="btn btn btn-sm button__resetPassword" data-id="{{ $nonghyup->id }}">비밀번호 초기화</button>
   @endif
 </div>
+@endif

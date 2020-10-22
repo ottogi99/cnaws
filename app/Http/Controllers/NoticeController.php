@@ -69,10 +69,13 @@ class NoticeController extends Controller
         $notice = $request->user()->notices()->create($payload);
 
         // 파일 저장
+        Log::debug($request->hasFile('files'));
+
         if ($request->hasFile('files')) {
            $files = $request->file('files');
 
            foreach($files as $file) {
+              Log::debug($file->getClientOriginalName());
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
               $file->move(attachments_path(), $filename);
 
@@ -118,11 +121,15 @@ class NoticeController extends Controller
         $notice = \App\Notice::findOrFail($id);
         $notice->update($request->all());
 
+        Log::debug($request->hasFile('files'));
+
         if ($request->hasFile('files')) {
            $files = $request->file('files');
 
            foreach($files as $file) {
+              Log::debug($file->getClientOriginalName());
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
+              Log::debug($filename);
               $file->move(attachments_path(), $filename);
 
               $notice->attachments()->create([
