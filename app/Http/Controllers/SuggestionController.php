@@ -113,7 +113,7 @@ class SuggestionController extends Controller
     public function edit($id)
     {
         $suggestion = \App\Suggestion::findOrFail($id);
-        $this->authorize('suggestion-update', $suggestion);
+        $this->authorize('suggestion-edit', $suggestion);
 
         return view('suggestion.edit', compact('suggestion'));
     }
