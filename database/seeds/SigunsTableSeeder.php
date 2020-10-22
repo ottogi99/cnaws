@@ -19,7 +19,7 @@ class SigunsTableSeeder extends Seeder
           array('sequence'  => 5, 'code'  => 'ss', 'name'  => '서산시'),
           array('sequence'  => 6, 'code'  => 'ns', 'name'  => '논산시'),
           array('sequence'  => 8, 'code'  => 'dj', 'name'  => '당진시'),
-          array('sequence'  => 7, 'code'  => 'sj', 'name'  => '세종시'),
+          // array('sequence'  => 7, 'code'  => 'sj', 'name'  => '세종시'),
           array('sequence'  => 9, 'code'  => 'gs', 'name'  => '금산군'),
           array('sequence'  => 10, 'code'  => 'by', 'name'  => '부여군'),
           array('sequence'  => 11, 'code'  => 'sc', 'name'  => '서천군'),
