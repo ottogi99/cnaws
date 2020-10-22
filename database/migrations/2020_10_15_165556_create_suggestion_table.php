@@ -34,6 +34,10 @@ class CreateSuggestionTable extends Migration
       */
      public function down()
      {
+         Schema::table('suggestion', function (Blueprint $table) {
+             $table->dropForeign('suggestion_user_id_foreign');
+         });
+
          Schema::dropIfExists('suggestion');
      }
 }

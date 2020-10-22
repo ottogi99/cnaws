@@ -39,31 +39,43 @@ class CreateGetPerformanceOperatingProcedure extends Migration
               	  SELECT COUNT(small_farmers.nonghyup_id) AS small_farmer_number
               	  FROM small_farmers
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T1,
               (
               	  SELECT COUNT(machine_supporters.nonghyup_id) AS machine_supporter_number
               	  FROM machine_supporters
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T2,
               (
               	  SELECT COUNT(large_farmers.nonghyup_id) AS large_farmer_number
               	  FROM large_farmers
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T3,
               (
               	  SELECT COUNT(manpower_supporters.nonghyup_id) AS manpower_supporter_number
               	  FROM manpower_supporters
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T4,
               (
               	  SELECT SUM(status_machine_supporters.working_area) AS machine_supporter_working_area
               	  FROM status_machine_supporters
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T5,
               (
               	  SELECT SUM(status_manpower_supporters.working_days) AS manpower_supporter_working_days
               	  FROM status_manpower_supporters
               	  WHERE `business_year` = IF(p_business_year = '', `business_year`, p_business_year)
+                  AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                  AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               ) T6,
               (
               	SELECT SUM(T1.days) machine_supporter_performance_days
@@ -80,6 +92,8 @@ class CreateGetPerformanceOperatingProcedure extends Migration
               				SELECT nonghyup_id, farmer_id, job_start_date AS sdate, job_end_date AS edate
               				FROM status_machine_supporters
               				WHERE business_year = IF(p_business_year = '', `business_year`, p_business_year)
+                      AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                      AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               				UNION ALL
               				select nonghyup_id, farmer_id, (sdate + INTERVAL 1 DAY), edate from CTE where sdate < edate
               			)
@@ -105,6 +119,8 @@ class CreateGetPerformanceOperatingProcedure extends Migration
               				SELECT nonghyup_id, farmer_id, job_start_date AS sdate, job_end_date AS edate
               				FROM status_manpower_supporters
               				WHERE business_year = IF(p_business_year = '', `business_year`, p_business_year)
+                      AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                      AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               				UNION ALL
               				select nonghyup_id, farmer_id, (sdate + INTERVAL 1 DAY), edate from CTE where sdate < edate
               			)
@@ -124,6 +140,9 @@ class CreateGetPerformanceOperatingProcedure extends Migration
               		(
               			SELECT nonghyup_id, farmer_id, 1 AS cnt
               			FROM status_machine_supporters
+                    WHERE business_year = IF(p_business_year = '', `business_year`, p_business_year)
+                    AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                    AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               			GROUP BY nonghyup_id, farmer_id
               		) T1
               		GROUP BY T1.nonghyup_id
@@ -138,6 +157,9 @@ class CreateGetPerformanceOperatingProcedure extends Migration
               		(
               			SELECT nonghyup_id, farmer_id, 1 AS cnt
               			FROM status_manpower_supporters
+                    WHERE business_year = IF(p_business_year = '', `business_year`, p_business_year)
+                    AND sigun_code = IF(p_sigun_code = '', sigun_code, p_sigun_code)
+                    AND nonghyup_id = IF(p_nonghyup_id = '', nonghyup_id, p_nonghyup_id)
               			GROUP BY nonghyup_id, farmer_id
               		) T1
               		GROUP BY T1.nonghyup_id

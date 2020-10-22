@@ -36,10 +36,10 @@ class CreateCommentTable extends Migration
      */
     public function down()
     {
-        Schema::table('comments', function (Blueprint $table) {
+        Schema::table('comment', function (Blueprint $table) {
             // $table->dropForeign('comments_parent_id_foreign');
-            $table->dropForeign('comments_user_id_foreign');
-            $table->dropForeign('comments_suggestion_id_foreign');
+            $table->dropForeign('comment_user_id_foreign');
+            $table->dropForeign('comment_suggestion_id_foreign');
         });
 
         Schema::dropIfExists('comment');
