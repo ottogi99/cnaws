@@ -459,7 +459,7 @@ class StatusManpowerSupportersController extends Controller
                                             		(status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
                                                 or
                                             		(status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
-                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_end_date, $job_end_date]);
+                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
                                       })->get();
 
         // dd(DB::getQueryLog());                                      // ->exists())
