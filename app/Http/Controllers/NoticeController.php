@@ -75,7 +75,6 @@ class NoticeController extends Controller
            $files = $request->file('files');
 
            foreach($files as $file) {
-              Log::debug($file->getClientOriginalName());
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
               $filesize = $file->getSize();
               $file->move(attachments_path(), $filename);
@@ -128,15 +127,14 @@ class NoticeController extends Controller
            $files = $request->file('files');
 
            foreach($files as $file) {
-              Log::debug($file->getClientOriginalName());
               $filename = Str::random().filter_var($file->getClientOriginalName(), FILTER_SANITIZE_URL);
-              Log::debug($filename);
+              $filesize = $file->getSize();
               $file->move(attachments_path(), $filename);
 
               $notice->attachments()->create([
                   'stored_name' => $filename,
                   'original_name' => $file->getClientOriginalName(),
-                  'bytes' => $file->getSize(),
+                  'bytes' => $filesize,
                   'mime' => $file->getClientMimeType()
               ]);
            }
