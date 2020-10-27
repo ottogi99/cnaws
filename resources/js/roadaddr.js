@@ -159,15 +159,16 @@ function enterSearchKeyword(type) {
 		event.keyCode = 0;
 
 		console.log(type);
-		if (type == 'small') {
-			getSearchResult(type);
-		} else if (type == 'large') {
-			getSearchResult(type);
-		} else if (type == 'machine') {
-			getSearchResult(type);
-		} else if (type == 'manpower') {
-			getSearchResult(type);
-		}
+		getSearchResult(type, 1);
+		// if (type == 'small') {
+		// 	getSearchResult(type);
+		// } else if (type == 'large') {
+		// 	getSearchResult(type);
+		// } else if (type == 'machine') {
+		// 	getSearchResult(type);
+		// } else if (type == 'manpower') {
+		// 	getSearchResult(type);
+		// }
 	}
 }
 
@@ -213,7 +214,7 @@ function getSearchResult(type, pageNo){
 			makeListJsonSearch(type, jsonStr);
 		}
     ,error: function(xhr, status, error){
-			console.log(error);
+			console.log(status + ' : ' + error);
 			alert("에러발생");
     }
 	});
