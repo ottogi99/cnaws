@@ -36,6 +36,10 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailu
 
     public function model(array $row)
     {
+        if (!isset($row[10])) {
+            return null;
+        }
+
         ++$this->rows;
 
         // 공백 제거

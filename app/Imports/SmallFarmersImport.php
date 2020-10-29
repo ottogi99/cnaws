@@ -33,6 +33,10 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
 
     public function model(array $row)
     {
+        if (!isset($row[11])) {
+            return null;
+        }
+
         ++$this->rows;
 
         $row = array_map(function($value) {

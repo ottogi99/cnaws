@@ -26,6 +26,10 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
 
     public function model(array $row)
     {
+        if (!isset($row[8])) {
+            return null;
+        }
+
         ++$this->rows;
 
         $row = array_map(function($value) {

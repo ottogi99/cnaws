@@ -26,6 +26,10 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
     public function model(array $row)
     {
+        if (!isset($row[12])) {
+            return null;
+        }
+
         ++$this->rows;
 
         // $currentRowNumber = $this->getRowNumber();

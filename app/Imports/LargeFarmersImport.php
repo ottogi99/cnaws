@@ -26,6 +26,10 @@ class LargeFarmersImport implements ToModel, WithStartRow, WithValidation, Skips
 
     public function model(array $row)
     {
+        if (!isset($row[12])) {
+            return null;
+        }
+
         ++$this->rows;
 
         $row = array_map(function($value) {

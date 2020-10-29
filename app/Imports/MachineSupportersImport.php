@@ -25,6 +25,10 @@ class MachineSupportersImport implements ToModel, WithStartRow, WithValidation, 
 
     public function model(array $row)
     {
+        if (!isset($row[14])) {
+            return null;
+        }
+
         ++$this->rows;
 
         $row = array_map(function($value) {
