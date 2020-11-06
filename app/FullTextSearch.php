@@ -46,8 +46,11 @@ trait FullTextSearch
         //           'small_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
         //       );
 
+        // if ($term) {
+        //     $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        // }
         if ($term) {
-            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("name like ?", ['%'.$term.'%']);
         }
         $query->whereRaw('business_year = ?', [$year]);
         $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
@@ -64,8 +67,11 @@ trait FullTextSearch
         //           'large_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
         //         );
 
+        // if ($term) {
+        //     $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        // }
         if ($term) {
-            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("name like ?", ['%'.$term.'%']);
         }
         $query->whereRaw('business_year = ?', [$year]);
         $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
@@ -82,8 +88,11 @@ trait FullTextSearch
         //           'machine_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
         //         );
 
+        // if ($term) {
+        //     $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        // }
         if ($term) {
-            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("name like ?", ['%'.$term.'%']);
         }
         $query->whereRaw('business_year = ?', [$year]);
         $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
@@ -105,8 +114,11 @@ trait FullTextSearch
         //           'manpower_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
         //         );
 
+        // if ($term) {
+        //     $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        // }
         if ($term) {
-            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("name like ?", ['%'.$term.'%']);
         }
         $query->whereRaw('business_year = ?', [$year]);
         $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
