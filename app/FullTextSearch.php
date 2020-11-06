@@ -41,15 +41,15 @@ trait FullTextSearch
     {
         $columns = implode(',', $this->searchable);
 
-        $query->join('users', 'small_farmers.nonghyup_id', 'users.nonghyup_id')
-              ->select(
-                  'small_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
-              );
+        // $query->join('users', 'small_farmers.nonghyup_id', 'users.nonghyup_id')
+        //       ->select(
+        //           'small_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
+        //       );
 
         if ($term) {
             $query->whereRaw("MATCH (small_farmers.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        // $query->whereRaw('small_farmers.business_year = ?', [$year]);
+        $query->whereRaw('business_year = ?', [$year]);
         // $query->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
