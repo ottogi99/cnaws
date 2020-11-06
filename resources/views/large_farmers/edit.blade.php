@@ -26,7 +26,7 @@
         @include('large_farmers.partial.form')
         <hr/>
         <div class="pull-left">
-          <a href="{{ route('small_farmers.index') }}" class="btn btn-sm btn-primary">목록</a>
+          <a href="{{ route('large_farmers.index') }}" class="btn btn-sm btn-primary">목록</a>
         </div>
         <div class="pull-right">
           <button type="submit" class="btn btn-sm btn-primary">수정</button>
