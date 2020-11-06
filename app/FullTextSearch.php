@@ -96,7 +96,7 @@ trait FullTextSearch
         return $query;
     }
 
-    public function scopeSearchManpower($query, $term)
+    public function scopeSearchManpower($query, $term, $year = null, $nonghyup_id = null)
     {
         $columns = implode(',', $this->searchable);
 
