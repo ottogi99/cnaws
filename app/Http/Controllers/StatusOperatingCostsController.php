@@ -107,6 +107,30 @@ class StatusOperatingCostsController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],         // 아이디 4자리~12자리
+            'item' => ['required'],
+            'target' => ['required'],
+            'detail' => ['required'],
+            'payment_sum' => ['required'],
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'item'            => '지출항목',
+            'target'          => '지급대상',
+            'detail'          => '지급내용',
+            'payment_sum'     => '지급액(계)',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $user = auth()->user();
         $business_year = now()->format('Y');
         $payment_sum = $request->input('payment_sum');
@@ -125,27 +149,20 @@ class StatusOperatingCostsController extends Controller
           'payment_unit' => $payment_unit,
         ]);
 
-        try {
-            $row = \App\StatusOperatingCost::create($payload);
-        } catch (\Exception $e) {
-            Log::error($e);
-            if ($e->getCode() == '23000') {
-                $first_quotes = strpos($e->getMessage(), '\'');
-                $end_quotes = strpos($e->getMessage(), '\'', $first_quotes + 1);
-                $duplicated = substr($e->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
-                flash()->error('동일한 항목이 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
-            } else {
-                flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$e->errorInfo[2].')');
-            }
-
-            return back()->withInput();
-        }
-
-        // if (\App\StatusOperatingCost::whereNhId($user->user_id)
-        //                               ->whereName($request->input('name'))
-        //                               ->whereContact($request->input('contact'))->exists())
-        // {
-        //     flash('해당농협에 동일한 이름의 농기계지원반이 이미 존재하고 있습니다. 중복을 확인하여 주세요.');
+        // 중복허용
+        // try {
+        //     $row = \App\StatusOperatingCost::create($payload);
+        // } catch (\Exception $e) {
+        //     Log::error($e);
+        //     if ($e->getCode() == '23000') {
+        //         $first_quotes = strpos($e->getMessage(), '\'');
+        //         $end_quotes = strpos($e->getMessage(), '\'', $first_quotes + 1);
+        //         $duplicated = substr($e->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
+        //         flash()->error('동일한 항목이 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+        //     } else {
+        //         flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$e->errorInfo[2].')');
+        //     }
+        //
         //     return back()->withInput();
         // }
 
@@ -175,8 +192,33 @@ class StatusOperatingCostsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],         // 아이디 4자리~12자리
+            'payment_do'      => ['required'],
+            'payment_sigun'   => ['required'],
+            'payment_center'  => ['required'],
+            'payment_unit'    => ['required'],
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'payment_do'      => '지급액(도비)',
+            'payment_sigun'   => '지급액(시군비)',
+            'payment_center'  => '지급액(중앙회)',
+            'payment_unit'    => '지급액(지역농협)',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $row = \App\StatusOperatingCost::findOrFail($id);
         $this->authorize('edit-status-operating-cost', $row);
+        // 중복허용
         $row->update($request->all());
 
         flash()->success('수정하신 내용을 저장했습니다.');

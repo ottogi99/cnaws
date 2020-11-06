@@ -23,7 +23,7 @@ class CreateMachineSupportersTable extends Migration
             $table->string('nonghyup_id');                // 대상농협
             // 인적사항
             $table->string('name');                       // 지원자 성명
-            $table->unsignedTinyInteger('age');           // 지원자 연령(세)
+            $table->unsignedTinyInteger('age')->nullable();           // 지원자 연령(세)
             $table->enum('sex', ['M','F'])->nullable();   // 성별(남, 여)
             $table->string('contact', 11)->nullable();    // 전화번호
             $table->string('address')->nullable();        // 도로명 주소(전체)

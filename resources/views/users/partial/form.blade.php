@@ -9,7 +9,7 @@
     </div>
 
     <div class="input-group input-group-lg {{ $errors->has('nonghyup_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-      <span class="input-group-addon" style="width:150px; font-size:13px;">농협ID</span>
+      <span class="input-group-addon" style="width:150px; font-size:13px;">농협ID(*)</span>
       <input type="text" name="nonghyup_id" id="nonghyup_id" placeholder="사용자(농협) ID"
               value="{{ old('nonghyup_id', $nonghyup->nonghyup_id) }}" class="form-control" {{ ($nonghyup->nonghyup_id) ? 'readonly' : '' }}/>
       {!! $errors->first('nonghyup_id', '<span class="form-error">:message</span>') !!}
@@ -34,20 +34,20 @@
 @endif
 
 <div class="input-group input-group-lg {{ $errors->has('name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">농협명</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">농협명(*)</span>
   <input type="text" name="name" id="name" value="{{ old('name', $nonghyup->name) }}" class="form-control" />
   {!! $errors->first('name', '<span class="form-error">:message</span>') !!}
 </div>
 
 @if ($viewName === 'users.create')
 <div class="input-group input-group-lg {{ $errors->has('password') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호(*)</span>
   <input type="password" name="password" id="password" placeholder="비밀번호" value="" class="form-control" />
   {!! $errors->first('password', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('password_confirmation') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호 확인</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">비밀번호 확인(*)</span>
   <input type="password" name="password_confirmation" id="password_confirmation" placeholder="비밀번호 확인" value="" class="form-control" />
   {!! $errors->first('password_confirmation', '<span class="form-error">:message</span>') !!}
 </div>
@@ -83,7 +83,7 @@
 @endif
 
 <div class="input-group input-group-lg {{ $errors->has('address') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">주소</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">주소(*)</span>
   <input type="text" name="address" id="address" value="{{ old('address', $nonghyup->address) }}" class="form-control" />
   <input type="button" value="도로명주소 검색" onclick="openAddrPopup();">
   {!! $errors->first('address', '<span class="form-error">:message</span>') !!}
@@ -91,13 +91,13 @@
 
 @if ($viewName == 'users.edit')
 <div class="input-group input-group-lg {{ $errors->has('contact') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">연락처</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">연락처(*)</span>
   <input name="contact" id="contact" value="{{ old('contact', $nonghyup->contact) }}" maxlength="11" placeholder="'-' 없이 숫자만 입력하세요" class="form-control" numberOnly/>
   {!! $errors->first('contact', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('representative') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">대표자</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">대표자(*)</span>
   <input type="text" name="representative" id="representative" value="{{ old('representative', $nonghyup->representative) }}" class="form-control" />
   {!! $errors->first('representative', '<span class="form-error">:message</span>') !!}
 </div>

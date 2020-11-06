@@ -126,6 +126,36 @@ class StatusMachineSupportersController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],      // 농협
+            'farmer_id' => ['required'],        // 농가
+            'supporter_id' => ['required'],     // 작업자
+            'job_start_date' => ['required'],   // 작업시작일
+            'job_end_date' => ['required'],     // 작업종료일
+            'work_detail' => ['required'],      // 작업내용
+            'working_area' => ['required'],     // 작업면적
+            'payment_sum' => ['required'],      // 지급액(합계)
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'farmer_id'       => '농가명',        // 농가
+            'supporter_id'    => '작업자명',     // 작업자
+            'job_start_date'  => '작업시작일',   // 작업시작일
+            'job_end_date'    => '작업종료일',     // 작업종료일
+            'work_detail'     => '작업내용',      // 작업내용
+            'working_area'    => '작업면적',     // 작업면적
+            'payment_sum'     => '지급액(합계)',      // 지급액(합계)
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $user = auth()->user();
         $business_year = now()->format('Y');
 
@@ -234,6 +264,43 @@ class StatusMachineSupportersController extends Controller
 
     public function update(Request $request, $id)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],      // 농협
+            'farmer_id' => ['required'],        // 농가
+            'supporter_id' => ['required'],     // 작업자
+            'job_start_date' => ['required'],   // 작업시작일
+            'job_end_date' => ['required'],     // 작업종료일
+            'work_detail' => ['required'],      // 작업내용
+            'working_area' => ['required'],     // 작업면적
+            'payment_do' => ['required'],      // 지급액(합계)
+            'payment_sigun' => ['required'],      // 지급액(합계)
+            'payment_center' => ['required'],      // 지급액(합계)
+            'payment_unit' => ['required'],      // 지급액(합계)
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'farmer_id'       => '농가명',        // 농가
+            'supporter_id'    => '작업자명',     // 작업자
+            'job_start_date'  => '작업시작일',   // 작업시작일
+            'job_end_date'    => '작업종료일',     // 작업종료일
+            'work_detail'     => '작업내용',      // 작업내용
+            'working_area'    => '작업면적',     // 작업면적
+            'payment_sum'     => '지급액(합계)',      // 지급액(합계)
+            'payment_do'      => '지급액(도비)',
+            'payment_sigun'   => '지급액(시군비)',
+            'payment_center'  => '지급액(중앙회)',
+            'payment_unit'    => '지급액(지역농협)',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $row = \App\StatusMachineSupporter::findOrFail($id);
         $this->authorize('edit-status-machine-supporter', $row);
 

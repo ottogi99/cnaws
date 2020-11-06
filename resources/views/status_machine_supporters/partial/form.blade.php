@@ -34,10 +34,10 @@
   </div>
 @endif
 
-<div class="input-group input-group-lg {{ $errors->has('farmer_name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">농가명</span>
+<div class="input-group input-group-lg {{ $errors->has('farmer_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">농가명(*)</span>
   <input type="text" name="farmer_name" id="farmer_name" value="{{ old('farmer_name', ($row->farmer) ? $row->farmer->name : '') }}" class="form-control" readonly/>
-  {!! $errors->first('farmer_id', '<span class="form-error">:message</span>') !!}
+  <div>{!! $errors->first('farmer_id', '<span class="form-error">:message</span>') !!}</div>
   <input type="button" value="농가 검색" onclick="openSearchPopup('small');">
 </div>
 
@@ -50,10 +50,10 @@
   <input type="text" name="address" id="address" value="{{ old('address', ($row->farmer) ? $row->farmer->address : '') }}" class="form-control" readonly/>
 </div>
 
-<div class="input-group input-group-lg {{ $errors->has('supporter_name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업자명</span>
+<div class="input-group input-group-lg {{ $errors->has('supporter_id') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업자명(*)</span>
   <input type="text" name="supporter_name" id="supporter_name" value="{{ old('supporter_name', ($row->supporter) ? $row->supporter->name : '') }}" class="form-control" readonly/>
-  {!! $errors->first('supporter_name', '<span class="form-error">:message</span>') !!}
+  <div>{!! $errors->first('supporter_id', '<span class="form-error">:message</span>') !!}</div>
   <input type="button" value="지원반 검색" onclick="openSearchPopup('machine');">
 </div>
 
@@ -62,28 +62,28 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('job_start_date') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업시작일</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업시작일(*)</span>
   <input type="text" name="job_start_date" id="job_start_date" class="form-control datePicker"
   value="{{ old('job_start_date', ($row->job_start_date) ? $row->job_start_date->format('Y-m-d') : '') }}">
   {!! $errors->first('job_start_date', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('job_end_date') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업종료일</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업종료일(*)</span>
   <input type="text" name="job_end_date" id="job_end_date" class="form-control datePicker"
   value="{{ old('job_end_date', ($row->job_end_date) ? $row->job_end_date->format('Y-m-d') : '') }}">
   {!! $errors->first('job_end_date', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('work_detail') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업내용</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업내용(*)</span>
   <input type="text" name="work_detail" id="work_detail" value="{{ old('work_detail', $row->work_detail) }}" class="form-control"/>
   {!! $errors->first('work_detail', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('working_area') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적(m<sup>2</sup>)</span>
-  <input type="text" name="working_area" id="working_area" value="{{ old('working_area', $row->working_area) }}" class="form-control"/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">작업면적(m<sup>2</sup>)(*)</span>
+  <input type="number" name="working_area" id="working_area" value="{{ old('working_area', $row->working_area) }}" class="form-control"/>
   {!! $errors->first('working_area', '<span class="form-error">:message</span>') !!}
 </div>
 
@@ -96,33 +96,33 @@
 @else
 <div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
-  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control"/>
+  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" style="font-weight:bold;" class="form-control" readonly/>
   {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
 </div>
 @endif
 
 @if ($viewName === 'status_machine_supporters.edit')
 <div class="input-group input-group-lg {{ $errors->has('payment_do') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(도비)</span>
-  <input type="number" name="payment_do" id="payment_do" value="{{ old('payment_do', $row->payment_do) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(도비)(*)</span>
+  <input type="number" name="payment_do" id="payment_do" value="{{ old('payment_do', $row->payment_do) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_do', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_sigun') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(시군비)</span>
-  <input type="number" name="payment_sigun" id="payment_sigun" value="{{ old('payment_sigun', $row->payment_sigun) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(시군비)(*)</span>
+  <input type="number" name="payment_sigun" id="payment_sigun" value="{{ old('payment_sigun', $row->payment_sigun) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_sigun', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_center') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(중앙회)</span>
-  <input type="number" name="payment_center" id="payment_center" value="{{ old('payment_center', $row->payment_center) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(중앙회)(*)</span>
+  <input type="number" name="payment_center" id="payment_center" value="{{ old('payment_center', $row->payment_center) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_center', '<span class="form-error">:message</span>') !!}
 </div>
 
-<div class="input-group input-group-lg {{ $errors->has('payment_center') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(지역농협)</span>
-  <input type="number" name="payment_unit" id="payment_unit" value="{{ old('payment_unit', $row->payment_unit) }}" maxlength="11" class="form-control" numberOnly/>
+<div class="input-group input-group-lg {{ $errors->has('payment_unit') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(지역농협)(*)</span>
+  <input type="number" name="payment_unit" id="payment_unit" value="{{ old('payment_unit', $row->payment_unit) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_unit', '<span class="form-error">:message</span>') !!}
 </div>
 @endif

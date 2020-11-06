@@ -68,6 +68,16 @@
           }
       });
 
+      $('input.sum_payment').on('keyup', function () {
+          var payment_do = parseInt($('#payment_do').val() || 0);
+          var payment_sigun = parseInt($('#payment_sigun').val() || 0);
+          var payment_center = parseInt($('#payment_center').val() || 0);
+          var payment_unit = parseInt($('#payment_unit').val() || 0);
+          var sum = (payment_do + payment_sigun + payment_center + payment_unit);
+
+          $('#payment_sum').val(sum);
+      });
+
       $('#sigun_code').change(get_nonghyups);
       get_nonghyups();
     });

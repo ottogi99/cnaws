@@ -35,7 +35,7 @@
 @endif
 
 <div class="input-group input-group-lg {{ $errors->has('name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">성명</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">성명(*)</span>
   <input type="text" name="name" id="name" value="{{ old('name', $supporter->name) }}" class="form-control"/>
   {!! $errors->first('name', '<span class="form-error">:message</span>') !!}
 </div>

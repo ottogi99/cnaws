@@ -20,7 +20,7 @@ class ManpowerSupporterController extends Controller
         $year = now()->year;
         $nonghyup_id = $request->input("nonghyup_id");
 
-        $supporters = \App\ManpowerSupporter::searchManpower($keyword)->get()->toArray();
+        $supporters = \App\ManpowerSupporter::searchManpower($keyword, $year, $nonghyup_id)->get()->toArray();
                     // ->whereRaw('manpower_supporters.business_year = ?', [$year])
                     // ->when($nonghyup_id, function($query, $nonghyup_id) {
                     //     return $query->whereRaw('manpower_supporters.nonghyup_id = ?', [$nonghyup_id]);

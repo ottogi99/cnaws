@@ -42,13 +42,13 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('name') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">성명</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">성명(*)</span>
   <input type="text" name="name" id="name" value="{{ old('name', $row->name) }}" class="form-control"/>
   {!! $errors->first('name', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('birth') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">생년월일</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">생년월일(*)</span>
   <input type="text" name="birth" id="birth" class="form-control datePicker"
   value="{{ old('birth', ($row->birth) ? $row->birth : '') }}">
   {!! $errors->first('birth', '<span class="form-error">:message</span>') !!}
@@ -72,34 +72,42 @@
   {!! $errors->first('bank_account', '<span class="form-error">:message</span>') !!}
 </div>
 
+@if ($viewName === 'status_labor_payments.create')
 <div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)(*)</span>
   <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" class="form-control" numberOnly/>
   {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
 </div>
+@else
+<div class="input-group input-group-lg {{ $errors->has('payment_sum') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(합계)</span>
+  <input type="number" name="payment_sum" id="payment_sum" value="{{ old('payment_sum', $row->payment_sum) }}" maxlength="11" style="font-weight:bold;" class="form-control" numberOnly readonly/>
+  {!! $errors->first('payment_sum', '<span class="form-error">:message</span>') !!}
+</div>
+@endif
 
 @if ($viewName === 'status_labor_payments.edit')
 <div class="input-group input-group-lg {{ $errors->has('payment_do') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(도비)</span>
-  <input type="number" name="payment_do" id="payment_do" value="{{ old('payment_do', $row->payment_do) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(도비)(*)</span>
+  <input type="number" name="payment_do" id="payment_do" value="{{ old('payment_do', $row->payment_do) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_do', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_sigun') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(시군비)</span>
-  <input type="number" name="payment_sigun" id="payment_sigun" value="{{ old('payment_sigun', $row->payment_sigun) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(시군비)(*)</span>
+  <input type="number" name="payment_sigun" id="payment_sigun" value="{{ old('payment_sigun', $row->payment_sigun) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_sigun', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_center') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(중앙회)</span>
-  <input type="number" name="payment_center" id="payment_center" value="{{ old('payment_center', $row->payment_center) }}" maxlength="11" class="form-control" numberOnly/>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(중앙회)(*)</span>
+  <input type="number" name="payment_center" id="payment_center" value="{{ old('payment_center', $row->payment_center) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_center', '<span class="form-error">:message</span>') !!}
 </div>
 
-<div class="input-group input-group-lg {{ $errors->has('payment_center') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(지역농협)</span>
-  <input type="number" name="payment_unit" id="payment_unit" value="{{ old('payment_unit', $row->payment_unit) }}" maxlength="11" class="form-control" numberOnly/>
+<div class="input-group input-group-lg {{ $errors->has('payment_unit') ? 'has-error' : '' }}" style="padding-bottom:10px;">
+  <span class="input-group-addon" style="width:150px; font-size:13px;">지급액(지역농협)(*)</span>
+  <input type="number" name="payment_unit" id="payment_unit" value="{{ old('payment_unit', $row->payment_unit) }}" maxlength="11" class="form-control sum_payment" numberOnly/>
   {!! $errors->first('payment_unit', '<span class="form-error">:message</span>') !!}
 </div>
 @endif

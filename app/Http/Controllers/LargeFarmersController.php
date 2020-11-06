@@ -134,6 +134,24 @@ class LargeFarmersController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],         // 아이디 4자리~12자리
+            'name' => ['required'],
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'name'            => '성명',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $user = auth()->user();
         $business_year = now()->format('Y');
 
@@ -213,7 +231,21 @@ class LargeFarmersController extends Controller
 
         $this->authorize('edit-large-farmer', $farmer);
 
-        $farmer->update($request->all());
+        try {
+            $farmer->update($request->all());
+        } catch (\Exception $e) {
+            Log::error($e);
+            if ($e->getCode() == '23000') {
+                $first_quotes = strpos($e->getMessage(), '\'');
+                $end_quotes = strpos($e->getMessage(), '\'', $first_quotes + 1);
+                $duplicated = substr($e->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
+                flash()->error('동일한 이름의 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+            } else {
+                flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$e->errorInfo[2].')');
+            }
+
+            return back()->withInput();
+        }
 
         flash()->success('수정하신 내용을 저장했습니다.');
         return redirect(route('large_farmers.index'));

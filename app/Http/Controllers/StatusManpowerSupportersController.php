@@ -127,6 +127,37 @@ class StatusManpowerSupportersController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],      // 농협
+            'farmer_id' => ['required'],        // 농가
+            'supporter_id' => ['required'],     // 작업자
+            'job_start_date' => ['required'],   // 작업시작일
+            'job_end_date' => ['required'],     // 작업종료일
+            'work_detail' => ['required'],      // 작업내용
+            'payment_item1' => ['required'],    // 교통비
+            'payment_item2' => ['required'],    // 간식비
+            // 'payment_item3' => ['required'],    // 마스크구입비
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'farmer_id'       => '농가명',        // 농가
+            'supporter_id'    => '작업자명',     // 작업자
+            'job_start_date'  => '작업시작일',   // 작업시작일
+            'job_end_date'    => '작업종료일',     // 작업종료일
+            'work_detail'     => '작업내용',      // 작업내용
+            'payment_item1'   => '교통비',      // 작업내용
+            'payment_item2'   => '간식비',     // 작업면적
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $user = auth()->user();
         $business_year = now()->format('Y');
 
@@ -242,6 +273,44 @@ class StatusManpowerSupportersController extends Controller
 
     public function update(Request $request, $id)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],      // 농협
+            'farmer_id' => ['required'],        // 농가
+            'supporter_id' => ['required'],     // 작업자
+            'job_start_date' => ['required'],   // 작업시작일
+            'job_end_date' => ['required'],     // 작업종료일
+            'work_detail' => ['required'],      // 작업내용
+            'payment_item1' => ['required'],    // 교통비
+            'payment_item2' => ['required'],    // 간식비
+            'payment_do' => ['required'],       // 도비
+            'payment_sigun' => ['required'],    // 시군비
+            'payment_center' => ['required'],   // 중앙회
+            'payment_unit' => ['required'],    // 지역농협
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'      => '시군항목',
+            'nonghyup_id'     => '농협ID',
+            'farmer_id'       => '농가명',        // 농가
+            'supporter_id'    => '작업자명',     // 작업자
+            'job_start_date'  => '작업시작일',   // 작업시작일
+            'job_end_date'    => '작업종료일',     // 작업종료일
+            'work_detail'     => '작업내용',      // 작업내용
+            'payment_item1'   => '교통비',      // 작업내용
+            'payment_item2'   => '간식비',     // 작업면적
+            'payment_do'      => '도비',        // 도비
+            'payment_sigun'   => '시군비',      // 시군비
+            'payment_center'  => '중앙회',      // 중앙회
+            'payment_unit'   => '지역농협',    // 지역농협
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $row = \App\StatusManpowerSupporter::findOrFail($id);
         $this->authorize('edit-status-manpower-supporter', $row);
 

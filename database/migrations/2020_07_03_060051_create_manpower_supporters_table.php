@@ -23,10 +23,10 @@ class CreateManpowerSupportersTable extends Migration
             $table->string('nonghyup_id');                          // 대상농협
             // 인적사항
             $table->string('name');                                 // 성명
-            $table->unsignedTinyInteger('age')->nullabel();         // 연령(세)
+            $table->unsignedTinyInteger('age')->nullable();         // 연령(세)
             $table->enum('sex', ['M','F'])->nullable();             // 성별
             $table->string('address')->nullable();                  // 도로명 주소(행정리까지)
-            $table->string('contact', 11);                          // 연락처
+            $table->string('contact', 11)->nullable();                 // 연락처
             // $table->timestamp('training_date1')->nullable();        // 교육참여일1
             // $table->timestamp('training_date2')->nullable();        // 교육참여일2
             // $table->timestamp('training_date3')->nullable();        // 교육참여일3

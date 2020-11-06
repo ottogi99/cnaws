@@ -56,17 +56,27 @@
 
     $(document).ready(function() {
       $('#form__edit').submit(function() {
-          var payment_sum = parseInt($('#payment_sum').val());
-          var payment_do = parseInt($('#payment_do').val());
-          var payment_sigun = parseInt($('#payment_sigun').val());
-          var payment_center = parseInt($('#payment_center').val());
-          var payment_unit = parseInt($('#payment_unit').val());
+          var payment_sum = parseInt($('#payment_sum').val() || 0);
+          var payment_do = parseInt($('#payment_do').val() || 0);
+          var payment_sigun = parseInt($('#payment_sigun').val() || 0);
+          var payment_center = parseInt($('#payment_center').val() || 0);
+          var payment_unit = parseInt($('#payment_unit').val() || 0);
           var sum = (payment_do + payment_sigun + payment_center + payment_unit);
 
           if (payment_sum != (payment_do + payment_sigun + payment_center + payment_unit)){
             alert('지급액 항목의 합과 합계가 일치하지 않습니다.( 항목의 합:' + sum + ')');
             return false;
           }
+      });
+
+      $('input.sum_payment').on('keyup', function () {
+          var payment_do = parseInt($('#payment_do').val() || 0);
+          var payment_sigun = parseInt($('#payment_sigun').val() || 0);
+          var payment_center = parseInt($('#payment_center').val() || 0);
+          var payment_unit = parseInt($('#payment_unit').val() || 0);
+          var sum = (payment_do + payment_sigun + payment_center + payment_unit);
+
+          $('#payment_sum').val(sum);
       });
 
       $('#sigun_code').change(get_nonghyups);

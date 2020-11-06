@@ -335,7 +335,6 @@ function enterSearchKeyword(type) {
 	if (evt_code == 13) {
 		event.keyCode = 0;
 
-		console.log(type);
 		getSearchResult(type, 1);
 		// if (type == 'small') {
 		// 	getSearchResult(type);
@@ -355,7 +354,7 @@ function getSearchResult(type, pageNo){
 		return;
 	}
 
-	console.log('getSearchResult('+type+', '+pageNo+')');
+	// console.log('getSearchResult('+type+', '+pageNo+')');
 
 	if (pageNo > 1) {
 		document.getElementsByName('currentPage')[0].value = pageNo;
