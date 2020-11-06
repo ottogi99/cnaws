@@ -47,10 +47,10 @@ trait FullTextSearch
         //       );
 
         if ($term) {
-            $query->whereRaw("MATCH (small_farmers.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
         $query->whereRaw('business_year = ?', [$year]);
-        // $query->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
@@ -59,16 +59,16 @@ trait FullTextSearch
     {
         $columns = implode(',', $this->searchable);
 
-        $query->join('users', 'large_farmers.nonghyup_id', 'users.nonghyup_id')
-              ->select(
-                  'large_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
-                );
+        // $query->join('users', 'large_farmers.nonghyup_id', 'users.nonghyup_id')
+        //       ->select(
+        //           'large_farmers.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
+        //         );
 
         if ($term) {
-            $query->whereRaw("MATCH (large_farmers.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        // $query->whereRaw('large_farmers.business_year = ?', [$year]);
-        // $query->whereRaw('large_farmers.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('business_year = ?', [$year]);
+        $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
@@ -77,16 +77,16 @@ trait FullTextSearch
     {
         $columns = implode(',', $this->searchable);
 
-        $query->join('users', 'machine_supporters.nonghyup_id', 'users.nonghyup_id')
-              ->select(
-                  'machine_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
-                );
+        // $query->join('users', 'machine_supporters.nonghyup_id', 'users.nonghyup_id')
+        //       ->select(
+        //           'machine_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
+        //         );
 
         if ($term) {
-            $query->whereRaw("MATCH (machine_supporters.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        // $query->whereRaw('machine_supporters.business_year = ?', [$year]);
-        // $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('business_year = ?', [$year]);
+        $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
 
         // $query->whereRaw("(users.is_admin != 1 AND machine_supporters.business_year = 2020 AND machine_supporters.nonghyup_id = 'nh457095')", [1, $year, $nonghyup_id])
         // ->orderbyRaw("siguns.sequence")
@@ -100,16 +100,16 @@ trait FullTextSearch
     {
         $columns = implode(',', $this->searchable);
 
-        $query->join('users', 'manpower_supporters.nonghyup_id', 'users.nonghyup_id')
-              ->select(
-                  'manpower_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
-                );
+        // $query->join('users', 'manpower_supporters.nonghyup_id', 'users.nonghyup_id')
+        //       ->select(
+        //           'manpower_supporters.*', 'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
+        //         );
 
         if ($term) {
-            $query->whereRaw("MATCH (manpower_supporters.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+            $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        // $query->whereRaw('manpower_supporters.business_year = ?', [$year]);
-        // $query->whereRaw('manpower_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('business_year = ?', [$year]);
+        $query->whereRaw('nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
