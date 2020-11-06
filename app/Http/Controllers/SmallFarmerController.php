@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class SmallFarmerController extends Controller
 {
@@ -56,53 +57,26 @@ class SmallFarmerController extends Controller
         $resultType = $request->input("resultType");
         $confmKey = $request->input("confmKey");
         $keyword = $request->input("keyword");
-        $currentPage = $request->input("page");
+        // $currentPage = $request->input("page");
 
         $year = now()->year;
         $nonghyup_id = $request->input("nonghyup_id");
 
-        // if (!auth()->user()->isAdmin())
-        //     $nonghyup_id = auth()->user()->nonghyup_id;
-
-        // Log::debug($keyword);
-
-        // Log::debug($this->fullTextWildcards($keyword));
-
-        // $farmers = \App\SmallFarmer::search('농가1')->get()->toJson();
-        // $farmers = \App\SmallFarmer::search($keyword)->get()->toJson();
-
-        // $farmers = \App\SmallFarmer::search($keyword)
-        //             ->whereRaw('small_farmers.business_year', $year)
-        //             ->when($nonghyup_id, function($query, $nonghyup_id) {
-        //                 return $query->whereRaw('small_farmers.nonghyup_id', $nonghyup_id);
-        //             })
+        $farmers = \App\SmallFarmer::searchSmall($keyword, $year, $nonghyup_id)->get()->toArray();
+        // $farmers = \App\SmallFarmer::searchSmall($keyword)
+        //             ->whereRaw('small_farmers.business_year = ?', [$year])
+        //             ->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id])
+        //             // ->when($nonghyup_id, function($query, $nonghyup_id) {
+        //             //     return $query->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id]);
+        //             // })
         //             // ->when($sigun_code, function($query, $sigun_code) {
         //             //     return $query->where('small_farmers.sigun_code', $sigun_code);
         //             // })
         //             ->orderbyRaw('siguns.sequence')
         //             ->orderbyRaw('users.sequence')
-        //             ->orderbyRaw('small_farmers.created_at', 'desc')
-        //             ->get()->toJson();
-
-        $farmers = \App\SmallFarmer::searchSmall($keyword)
-                    ->whereRaw('small_farmers.business_year = ?', [$year])
-                    ->when($nonghyup_id, function($query, $nonghyup_id) {
-                        return $query->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id]);
-                    })
-                    // ->when($sigun_code, function($query, $sigun_code) {
-                    //     return $query->where('small_farmers.sigun_code', $sigun_code);
-                    // })
-                    ->orderbyRaw('siguns.sequence')
-                    ->orderbyRaw('users.sequence')
-                    ->orderbyRaw('small_farmers.name')
-                    // ->paginate();//paginate(1);
-                    ->get()->toArray();//paginate(1);
-
-        // $farmers = \App\SmallFarmer::search($keyword)->paginate();
-
-        // Log::debug($farmers);
-        // Log::debug($farmers->toJson());
-        // Log::debug($farmers->links());
+        //             ->orderbyRaw('small_farmers.name')
+        //             // ->paginate();//paginate(1);
+        //             ->get()->toArray();//paginate(1);
 
         $rows = $this->arrayPaginator($farmers, $request);
         // Log::debug($rows->toJson());

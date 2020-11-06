@@ -20,22 +20,18 @@ class ManpowerSupporterController extends Controller
         $year = now()->year;
         $nonghyup_id = $request->input("nonghyup_id");
 
-        $supporters = \App\ManpowerSupporter::searchManpower($keyword)
-                    ->whereRaw('manpower_supporters.business_year = ?', [$year])
-                    ->when($nonghyup_id, function($query, $nonghyup_id) {
-                        return $query->whereRaw('manpower_supporters.nonghyup_id = ?', [$nonghyup_id]);
-                    })
-                    ->orderbyRaw('siguns.sequence')
-                    ->orderbyRaw('users.sequence')
-                    ->orderbyRaw('manpower_supporters.name')
-                    ->get()->toArray();//paginate(1);
-
-        // Log::debug($farmers);
-        // Log::debug($farmers->toJson());
-        // Log::debug($farmers->links());
+        $supporters = \App\ManpowerSupporter::searchManpower($keyword)->get()->toArray();
+                    // ->whereRaw('manpower_supporters.business_year = ?', [$year])
+                    // ->when($nonghyup_id, function($query, $nonghyup_id) {
+                    //     return $query->whereRaw('manpower_supporters.nonghyup_id = ?', [$nonghyup_id]);
+                    // })
+                    // ->orderbyRaw('siguns.sequence')
+                    // ->orderbyRaw('users.sequence')
+                    // ->orderbyRaw('manpower_supporters.name')
+                    // ->get()->toArray();//paginate(1);
 
         $rows = $this->arrayPaginator($supporters, $request);
-        Log::debug($rows->toJson());
+        // Log::debug($rows->toJson());
 
         return response()->json([
             'status' => 'success',

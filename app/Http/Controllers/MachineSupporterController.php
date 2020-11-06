@@ -22,22 +22,22 @@ class MachineSupporterController extends Controller
         $nonghyup_id = $request->input("nonghyup_id");
         // $nonghyup_id = auth()->user()->nonghyup_id;
 
-        $supporters = \App\MachineSupporter::searchMachine($keyword)
-                    ->whereRaw('machine_supporters.business_year = ?', [$year])
-                    ->when($nonghyup_id, function($query, $nonghyup_id) {
-                        return $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
-                    })
-                    ->orderbyRaw('siguns.sequence')
-                    ->orderbyRaw('users.sequence')
-                    ->orderbyRaw('machine_supporters.name')
-                    ->get()->toArray();//paginate(1);
+        $supporters = \App\MachineSupporter::searchMachine($keyword, $year, $nonghyup_id)->get()->toArray();
+        // $supporters = \App\MachineSupporter::searchMachine($keyword)
+        //             ->whereRaw('machine_supporters.business_year = ?', [$year])
+        //             ->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id])
+        //             // ->when($nonghyup_id, function($query, $nonghyup_id) {
+        //             //     Log::debug($nonghyup_id);
+        //             //     return $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        //             // })
+        //             ->orderbyRaw('siguns.sequence')
+        //             ->orderbyRaw('users.sequence')
+        //             ->orderbyRaw('machine_supporters.name')
+        //             ->get()->toArray();//paginate(1);
 
-        // Log::debug($farmers);
-        // Log::debug($farmers->toJson());
-        // Log::debug($farmers->links());
 
         $rows = $this->arrayPaginator($supporters, $request);
-        Log::debug($rows->toJson());
+        // Log::debug($rows->toJson());
 
         return response()->json([
             'status' => 'success',

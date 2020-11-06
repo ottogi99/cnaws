@@ -92,7 +92,7 @@
 @if ($viewName == 'users.edit')
 <div class="input-group input-group-lg {{ $errors->has('contact') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:150px; font-size:13px;">연락처</span>
-  <input type="number" name="contact" id="contact" value="{{ old('contact', $nonghyup->contact) }}" maxlength="11" class="form-control" numberOnly/>
+  <input name="contact" id="contact" value="{{ old('contact', $nonghyup->contact) }}" maxlength="11" placeholder="'-' 없이 숫자만 입력하세요" class="form-control" numberOnly/>
   {!! $errors->first('contact', '<span class="form-error">:message</span>') !!}
 </div>
 

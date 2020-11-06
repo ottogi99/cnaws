@@ -355,6 +355,8 @@ function getSearchResult(type, pageNo){
 		return;
 	}
 
+	console.log('getSearchResult('+type+', '+pageNo+')');
+
 	if (pageNo > 1) {
 		document.getElementsByName('currentPage')[0].value = pageNo;
 	} else {

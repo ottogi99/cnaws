@@ -20,15 +20,15 @@ class LargeFarmerController extends Controller
         $year = now()->year;
         $nonghyup_id = $request->input("nonghyup_id");
 
-        $farmers = \App\LargeFarmer::searchLarge($keyword)
-                    ->whereRaw('large_farmers.business_year = ?', [$year])
-                    ->when($nonghyup_id, function($query, $nonghyup_id) {
-                        return $query->whereRaw('large_farmers.nonghyup_id = ?', [$nonghyup_id]);
-                    })
-                    ->orderbyRaw('siguns.sequence')
-                    ->orderbyRaw('users.sequence')
-                    ->orderbyRaw('large_farmers.name')
-                    ->get()->toArray();//paginate(1);
+        $farmers = \App\LargeFarmer::searchLarge($keyword, $year, $nonghyup_id)->get()->toArray();
+                    // ->whereRaw('large_farmers.business_year = ?', [$year])
+                    // ->when($nonghyup_id, function($query, $nonghyup_id) {
+                    //     return $query->whereRaw('large_farmers.nonghyup_id = ?', [$nonghyup_id]);
+                    // })
+                    // ->orderbyRaw('siguns.sequence')
+                    // ->orderbyRaw('users.sequence')
+                    // ->orderbyRaw('large_farmers.name')
+                    // ->get()->toArray();//paginate(1);
 
         $rows = $this->arrayPaginator($farmers, $request);
 

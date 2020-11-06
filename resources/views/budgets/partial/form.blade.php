@@ -4,7 +4,7 @@
     <span class="input-group-addon" style="width:150px; font-size:13px;">시군명</span>
     <select name="sigun_code" id="sigun_code" >
       @forelse($siguns as $sigun)
-        <option value="{{ $sigun->code }}" {{ ($sigun->code == $budget->sigun_code) ? 'selected="selected"' : '' }}>{{ $sigun->name }}</option>
+        <option value="{{ $sigun->code }}" {{ ($sigun->code == auth()->user()->sigun_code) ? 'selected="selected"' : '' }}>{{ $sigun->name }}</option>
       @empty
         <option>-</option>
       @endforelse
@@ -16,7 +16,7 @@
     <span class="input-group-addon" style="width:150px; font-size:13px;">대상농협</span>
     <select name="nonghyup_id" id="nonghyup_id" >
       @forelse($nonghyups as $nonghyup)
-        <option value="{{ $nonghyup->nonghyup_id }}" {{ ($nonghyup->nonghyup_id == $budget->nonghyup_id) ? 'selected="selected"' : '' }}>{{ $nonghyup->name }}</option>
+        <option value="{{ $nonghyup->nonghyup_id }}" {{ ($nonghyup->nonghyup_id == auth()->user()->nonghyup_id) ? 'selected="selected"' : '' }}>{{ $nonghyup->name }}</option>
       @empty
         <option>-</option>
       @endforelse

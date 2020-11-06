@@ -204,7 +204,8 @@ class UsersController extends Controller
         $messages = [
             'required' => ':attribute은(는) 필수 입력 항목입니다.',
             'unique'  => '이미 등록된 :attribute 항목이 존재합니다',
-            'regex'   => ':attribute가 유효한 형식이 아닙니다',
+            'nonghyup_id.regex'   => ':attribute가 유효한 형식이 아닙니다',
+            'contact.regex'   => ':attribute가 유효한 형식이 아닙니다.(\'-\' 없이 숫자만 가능)',
             'min' => ':attribute은(는) 최소 :min 글자 이상이 필요합니다.',
             'max' => ':attribute은(는) 최대 :max 글자를 초과할 수 없습니다',
             'confirmed' => ':attribute가 일치하지 않습니다.',
