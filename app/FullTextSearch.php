@@ -49,8 +49,8 @@ trait FullTextSearch
         if ($term) {
             $query->whereRaw("MATCH (small_farmers.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        $query->whereRaw('machine_supporters.business_year = ?', [$year]);
-        $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('small_farmers.business_year = ?', [$year]);
+        $query->whereRaw('small_farmers.nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
@@ -67,8 +67,8 @@ trait FullTextSearch
         if ($term) {
             $query->whereRaw("MATCH (large_farmers.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        $query->whereRaw('machine_supporters.business_year = ?', [$year]);
-        $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('large_farmers.business_year = ?', [$year]);
+        $query->whereRaw('large_farmers.nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
@@ -108,8 +108,8 @@ trait FullTextSearch
         if ($term) {
             $query->whereRaw("MATCH (manpower_supporters.{$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
         }
-        $query->whereRaw('machine_supporters.business_year = ?', [$year]);
-        $query->whereRaw('machine_supporters.nonghyup_id = ?', [$nonghyup_id]);
+        $query->whereRaw('manpower_supporters.business_year = ?', [$year]);
+        $query->whereRaw('manpower_supporters.nonghyup_id = ?', [$nonghyup_id]);
 
         return $query;
     }
