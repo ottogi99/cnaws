@@ -161,6 +161,8 @@ class StatusManpowerSupportersController extends Controller
         $user = auth()->user();
         $business_year = now()->format('Y');
 
+        // 인력반은 모드 농가 대상으로 중복 검사함
+        // $farmer_id = $request->input('farmer_id');
         $supporter_id = $request->input('supporter_id');
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
@@ -168,7 +170,8 @@ class StatusManpowerSupportersController extends Controller
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
 
-        $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+        // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+        $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
@@ -319,29 +322,30 @@ class StatusManpowerSupportersController extends Controller
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
-        $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
-        $supporter_name = $supporter->name;
+        // $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
+        // $supporter_name = $supporter->name;
         // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
-        if ($row->job_start_date->format('Y-m-d') != $job_start_date && $row->job_end_date->format('Y-m-d') != $job_end_date)
+        if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-            $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+            // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+            $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
             if (count($duplicated_items) > 0)
             {
                 // dd($duplicated_items[0]->id, $id);
-                if ($duplicated_items[0]->id != $id) {
-                    // $error_message = '요청하신 데이터 정보<br/>';
-                    flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
+                // $error_message = '요청하신 데이터 정보<br/>';
+                flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
-                    $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
-                    foreach ($duplicated_items as $index => $item) {
-                        $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                    . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
+                foreach ($duplicated_items as $index => $item) {
+                    if ($item->id != $id) {
+                      $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
                     }
-
-                    flash()->warning($warning_message);
-                    return back()->withInput();
                 }
+
+                flash()->warning($warning_message);
+                return back()->withInput();
             }
         }
         // << End.
@@ -505,7 +509,9 @@ class StatusManpowerSupportersController extends Controller
         return redirect(route('status_manpower_supporters.index'));
     }
 
-    private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
+    // 인력지원반의 경우 전체 농가에 대한 중복 검사를 함. 그래서 (farmer_id 조건 사용 안함)
+    // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
     {
         // DB::enableQueryLog();
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
@@ -520,7 +526,8 @@ class StatusManpowerSupportersController extends Controller
                                           'manpower_supporters.name as supporter_name'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
-                                      ->where('manpower_supporters.name', $supporter_name)
+                                      // ->where('manpower_supporters.name', $supporter_name)
+                                      ->where('manpower_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
                                           //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);

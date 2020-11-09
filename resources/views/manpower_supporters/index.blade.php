@@ -53,7 +53,8 @@
             <th width="5%">시군명</th>
             <th width="5%">대상농협</th>
             <th>성명</th>
-            <th width="3%">연령<br/>(세)</th>
+            <!-- <th width="3%">연령<br/>(세)</th> -->
+            <th width="8%">생년월일(연령)</th>
             <th width="3%">성별</th>
             <th>주소</th>
             <th>연락처</th>
@@ -75,10 +76,12 @@
             <td>{{ $supporter->sigun->name }}</td>
             <td>{{ $supporter->nonghyup->name }}</td>
             <td>{{ $supporter->name }}</td>
-            <td>{{ $supporter->age }}</td>
+            <!-- <td>{{ $supporter->age }}</td> -->
+            <td>{{ $supporter->birth }} ({{ Carbon\Carbon::parse($supporter->birth)->diffInYears(Carbon\Carbon::now()) }})</td>
             <td>{{ ($supporter->sex == 'M') ? '남' : '여' }}</td>
             <td>{{ $supporter->address }}</td>
-            <td>{{ $supporter->contact }}</td>
+            <!-- <td>{{ $supporter->contact }}</td> -->
+            <td>{{ $supporter->phoneNumber() }}</td>
             <td>{{ $supporter->training_date1 }}</td>
             <td>{{ $supporter->training_date2 }}</td>
             <td>{{ $supporter->training_date3 }}</td>

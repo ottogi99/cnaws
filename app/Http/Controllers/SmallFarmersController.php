@@ -169,9 +169,10 @@ class SmallFarmersController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'sigun_code' => ['required'],
+            'sigun_code'  => ['required'],
             'nonghyup_id' => ['required'],         // 아이디 4자리~12자리
-            'name' => ['required'],
+            'name'        => ['required'],
+            'birth'       => ['required'],
         ];
 
         $messages = [
@@ -182,6 +183,7 @@ class SmallFarmersController extends Controller
             'sigun_code'      => '시군항목',
             'nonghyup_id'     => '농협ID',
             'name'            => '성명',
+            'birth'           => '생년월일',
         ];
 
         $this->validate($request, $rules, $messages, $attributes);

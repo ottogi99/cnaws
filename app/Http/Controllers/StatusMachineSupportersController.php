@@ -164,10 +164,12 @@ class StatusMachineSupportersController extends Controller
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
-        $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
-        $supporter_name = $supporter->name;
+        // 2020-11-09 중복일 처리 변경 (지원반 이름에서 지원반 id로: 동명이인 허용되므로)
+        // $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
+        // $supporter_name = $supporter->name;
 
-        $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
+        // $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
+        $duplicated_items = $this->check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
@@ -310,13 +312,18 @@ class StatusMachineSupportersController extends Controller
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
-        $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
-        $supporter_name = $supporter->name;
+        // 2020-11-09 중복일 처리 변경 (지원반 이름에서 지원반 id로: 동명이인 허용되므로)
+        // $supporter = \App\MachineSupporter::where('id', $supporter_id)->first();
+        // $supporter_name = $supporter->name;
 
         // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
-        if ($row->job_start_date->format('Y-m-d') != $job_start_date && $row->job_end_date->format('Y-m-d') != $job_end_date)
+        // Log::debug([$farmer_id, $supporter_id, $job_start_date, $job_end_date]);
+        // Log::debug([$row->job_start_date->format('Y-m-d'), $job_start_date, $row->job_end_date->format('Y-m-d'), $job_end_date]);
+
+        if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-          $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
+            // $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
+            $duplicated_items = $this->check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date);
 
             if (count($duplicated_items) > 0)
             {
@@ -325,8 +332,10 @@ class StatusMachineSupportersController extends Controller
 
                 $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
                 foreach ($duplicated_items as $index => $item) {
-                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    if ($item->id != $id) {
+                      $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    }
                 }
 
                 flash()->warning($warning_message);
@@ -488,21 +497,8 @@ class StatusMachineSupportersController extends Controller
         return redirect(route('status_machine_supporters.index'));
     }
 
-    public function calc(Request $request)
-    {
-        $nonghyup_id = 'nh485818';
-        $dates = \App\StatusMachineSupporter::with('sigun')->with('user')
-                                              ->select('job_start_date, job_end_date')
-                                              ->where('nonghyup_id', $nonghyup_id)
-                                              ->where('business_year', '2020')
-                                              ->orderBy('job_start_date')
-                                              ->get();
-
-        // dd($dates);
-        // return ;
-    }
-
-    private function check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date)
+    // private function check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date)
+    private function check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date)
     {
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
@@ -517,7 +513,9 @@ class StatusMachineSupportersController extends Controller
                                         )
                                       ->where('status_machine_supporters.business_year', now()->year)
                                       ->where('small_farmers.id', $farmer_id)
-                                      ->where('machine_supporters.name', $supporter_name)
+                                      // 2020-11-09 동명이인 허용으로 id로 검색하는 것으로 변경
+                                      // ->where('machine_supporters.name', $supporter_name)
+                                      ->where('machine_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
                                                 ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);

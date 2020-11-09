@@ -51,7 +51,8 @@
             <th>시군명</th>
             <th>대상농협</th>
             <th>성명</th>
-            <th>연령(세)</th>
+            <!-- <th>연령(세)</th> -->
+            <th>생년월일(연령)</th>
             <th>성별</th>
             <th>주소</th>
             <th>연락처</th>
@@ -71,10 +72,12 @@
             <td>{{ $farmer->sigun->name }}</td>
             <td>{{ $farmer->nonghyup->name }}</td>
             <td>{{ $farmer->name }}</td>
-            <td>{{ $farmer->age }}</td>
+            <!-- <td>{{ $farmer->age }}</td> -->
+            <td>{{ $farmer->birth }} ({{ Carbon\Carbon::parse($farmer->birth)->diffInYears(Carbon\Carbon::now()) }})</td>
             <td>{{ ($farmer->sex == 'M') ? '남' : '여' }}</td>
             <td>{{ $farmer->address }}</td>
-            <td>{{ $farmer->contact }}</td>
+            <!-- <td>{{ $farmer->contact }}</td> -->
+            <td>{{ $farmer->phoneNumber() }}</td>
             <td>{{ number_format($farmer->acreage, 1) }}</td>
             <td>{{ $farmer->cultivar }}</td>
             <td>{{ $farmer->bank_name }}</td>

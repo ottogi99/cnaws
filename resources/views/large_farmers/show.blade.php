@@ -21,8 +21,12 @@
         <span class="form-control" style="width:550px; border:;">{{ $farmer->name }}</span>
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
-        <span class="input-group-addon" style="width:150px; font-size:13px;">연령(세)</span>
-        <span class="form-control" style="width:550px; border:;">{{ $farmer->age }}</span>
+        <!-- <span class="input-group-addon" style="width:150px; font-size:13px;">연령(세)</span>
+        <span class="form-control" style="width:550px; border:;">{{ $farmer->age }}</span> -->
+        <span class="input-group-addon" style="width:150px; font-size:13px;">생년월일(연령)</span>
+        <span class="form-control" style="width:550px; border:;">
+          {{ $farmer->birth }} ({{ Carbon\Carbon::parse($farmer->birth)->diffInYears(Carbon\Carbon::now()) }})
+        </span>
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:150px; font-size:13px;">성별</span>
@@ -34,7 +38,8 @@
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:150px; font-size:13px;">연락처</span>
-        <span class="form-control" style="width:550px; border:;">{{ $farmer->contact }}</span>
+        <!-- <span class="form-control" style="width:550px; border:;">{{ $farmer->contact }}</span> -->
+        <span class="form-control" style="width:550px; border:;">{{ $farmer->phoneNumber() }}</span>
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:150px; font-size:13px;">소유경지면적(ha)</span>

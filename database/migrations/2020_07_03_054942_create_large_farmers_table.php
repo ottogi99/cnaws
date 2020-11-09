@@ -26,7 +26,7 @@ class CreateLargeFarmersTable extends Migration
             $table->unsignedTinyInteger('age')->nullable(); // 연령(세)
             $table->enum('sex', ['M','F'])->nullable();     // 성별
             $table->string('address')->nullable();          // 도로명 주소(전체)
-            $table->string('contact', 11)->nullable()       // 연락처
+            $table->string('contact', 11)->nullable();      // 연락처
             $table->decimal('acreage', 8, 2)->nullable();   // 소유경지면적, 단위(ha)
             $table->string('cultivar')->nullable();         // 재배품목(품종)
             $table->string('bank_name')->nullable();        // 입금정보(은행명)

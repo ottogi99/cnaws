@@ -38,7 +38,7 @@
         <thead>
           <tr>
             <th width="3%"></th>
-            <th width="3%"></th>
+            <th></th>
             <th colspan='2'>지역정보</th>
             <th colspan='3'>지원농가</th>
             <th colspan='5'>지원작업</th>
@@ -50,26 +50,26 @@
           <tr>
             <th><input type="checkbox" id="check_all"></th>
             <th>번호</th>
-            <th>시군명</th>
-            <th>대상농협</th>
-            <th>성명</th>
+            <th width="4%">시군명</th>
+            <th width="4%">농협</th>
+            <th width="4%">성명</th>
             <th>주소</th>
             <th>성별</th>
-            <th>작업자명</th>
-            <th>작업시작일</th>
-            <th>작업종료일</th>
-            <th>작업일수</th>
-            <th>작업내용</th>
-            <th>제공자</th>
+            <th width="4%">작업자</th>
+            <th width="6%">시작일</th>
+            <th width="6%">종료일</th>
+            <th>일수</th>
+            <th width="4%">내용</th>
+            <th width="4%">제공자</th>
             <th>합계</th>
-            <th>교통비</th>
-            <th>간식비</th>
-            <th>마스크구입비</th>
+            <th width="4%">교통비</th>
+            <th width="4%">간식비</th>
+            <th width="4%">마스크<br>구입비</th>
             <th>합계</th>
-            <th>도비</th>
-            <th>시군비</th>
-            <th>중앙회</th>
-            <th>지역농협</th>
+            <th width="4%">도비</th>
+            <th width="4%">시군비</th>
+            <th width="4%">중앙회</th>
+            <th width="4%">지역<br>농협</th>
             <th>등록일자</th>
             <th>기능</th>
           </tr>

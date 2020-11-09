@@ -136,9 +136,6 @@ return [
     |
     */
 
-    'log' => 'daily',
-    'log_max_files' => 30,
-
     'providers' => [
 
         /*

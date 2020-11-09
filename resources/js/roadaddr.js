@@ -1,3 +1,11 @@
+function isEmpty(value) {
+	if (value == null || value.length === 0) {
+		return "";
+	} else {
+		return value;
+	}
+}
+
 function getAddr(pageNo){
 	// 적용예 (api 호출 전에 검색어 체크)
 	if (!checkSearchedWord(document.form.keyword)) {
@@ -233,8 +241,11 @@ function setMappingFarmer(type, idx) {
 		opener.document.getElementById('address').value = address;
 	}
 	else {
+		console.log(name);
+		console.log(address);
 		opener.document.getElementById('supporter_name').value = name;
 		opener.document.getElementById('supporter_id').value = id;
+		opener.document.getElementById('supporter_address').value = address;
 	}
 
 	self.close();
@@ -245,26 +256,27 @@ function makeListJsonSearch(type, jsonStr){
 	var htmlStr = "";
 	htmlStr += "<p>검색 결과(" + jsonStr.results.total +")";
 	htmlStr += "<table>";
-	htmlStr += "<tr><th style='width:80px;'>농가명</th><th style='width:50px;'>성별</th><th style='width:50px;'>나이</th><th>연락처</th><th style='width:200px;'>주소</th>";
+	// htmlStr += "<tr><th style='width:80px;'>농가명</th><th style='width:50px;'>성별</th><th style='width:100px;'>생년월일</th><th>연락처</th><th style='width:200px;'>주소</th>";
+	htmlStr += "<tr><th style='width:80px;'>농가명</th><th style='width:50px;'>성별</th><th style='width:100px;'>생년월일</th><th style='width:200px;'>주소</th>";
 	$(jsonStr.results.data).each(function(){
 		num++;
 
 		htmlStr += "<tr>";
 		htmlStr += "<td >";
 		htmlStr += '<a href="#" onclick="setMappingFarmer(\'' + type + '\',' + num + ')">';
-		htmlStr += "<div id='name" + num + "' data-id='"+this.id+"' ><b>"+this.name+"</b></a></div>";
+		htmlStr += "<div id='name" + num + "' data-id='"+this.id+"' ><b>" + isEmpty(this.name) +"</b></a></div>";
 		htmlStr += "</td>";
 		if (this.sex == 'M')
 			htmlStr += "<td>남</td>";
 		else
 			htmlStr += "<td>여</td>";
 
-		htmlStr += "<td>"+this.age+"</td>";
-		htmlStr += "<td>"+this.contact+"</td>";
+		htmlStr += "<td>"+this.birth+"</td>";
+		// htmlStr += "<td>"+ isEmpty(this.contact) + "</td>";
 		if (this.address == "")
 			htmlStr += "<td><div id='address" + num + "'></div></td>";
 		else
-			htmlStr += "<td><div id='address" + num + "'>"+this.address+"</div></td>";
+			htmlStr += "<td><div id='address" + num + "'>"+ isEmpty(this.address) +"</div></td>";
 
 		// htmlStr += "<td><div id='id" + num + "' style='visibility:hidden'>"+this.id+"</div></td>";
 		htmlStr += "</tr>";
@@ -279,7 +291,7 @@ function makeListJsonSearch(type, jsonStr){
 	var currentPage = jsonStr.results.current_page;
 	// var page_viewList = Paging(27, 10, 10 ,1, "PagingView");
 
-	console.log(totalCount, perPage, groupRange, currentPage);
+	// console.log(totalCount, perPage, groupRange, currentPage);
 	var page_viewList = pagingSmallFarmer(totalCount, perPage, groupRange, currentPage, type);
 	// $("#paginate").html(page_viewList);
 	$(".bot_pagination").html(page_viewList);

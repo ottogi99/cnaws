@@ -33,6 +33,10 @@
         <span class="form-control" style="width:550px; border:;">{{ $row->supporter->name }}</span>
       </div>
       <div class="input-group input-group-lg" style="padding-bottom:10px;">
+        <span class="input-group-addon" style="width:150px; font-size:13px;">작업자주소</span>
+        <span class="form-control" style="width:550px; border:;">{{ $row->supporter->address }}</span>
+      </div>
+      <div class="input-group input-group-lg" style="padding-bottom:10px;">
         <span class="input-group-addon" style="width:150px; font-size:13px;">작업시작일</span>
         <span class="form-control" style="width:550px; border:;">{{ $row->job_start_date->format('Y-m-d') }}</span>
       </div>
