@@ -126,8 +126,8 @@ class BudgetsController extends Controller
         ];
 
         $attributes = [
-            'sigun_code'      => '시군항목',
-            'nonghyup_id'     => '농협ID',
+            'sigun_code'    => '시군항목',
+            'nonghyup_id'   => '농협ID',
             'amount'        => '비밀번호',
         ];
 
@@ -152,13 +152,31 @@ class BudgetsController extends Controller
             $business_year = now()->format('Y');
         }
 
+        $payment_sum = $request->input('amount');
+
+        $payment_do = floor($payment_sum * 0.21);
+        $payment_sigun = floor($payment_sum * 0.49);
+        $payment_center = floor($payment_sum * 0.2);
+        $payment_unit = floor($payment_sum * 0.1);
+        $payment_diff = $payment_sum - ($payment_do + $payment_sigun + $payment_center + $payment_unit);
+
         $payload = array_merge($request->all(), [
-            'sigun_code' => $sigun_code,
-            'nonghyup_id' => $nonghyup_id,
-            'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+          'sigun_code' => $sigun_code,
+          'nonghyup_id' => $nonghyup_id,
+          'business_year' => $business_year,  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+          'payment_do' => $payment_do + $payment_diff,
+          'payment_sigun' => $payment_sigun,
+          'payment_center' => $payment_center,
+          'payment_unit' => $payment_unit,
         ]);
 
-        Log::debug($request->all());
+        // $payload = array_merge($request->all(), [
+        //     'sigun_code' => $sigun_code,
+        //     'nonghyup_id' => $nonghyup_id,
+        //     'business_year' => $business_year  // 생성은 그 해에 입력하는 데이터로 한다.(수정불가)
+        // ]);
+
+        // Log::debug($request->all());
         if (\App\Budget::where('business_year', $business_year)
                           ->where('nonghyup_id', $nonghyup_id)->exists())
         {
@@ -197,6 +215,33 @@ class BudgetsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $rules = [
+            'sigun_code' => ['required'],
+            'nonghyup_id' => ['required'],
+            'amount' => ['required','numeric'],
+            'payment_do' => ['required','numeric'],
+            'payment_sigun' => ['required','numeric'],
+            'payment_center' => ['required','numeric'],
+            'payment_unit' => ['required','numeric'],
+        ];
+
+        $messages = [
+            'required' => ':attribute은(는) 필수 입력 항목입니다.',
+            'numeric' => ':attribute은(는) 숫자형태만 가능합니다.',
+        ];
+
+        $attributes = [
+            'sigun_code'    => '시군항목',
+            'nonghyup_id'   => '농협ID',
+            'amount'        => '비밀번호',
+            'payment_do'    => '도비',
+            'payment_sigun' => '시군비',
+            'payment_center' => '중앙회',
+            'payment_unit'  => '지역농협',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
+
         $budget = \App\Budget::findOrFail($id);
         $this->authorize('edit-budgets', $budget);
 

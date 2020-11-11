@@ -41,17 +41,35 @@
           <col width="%"/>
           <col width=""/>
           <col width=""/>
+          <col width=""/>
+          <col width=""/>
+          <col width=""/>
+          <col width=""/>
           <col width="10%"/>
           <col width="10%"/>
         </colgroup>
         <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th colspan="5">사업비(원)</th>
+            <th></th>
+            <th></th>
+          </tr>
           <tr>
             <th><input type="checkbox" id="check_all"></th>
             <th>번호</th>
             <th>년도</th>
             <th>시군명</th>
             <th>농협명</th>
-            <th>사업비</th>
+            <th>합계</th>
+            <th>도비</th>
+            <th>시군비</th>
+            <th>중앙회</th>
+            <th>지역농협</th>
             <th>갱신일자</th>
             <th>기능</th>
           </tr>
@@ -65,6 +83,10 @@
             <td>{!! $budget->sigun->name !!}</td>
             <td>{!! $budget->nonghyup->name !!}</td>
             <td>{!! number_format($budget->amount) !!}</td>
+            <td>{!! number_format($budget->payment_do) !!}</td>
+            <td>{!! number_format($budget->payment_sigun) !!}</td>
+            <td>{!! number_format($budget->payment_center) !!}</td>
+            <td>{!! number_format($budget->payment_unit) !!}</td>
             <td>{!! $budget->updated_at->format('Y-m-d') !!}</td>
             <td>
               <button class="btn btn-xs" onclick="location.href='{{ route('budgets.edit', $budget->id) }}'" data-id="{{ $budget->id }}">수정</button>

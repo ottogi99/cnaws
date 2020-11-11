@@ -61,6 +61,10 @@ class BudgetsExport implements FromQuery, WithMapping, WithColumnFormatting, Wit
                 $budget->sigun_name,
                 $budget->nonghyup_name,
                 $budget->amount,
+                $budget->payment_do,
+                $budget->payment_sigun,
+                $budget->payment_center,
+                $budget->payment_unit,
                 Date::dateTimeToExcel($budget->created_at),
             ],
         ];
@@ -69,7 +73,7 @@ class BudgetsExport implements FromQuery, WithMapping, WithColumnFormatting, Wit
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'I' => NumberFormat::FORMAT_DATE_YYYYMMDD,
         ];
     }
 
@@ -78,7 +82,8 @@ class BudgetsExport implements FromQuery, WithMapping, WithColumnFormatting, Wit
         return [
             '대상년도',
             '시군명', '대상농협',
-            '사업비(원)',
+            '사업비(합계)',
+            '도비', '시군비', '중앙회', '지역농협',
             '등록일'
         ];
     }

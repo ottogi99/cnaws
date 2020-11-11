@@ -14,9 +14,7 @@ class AddBirthToSmallFarmersTable extends Migration
     public function up()
     {
         Schema::table('small_farmers', function (Blueprint $table) {
-            $table->date('birth')->default('0000-01-01');
-            // $table->dropUnique(['business_year', 'nonghyup_id', 'name']);
-            // $table->unique(['business_year', 'nonghyup_id', 'name', 'birth']);
+            $table->date('birth')->default('1900-01-01');
         });
     }
 
@@ -29,8 +27,6 @@ class AddBirthToSmallFarmersTable extends Migration
     {
         Schema::table('small_farmers', function (Blueprint $table) {
             $table->dropColumn(['birth']);
-            // $table->dropUnique(['business_year', 'nonghyup_id', 'name', 'birth']);
-            // $table->unique(['business_year', 'nonghyup_id', 'name']);
         });
     }
 }

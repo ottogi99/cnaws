@@ -14,7 +14,7 @@ class AddBirthToMachineSupportersTable extends Migration
     public function up()
     {
         Schema::table('machine_supporters', function (Blueprint $table) {
-            $table->date('birth')->default('0000-01-01');
+            $table->date('birth')->default('1900-01-01');
         });
     }
 

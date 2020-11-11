@@ -14,7 +14,7 @@ class AddBirthToLargeFarmersTable extends Migration
     public function up()
     {
         Schema::table('large_farmers', function (Blueprint $table) {
-            $table->date('birth')->default('0000-01-01');
+            $table->date('birth')->default('1900-01-01');
         });
     }
 
