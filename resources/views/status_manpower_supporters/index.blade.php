@@ -51,7 +51,7 @@
             <th><input type="checkbox" id="check_all"></th>
             <th>번호</th>
             <th width="4%">시군명</th>
-            <th width="4%">농협</th>
+            <th width="5%">농협</th>
             <th width="4%">성명</th>
             <th>주소</th>
             <th>성별</th>

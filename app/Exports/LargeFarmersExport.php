@@ -52,16 +52,21 @@ class LargeFarmersExport implements FromQuery, WithMapping, WithColumnFormatting
 
     public function map($farmer): array
     {
+        $age = \Carbon\Carbon::parse($farmer->birth)->diffInYears(\Carbon\Carbon::now());
+
         return [
             [
                 $farmer->business_year,
                 $farmer->sigun_name,
                 $farmer->nonghyup_name,
                 $farmer->name,
-                $farmer->age,
+                // $farmer->age,
+                $farmer->birth,
+                $age,
                 ($farmer->sex == 'M' ? '남' : '여'),
                 $farmer->address,
-                $farmer->contact,
+                // $farmer->contact,
+                $farmer->phoneNumber(),
                 $farmer->acreage,
                 $farmer->cultivar,
                 $farmer->bank_name,
@@ -75,7 +80,7 @@ class LargeFarmersExport implements FromQuery, WithMapping, WithColumnFormatting
     public function columnFormats(): array
     {
         return [
-            'N' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'O' => NumberFormat::FORMAT_DATE_YYYYMMDD,
         ];
     }
 
@@ -84,7 +89,8 @@ class LargeFarmersExport implements FromQuery, WithMapping, WithColumnFormatting
         return [
           '대상년도',
            '시군명', '대상농협',
-           '성명', '연령(세)', '성별', '주소','연락처',
+           // '성명', '연령(세)', '성별', '주소','연락처',
+           '성명', '생년월일', '연령(세)', '성별', '주소','연락처',
            '소유경지면저(㏊)','재배품목','은행명','계좌번호',
            '비고', '등록일'
         ];

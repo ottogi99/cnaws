@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Carbon;
@@ -33,7 +34,9 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
 
     public function model(array $row)
     {
-        if (!isset($row[11])) {
+        // 칼럼수가 맞지 않으면
+        if (count($row) != 12) {
+            Log::debug('엑셀 칼럼수가 맞지 않습니다. 필요(12), 입력('.count($row).')');
             return null;
         }
 
@@ -69,7 +72,8 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                 'sigun_code'      => $sigun->code,            //$row[1],
                 'nonghyup_id'     => $nonghyup->nonghyup_id,  //$row[2],
                 'name'            => $row[3],
-                'age'             => $row[4],
+                // 'age'             => $row[4],
+                'birth'           => Date::excelToDateTimeObject($row[4])->format('Y-m-d'),
                 'sex'             => ($row[5] == '남' ? 'M' : 'F'),
                 'address'         => $row[6],
                 'contact'         => $row[7],
@@ -85,6 +89,12 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
 
         return null;
     }
+
+    // public function onError(\Throwable $e)
+    // {
+    //     --$this->rows;
+    //     Log::debug($e);
+    // }
 
     public function startRow(): int
     {
@@ -113,6 +123,9 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                 } else {
                     $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
                 }
+
+                $key = substr($attribute, 0, 1);
+                $this->stack[$key] = array('business_year' => $value);
             },
             '1' => function($attribute, $value, $onFailure) {
                 $sigun = \App\Sigun::where('name', trim($value))->first();
@@ -139,11 +152,52 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                     $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
                     return;
                 }
+
+                // 중복처리
+                $key = substr($attribute, 0, 1);
+                $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
             },
-            '4' => function ($attribute, $value, $onFailure) {
-                if (!$this->is_valid_numeric($value))
-                  $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
-            },
+            '3' =>  // 성명
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('name' => $value));
+                },
+            ],
+            // function ($attribute, $value, $onFailure) {  // 성명
+            //     // TODO: 동명이인 처리해야함
+            //     // if (!$this->is_valid_numeric($value))
+            //     //   $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+            //
+            //     $key = substr($attribute, 0, 1);
+            //     $this->stack[$key] = array('nonghyup_id' => $value);
+            // },
+            '4' => // 생년월일
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $birth = '';
+                    try {
+                        $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
+
+                    $key = substr($attribute, 0, 1);
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
+                    $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
+                    $name = isset($this->stack[$key]['name']) ? $this->stack[$key]['name'] : null;
+
+                    // 중복검사
+                    $duplicated_items = $this->check_duplicate($business_year, $nonghyup_id, $name, $birth);
+                    if (count($duplicated_items) > 0)
+                    {
+                        $onFailure('요청하신 농가가 이미 등록되어 있습니다. [농가: '.$name.', 생년월일: '.$birth.']');
+                    }
+                },
+            ],
             '8' => function ($attribute, $value, $onFailure) {
                 if (!$this->is_valid_numeric($value))
                   $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
@@ -182,4 +236,15 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
     //         },
     //     ];
     // }
+
+    private function check_duplicate($business_year, $nonghyup_id, $name, $birth)
+    {
+        // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
+        return $duplicated_items = \App\SmallFarmer::where('business_year', $business_year)
+                                      ->where('nonghyup_id', $nonghyup_id)
+                                      ->where('name', $name)
+                                      ->where('birth', $birth)
+                                      ->get();
+                                      // ->exists())
+    }
 }

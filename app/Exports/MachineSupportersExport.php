@@ -51,16 +51,21 @@ class MachineSupportersExport implements FromQuery, WithMapping, WithColumnForma
 
     public function map($supporter): array
     {
+        $age = \Carbon\Carbon::parse($supporter->birth)->diffInYears(\Carbon\Carbon::now());
+
         return [
             [
                 $supporter->business_year,
                 $supporter->sigun_name,
                 $supporter->nonghyup_name,
                 $supporter->name,
-                $supporter->age,
+                // $supporter->age,
+                $supporter->birth,
+                $age,
                 ($supporter->sex == 'M' ? '남' : '여'),
                 $supporter->address,
-                $supporter->contact,
+                // $supporter->contact,
+                $supporter->phoneNumber(),
                 $supporter->machine1,
                 $supporter->machine2,
                 $supporter->machine3,
@@ -76,7 +81,7 @@ class MachineSupportersExport implements FromQuery, WithMapping, WithColumnForma
     public function columnFormats(): array
     {
         return [
-            'P' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'Q' => NumberFormat::FORMAT_DATE_YYYYMMDD,
         ];
     }
 
@@ -85,7 +90,8 @@ class MachineSupportersExport implements FromQuery, WithMapping, WithColumnForma
         return [
             '대상년도',
             '시군명', '대상농협',
-            '성명', '연령(세)', '성별', '주소','연락처',
+            // '성명', '연령(세)', '성별', '주소','연락처',
+            '성명', '생년월일', '연령(세)', '성별', '주소','연락처',
             '소유농기계1', '소유농기계2', '소유농기계3', '소유농기계4',
             '은행명','계좌번호',
             '비고', '등록일'

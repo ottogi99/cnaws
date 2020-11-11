@@ -14,13 +14,14 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Illuminate\Support\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 // use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 // use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading
+class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError//, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsFailures, SkipsErrors;
     // use RemembersRowNumber;
@@ -29,7 +30,9 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
 
     public function model(array $row)
     {
-        if (!isset($row[10])) {
+        // 칼럼수가 맞지 않으면
+        if (count($row) != 13) {
+            Log::debug('엑셀 칼럼수가 맞지 않습니다. 필요(13), 입력('.count($row).')');
             return null;
         }
 
@@ -41,27 +44,35 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         //
         $row = array_map('trim', $row);
 
+        $farmer_birth = Date::excelToDateTimeObject($row[4])->format('Y-m-d');
+        $supporter_birth = Date::excelToDateTimeObject($row[6])->format('Y-m-d');
+
         $sigun = \App\Sigun::where('name', $row[1])->first();
         $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
         $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
-                                ->where('name', $row[3])->First();
+                                ->where('name', $row[3])
+                                ->where('birth', $farmer_birth)
+                                ->first();
+
         $supporter = \App\MachineSupporter::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
-                                ->where('name', $row[4])->First();
+                                ->where('name', $row[5])
+                                ->where('birth', $supporter_birth)
+                                ->first();
 
         // $job_start_date = new Carbon($row[5]);
         // $job_end_date   = new Carbon($row[6]);
         // $working_days = $job_start_date->diffInDays($job_end_date)+1;//->format('%H:%I:%S');
         //
         // dd([$row[5], $row[6]]);
-        $job_start_date = Date::excelToDateTimeObject($row[5]);
-        $job_end_date = Date::excelToDateTimeObject($row[6]);
+        $job_start_date = Date::excelToDateTimeObject($row[7]);
+        $job_end_date = Date::excelToDateTimeObject($row[8]);
         // $job_start_date = new DateTime($row[5]);
         // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
-        $payment_sum = $row[9];
+        $payment_sum = $row[11];
         $payment_do = floor($payment_sum * 0.21);
         $payment_sigun = floor($payment_sum * 0.49);
         $payment_center = floor($payment_sum * 0.2);
@@ -78,17 +89,15 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'job_start_date'  => $job_start_date->format('Y-m-d'),
                 'job_end_date'    => $job_end_date->format('Y-m-d'),
                 'working_days'    => $working_days,
-                'work_detail'     => $row[7],
-                'working_area'    => $row[8],
+                'work_detail'     => $row[9],
+                'working_area'    => $row[10],
                 'payment_sum'     => $payment_sum,
                 'payment_do'      => $payment_do + $payment_diff,
                 'payment_sigun'   => $payment_sigun,
                 'payment_center'  => $payment_center,
                 'payment_unit'    => $payment_unit,
-                'remark'          => $row[10],
+                'remark'          => $row[12],
             ]);
-
-            Log::debug($row);
 
             return $row;
         } else {
@@ -103,15 +112,15 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         return 2;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function batchSize(): int
+    // {
+    //     return 1000;
+    // }
+    //
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 
     public function rules(): array
     {
@@ -169,50 +178,107 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
+                    // $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     // dd('농협 ID: '.$nonghyup_id.', 농가명: '.$value);
+
+                    // 2020-11-11 농가 동명이인 허용
+                    // $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
+                    //                           ->when($nonghyup_id, function($query, $nonghyup_id) {
+                    //                               $query->where('nonghyup_id', $nonghyup_id);
+                    //                             })
+                    //                           ->where('name', trim($value))->First();
+                    //
+                    // if (!$farmer) {
+                    //     $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
+                    //     return;
+                    // }
+
+                    // $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
+                    // $this->stack[$key] = array_merge($this->stack[$key], $array_farmer);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('farmer_name' => $value));
+                },
+            ],
+            '4' =>  // 농가 생년월일
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
+                    $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
+                    $name = isset($this->stack[$key]['farmer_name']) ? $this->stack[$key]['farmer_name'] : null;
+                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
 
                     $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
                                               ->when($nonghyup_id, function($query, $nonghyup_id) {
                                                   $query->where('nonghyup_id', $nonghyup_id);
                                                 })
-                                              ->where('name', trim($value))->First();
+                                              ->where('name', trim($name))
+                                              ->where('birth', trim($birth))
+                                              ->first();
 
                     if (!$farmer) {
-                        $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
+                        // $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
+                        $onFailure('해당 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
-                    $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
-                    $this->stack[$key] = array_merge($this->stack[$key], $array_farmer);
+                    // $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('farmer_id' => $farmer->id));
                 },
             ],
-            '4' =>  // 작업자명
+            '5' =>  // 작업자명
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
+                    // $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
+
+                    // 2020-11-11 동명이인 허용
+                    // $supporter = \App\MachineSupporter::with('sigun')->with('nonghyup')
+                    //                           ->where('nonghyup_id', $nonghyup_id)
+                    //                           ->where('name', trim($value))->First();
+                    // if (!$supporter) {
+                    //     $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
+                    //     return;
+                    // }
+                    //
+                    // $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
+                    // $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
+
+                    $this->stack[$key] = array_merge($this->stack[$key], array('supporter_name' => $value));
+                },
+            ],
+            '6' =>  // 작업자 생년월일
             [
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
+                    $name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
+                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
 
-                    $supporter = \App\MachineSupporter::with('sigun')->with('nonghyup')
-                                              ->where('nonghyup_id', $nonghyup_id)
-                                              ->where('name', trim($value))->First();
+                    $supporter = \App\MachineSupporter::where('nonghyup_id', $nonghyup_id)
+                                              ->where('name', trim($name))
+                                              ->where('birth', trim($birth))
+                                              ->first();
+
                     if (!$supporter) {
-                        $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
+                        // $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
+                        $onFailure('해당 농기계지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
+                    //
+                    // $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
+                    // $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
 
-                    $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
-                    $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('supporter_id' => $supporter->id));
                 },
             ],
-            '5' =>  // 작업시작일
+            '7' =>  // 작업시작일
             [
                 'required',
                 // 'date_format:Y-m-d',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-
                     try {
                         $array_job_start = array('job_start_date' => Date::excelToDateTimeObject($value)->format('Y-m-d'));
                         $this->stack[$key] = array_merge($this->stack[$key], $array_job_start);
@@ -221,7 +287,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     }
                 }
             ],
-            '6' => // 작업종료일
+            '8' => // 작업종료일
             [
                 'required',
                 // 'date_format:Y-m-d',
@@ -229,28 +295,30 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $supporter_name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
+                    $supporter_id = isset($this->stack[$key]['supporter_id']) ? $this->stack[$key]['supporter_id'] : null;
                     $job_start_date = isset($this->stack[$key]['job_start_date']) ? $this->stack[$key]['job_start_date'] : null;
 
                     try {
                         $job_end_date = Date::excelToDateTimeObject($value)->format('Y-m-d');
-                        $array_job_end = array('job_start_date' => $job_end_date);
+                        $array_job_end = array('job_end_date' => $job_end_date);
                         $this->stack[$key] = array_merge($this->stack[$key], $array_job_end);
                     } catch (\Exception $e) {
                         $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
                         return;
                     }
 
-                    $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+                    // 2020-11-11 동명이인 허용
+                    // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+                    $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
                     if (count($duplicated_items) > 0)
                     {
                         $onFailure('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
                     }
                 }
             ],
-            'required',
-            '7' => 'required',
-            '8' => 'required',
-            '9' => [
+            '9' => 'required',
+            '10' => 'required',
+            '11' => [
                       'required',
                       function ($attribute, $value, $onFailure) {
                         if (!$this->is_valid_numeric($value))
@@ -273,7 +341,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
             '7.required' => ':attribute 값은 필수항목입니다.',
             '8.required' => ':attribute 값은 필수항목입니다.',
             '9.required' => ':attribute 값은 필수항목입니다.',
-            '5.date_format' => ':attribute 값은 날짜형태만 가능합니다',
+            '10.required' => ':attribute 값은 필수항목입니다.',
+            '11.required' => ':attribute 값은 필수항목입니다.',
         ];
     }
 
@@ -285,12 +354,14 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
           '1' => '시군명',
           '2' => '대상농협',
           '3' => '성명',
-          '4' => '작업자명',
-          '5' => '작업시작일',
-          '6' => '작업종료일',
-          '7' => '작업내용',
-          '8' => '작업면적',
-          '9' => '작업비용',
+          '4' => '생년월일',
+          '5' => '작업자명',
+          '6' => '생년월일',
+          '7' => '작업시작일',
+          '8' => '작업종료일',
+          '9' => '작업내용',
+          '10' => '작업면적',
+          '11' => '작업비용',
         ];
     }
 
@@ -309,7 +380,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         return $this->rows;
     }
 
-    private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
+    // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
     {
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
@@ -325,12 +397,24 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                       ->where('status_machine_supporters.business_year', now()->year)
                                       // ->where('status_machine_supporters.supporter_id', $supporter_id)
                                       // id 중복이 아니라 이름 중복을 검색하여야 한다.
-                                      ->where('machine_supporters.name', $supporter_name)
+                                      // ->where('machine_supporters.name', $supporter_name)
+                                      ->where('machine_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                          $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                                ->orWhereBetween('status_machine_supporters.job_end_date', [$job_start_date, $job_end_date]);
-                                      })
-                                      ->get();
+                                          // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
+                                          //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
+                                              $query->whereRaw('
+                                                (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                            		or
+                                            		(status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                                or
+                                            		(status_machine_supporters.job_start_date > ? and ? > status_machine_supporters.job_end_date)
+                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
+                                      })->get();
+                                      // ->where(function ($query) use ($job_start_date, $job_end_date) {
+                                      //     $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
+                                      //           ->orWhereBetween('status_machine_supporters.job_end_date', [$job_start_date, $job_end_date]);
+                                      // })
+                                      // ->get();
                                       // ->exists())
     }
 

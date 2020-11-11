@@ -488,7 +488,7 @@ class StatusManpowerSupportersController extends Controller
                 Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
 
                  // if ($index <= 10)
-                $failure_message .= ($index+1). ')' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
+                $failure_message .= ($index+1). ')' . $row.'행 '.$column.'열: '.$failure->errors()[0].'<br/>';
             }
             $total_rows = $inserted_rows + count($failure_rows);
 
@@ -505,7 +505,11 @@ class StatusManpowerSupportersController extends Controller
             return redirect(route('status_manpower_supporters.index'));
         }
 
-        flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        if ($inserted_rows == 0) {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다. (샘플 엑셀파일과 칼럼수가 일치하는지 확인해 주세요.)');
+        } else {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        }
         return redirect(route('status_manpower_supporters.index'));
     }
 

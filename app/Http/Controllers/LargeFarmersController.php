@@ -177,7 +177,7 @@ class LargeFarmersController extends Controller
                 $first_quotes = strpos($e->getMessage(), '\'');
                 $end_quotes = strpos($e->getMessage(), '\'', $first_quotes + 1);
                 $duplicated = substr($e->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
-                flash()->error('동일한 이름의 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+                flash()->error('동일한 이름의 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 항목: '.$duplicated.')');
             } else {
                 flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$e->errorInfo[2].')');
             }
@@ -241,7 +241,7 @@ class LargeFarmersController extends Controller
                 $first_quotes = strpos($e->getMessage(), '\'');
                 $end_quotes = strpos($e->getMessage(), '\'', $first_quotes + 1);
                 $duplicated = substr($e->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
-                flash()->error('동일한 이름의 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+                flash()->error('동일한 이름의 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 항목: '.$duplicated.')');
             } else {
                 flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$e->errorInfo[2].')');
             }
@@ -351,9 +351,9 @@ class LargeFarmersController extends Controller
                     $end_quotes = strpos($error->getMessage(), '\'', $first_quotes + 1);
                     $duplicated = substr($error->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
                     // Log::debug($duplicated);
-                    flash()->error('자료 중에 추가하려는 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
+                    flash()->error('엑셀 자료에서 중복된 농가가 존재하고 있습니다. 중복된 자료를 제거(수정)하여 다시 시도하시기 바랍니다. (중복 항목: '.$duplicated.')');
                 } else {
-                flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$error->errorInfo[2].')');
+                    flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$error->errorInfo[2].')');
                 }
             }
             // Log::debug($errors);
@@ -379,7 +379,7 @@ class LargeFarmersController extends Controller
                 Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
 
                  // if ($index <= 10)
-                $failure_message .= ($index+1). ')' . $row.'행 '.$column.': '.$failure->errors()[0].'<br/>';
+                $failure_message .= ($index+1). ')' . $row.'행 '.$column.'열: '.$failure->errors()[0].'<br/>';
             }
             $total_rows = $inserted_rows + count($failure_rows);
 
@@ -396,7 +396,11 @@ class LargeFarmersController extends Controller
             return redirect(route('large_farmers.index'));
         }
 
-        flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        if ($inserted_rows == 0) {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다. (샘플 엑셀파일과 칼럼수가 일치하는지 확인해 주세요.)');
+        } else {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        }
         return redirect(route('large_farmers.index'));
     }
 
