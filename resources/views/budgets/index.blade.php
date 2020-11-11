@@ -95,7 +95,7 @@
           </tr>
           @empty
           <tr>
-            <td colspan="6">항목이 존재하지 않습니다.</td>
+            <td colspan="12">항목이 존재하지 않습니다.</td>
           </tr>
           @endforelse
         </tbody>
