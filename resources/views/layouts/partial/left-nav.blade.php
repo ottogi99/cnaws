@@ -2,7 +2,7 @@
 <!-- <div class="sidebar-nav" style="width:210px; padding-bottom:100%;"> -->
 <div class="sidebar-nav" style="width:210px; padding-bottom:100%; position:fixed;">
   <a class="navbar-brand" href="{{ route('home.index') }}" style="width:210px; height:90px; background-color:#188859; position:absolute; top:-130px;">
-    <img src="img/logo.png"/ style="width:96px; height:68px;"></a>
+    <img src="/img/logo.png"/ style="width:96px; height:68px;"></a>
   <div style="width:210px; height:40px; background-color:#085e38; top:-40px; position:absolute;">
   <span style="font-family:'ng'; color:#ffffff; line-height:38px; padding-left:15px;">농작업지원단 업무지원시스템</span>
   </div>
