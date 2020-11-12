@@ -1,5 +1,12 @@
 <!-- left menu starts -->
-<div class="sidebar-nav" style="width:210px; padding-bottom:100%;">
+<!-- <div class="sidebar-nav" style="width:210px; padding-bottom:100%;"> -->
+<div class="sidebar-nav" style="width:210px; padding-bottom:100%; position:fixed;">
+  <a class="navbar-brand" href="{{ route('home.index') }}" style="width:210px; height:90px; background-color:#188859; position:absolute; top:-130px;">
+    <img src="img/logo.png"/ style="width:96px; height:68px;"></a>
+  <div style="width:210px; height:40px; background-color:#085e38; top:-40px; position:absolute;">
+  <span style="font-family:'ng'; color:#ffffff; line-height:38px; padding-left:15px;">농작업지원단 업무지원시스템</span>
+  </div>
+
   <div class="nav-canvas">
     <div class="nav-sm nav nav-stacked">
     </div>
@@ -75,6 +82,21 @@
           <li><a href="{{ route('suggestion.index') }}">건의사항</a></li>
         </ul>
       </li>
+
+      <style>
+    	   footer { font-size:11px;
+    				background-color: #323333;
+    				position: fixed;
+    				width: 210px;
+    				bottom: 0px;
+    				padding: 15px;}
+    		footer p {color:#dadada; text-align:center; margin:0;}
+    	</style>
+
+      <footer class="">
+        <p class="copyright">충청남도 홍성군 홍북읍 충남대로 64 농협중앙회(32263) &nbsp;&nbsp;&nbsp; <br/>☎ 대표전화:041-339-5344<br><br>
+        copyright ⓒ 2020 NONGHYUP <br/>All Rights Reserved.</p>
+      </footer>
 
       <div class="box col-md-12">
         <!-- <div class="box-inner">

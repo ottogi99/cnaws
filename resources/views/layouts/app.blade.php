@@ -72,12 +72,12 @@
     </style>
 
     <!--20201110 footer-->
-  	<style>
+  	<!-- <style>
   	   footer {
           height: 60px;
   				background-color: #323333;
   				/* position: fixed; */
-          position: absolute;
+          position: relative;
   				width: 100%;
   				bottom: 0px;
   				padding-top: 10px;
@@ -85,14 +85,14 @@
   				border-top: 1px solid #efefef;
       }
   		footer p {color:#dadada; font-size: 0.8em; text-align:center; margin:0;}
-  	</style>
+  	</style> -->
 
 </head>
 <body style="overflow-y:scroll;">
   @include('layouts.partial.top-nav')
 
   <div class="ch-container" style="padding-left:0;">
-    <div style="background-color:#323333; width:210px; height:100%; position:absolute;"></div>
+    <div style="background-color:#323333; width:210px; height:100%; position:fixed;"></div>
     <div class="row">
       <div class="col-sm-2 col-lg-2">
         @include('layouts.partial.left-nav')
@@ -103,10 +103,10 @@
       </div>
     </div>
 
-    <footer class="">
+    <!-- <footer class="">
 		    <p class="col-md-12 col-sm-12 col-xs-12 copyright">(32263) 충청남도 홍성군 홍북읍 충남대로 64 농협중앙회 &nbsp;&nbsp;&nbsp; ☎ 대표전화:041-339-5344 </p>
         <p class="col-md-12 col-sm-12 col-xs-12 copyright">copyright ⓒ 2020 NONGHYUP All Rights Reserved.</p>
-    </footer>
+    </footer> -->
   </div>
 </body>
 
