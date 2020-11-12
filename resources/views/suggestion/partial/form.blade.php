@@ -6,13 +6,13 @@
 </div>
 <div class="input-group input-group-lg {{ $errors->has('content') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:20%; font-size:13px;">내용</span>
-  <textarea class="form-control" name="content" id="contents">{{ old('content', $suggestion->content) }}</textarea>
+  <textarea class="form-control" name="content" id="content">{{ old('content', $suggestion->content) }}</textarea>
   <div>{!! $errors->first('content', '<span class="form-error">:message</span>') !!}</div>
 </div>
 
 <div class="input-group input-group-lg" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">공개여부</span>
-  <span class="input-group-addon" style="width:41px; font-size:13px;">공개</span>
+  <span class="input-group-addon" style="width:20%; font-size:13px;">공개여부</span>
+  <span class="input-group-addon" style="width:41px; font-size:13px; padding-left: 60px;">공개</span>
   <input type="radio" id="disclose" name="disclose" value="0" class="form-control" style="width:18px;" {{ !($suggestion->disclose == '1') ? 'checked' : '' }}>
   <span class="input-group-addon" style="width:41px; font-size:13px;">비공개</span>
   <input type="radio" id="disclose" name="disclose" value="1" class="form-control" style="width:18px;" {{ ($suggestion->disclose == '1') ? 'checked' : '' }}>

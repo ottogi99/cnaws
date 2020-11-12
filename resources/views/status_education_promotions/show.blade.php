@@ -70,10 +70,10 @@
       </div>
 
       <div style="float:right; margin-right:30px;">
-        @can('edit-education-promotion', $row)
+        @can('edit-status-education-promotion', $row)
         <a href="{{ route('status_education_promotions.edit', $row->id) }}" class="btn btn-sm btn-primary">수정</a>
         @endcan
-        @can('delete-education-promotion', $row)
+        @can('delete-status-education-promotion', $row)
         <button class="btn btn-danger btn-sm button__delete" data-id="{{ $row->id }}">삭제</button>
         @endcan
       </div>

@@ -66,7 +66,7 @@
     	background-image:max-height:100%; min-height:1080px;
     }
     body > div.ch-container > div.row > div.col-sm-2.col-lg-2 {width:12%;}
-    #content {width:88%;}
+    div.ch-container > div.row > #content { width:88%; }
     .nav>li a:hover, .nav>li a:focus {background-color:#5a5b5b; color:#ffffff;}
     ::-webkit-scrollbar { display: none; }
     </style>

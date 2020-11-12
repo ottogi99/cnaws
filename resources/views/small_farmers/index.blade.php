@@ -84,7 +84,7 @@
             <td>
               @if (auth()->user()->is_input_allowed)
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('small_farmers.show', $farmer->id) }}'">보기</button> -->
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('small_farmers.edit', $farmer->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $farmer->id }}">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $farmer->id }}">삭제</button>
               @endif
             </td>
@@ -148,6 +148,12 @@
     }
   });
 
+  $('.button__eidt').on('click', function(e) {
+    var farmerId = $(this).data('id');
+    window.location.href = '/small_farmers/' + farmerId + '/edit';
+    e.preventDefault();
+  });
+
   $('.button__delete').on('click', function(e) {
     var farmerId = $(this).data('id');
 
@@ -159,6 +165,7 @@
         window.location.href = '/small_farmers';
       });
     }
+    e.preventDefault();
   });
 
   $('#check_all').on('click', function(e) {
