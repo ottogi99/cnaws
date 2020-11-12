@@ -6,7 +6,7 @@
 </div>
 <div class="input-group input-group-lg {{ $errors->has('content') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:20%; font-size:13px;">내용</span>
-  <textarea class="form-control" name="content" id="content">{{ old('content', $notice->content) }}</textarea>
+  <textarea class="form-control" name="content" id="contents">{{ old('content', $notice->content) }}</textarea>
   <div>{!! $errors->first('content', '<span class="form-error">:message</span>') !!}</div>
 </div>
 

@@ -49,7 +49,7 @@
                 url: '/suggestion/' + attachmentId + '/delete_file'
             }).then(function() {
                 // window.location.href = '/notice';
-                console.log('#attachment_' + attachmentId);
+                // console.log('#attachment_' + attachmentId);
                 $('#attachment_' + attachmentId).remove();
             });
         }
