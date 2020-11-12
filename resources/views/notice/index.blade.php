@@ -64,7 +64,7 @@
               @if (auth()->user()->is_input_allowed)
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('notice.show', $notice->id) }}'">보기</button> -->
               @can('notice-edit', $notice)
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('notice.edit', $notice->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $notice->id }}">수정</button>
               @endcan
               @can('notice-delete', $notice)
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $notice->id }}">삭제</button>
@@ -105,13 +105,24 @@
     }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
+  $('.button__edit').on('click', function(e) {
+    e.stopPropagation();
+    var rowId = $(this).data('id');
+    window.location.href = '/notice/' + rowId + '/edit';
+  });
+
   $('.button__delete').on('click', function(e) {
-    var supporterId = $(this).data('id');
+    e.stopPropagation();
+    var rowId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {
       $.ajax({
         type: 'DELETE',
-        url: '/notice/' + supporterId
+        url: '/notice/' + rowId
       }).then(function() {
         window.location.href = '/notice';
       });

@@ -131,7 +131,12 @@
     }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
   $('.button__delete').on('click', function(e) {
+    e.stopPropagation();
     var budgetId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {

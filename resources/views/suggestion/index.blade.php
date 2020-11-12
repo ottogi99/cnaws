@@ -99,13 +99,24 @@
     }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
+  $('.button__edit').on('click', function(e) {
+    e.stopPropagation();
+    var rowId = $(this).data('id');
+    window.location.href = '/suggestion/' + rowId + '/edit';
+  });
+
   $('.button__delete').on('click', function(e) {
-    var supporterId = $(this).data('id');
+    e.stopPropagation();
+    var rowId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {
       $.ajax({
         type: 'DELETE',
-        url: '/suggestion/' + supporterId
+        url: '/suggestion/' + rowId
       }).then(function() {
         window.location.href = '/suggestion';
       });

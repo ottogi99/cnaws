@@ -57,6 +57,7 @@
           <tbody>
             @forelse($users as $user)
             <tr onclick="location.href='{{ route('users.show', $user->id) }}'">
+            <!-- <tr> -->
               <td><input type="checkbox" class="check" data-id="{{ $user->id }}"></td>
               <td>{{ ($users->currentPage()-1) * $users->perPage() + $loop->iteration }}</td>
               <td>{{ $user->sigun->name }}</td>
@@ -73,7 +74,7 @@
               <td>{{ $user->updated_at->format('Y-m-d') }}</td>
               <td>
                 <!-- <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button> -->
-                <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('users.edit', $user->id) }}'">수정</button>
+                <button class="btn btn-xs btn-primary button__edit" data-id="{{ $user->id }}">수정</button>
                 @can('delete-user', auth()->user()->nonghyup_id)
                 <button class="btn btn-xs btn-danger button__delete" data-id="{{ $user->id }}">삭제</button>
                 @endcan
@@ -148,7 +149,18 @@
       }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
+  $('.button__edit').on('click', function(e) {
+    e.stopPropagation();
+    var userId = $(this).data('id');
+    window.location.href = '/users/' + userId + '/edit';
+  });
+
   $('.button__delete').on('click', function(e) {
+    e.stopPropagation();
     var userId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {
@@ -159,6 +171,12 @@
           window.location.href = '/users';
       });
     }
+  });
+
+  $('.button__eidt').on('click', function(e) {
+    e.stopPropagation();
+    var userId = $(this).data('id');
+    window.location.href = '/users';
   });
 
   $('.button__activate').on('click', function(e) {
@@ -181,6 +199,7 @@
   });
 
   $('#check_all').on('click', function(e) {
+    e.preventDefault();
     if($(this).is(':checked', true))
     {
       $(".check").prop('checked', true);
@@ -190,6 +209,7 @@
   });
 
   $('.delete-all').on('click', function(e) {
+    e.preventDefault();
     var idsArr = [];
     $(".check:checked").each(function() {
         idsArr.push($(this).attr('data-id'));
@@ -225,6 +245,7 @@
 
 // 선택 계정상태 변경
   $('.activated-all').on('click', function(e) {
+    e.preventDefault();
     var selected_ids = [];
     $(".check:checked").each(function() {
         selected_ids.push($(this).attr('data-id'));
@@ -259,6 +280,7 @@
   });
 
   $('.input-allowed-all').on('click', function(e) {
+    e.preventDefault();
     var selected_ids = [];
     $(".check:checked").each(function() {
         selected_ids.push($(this).attr('data-id'));
@@ -292,7 +314,8 @@
     }
   });
 
-  $('.btn-down-example').on('click', function () {
+  $('.btn-down-example').on('click', function (e) {
+    e.preventDefault();
     window.location.href = '/users/example';
   })
 </script>

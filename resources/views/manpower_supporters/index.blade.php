@@ -92,7 +92,7 @@
             <td>
               @if (auth()->user()->is_input_allowed)
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('manpower_supporters.show', $supporter->id) }}'">보기</button> -->
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('manpower_supporters.edit', $supporter->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $supporter->id }}">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $supporter->id }}">삭제</button>
               @endif
             </td>
@@ -156,7 +156,18 @@
     }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
+  $('.button__edit').on('click', function(e) {
+    e.stopPropagation();
+    var supporterId = $(this).data('id');
+    window.location.href = '/manpower_supporters/' + supporterId + '/edit';
+  });
+
   $('.button__delete').on('click', function(e) {
+    e.stopPropagation();
     var supporterId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {

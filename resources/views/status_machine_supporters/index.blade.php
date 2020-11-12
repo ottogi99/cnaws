@@ -94,7 +94,7 @@
             <td>
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">보기</button> -->
               @if (auth()->user()->is_input_allowed)
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('status_machine_supporters.edit', $row->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $row->id }}">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $row->id }}">삭제</button>
               @endif
             </td>
@@ -158,7 +158,18 @@
     }
   });
 
+  $('.check').click(function(e){
+    e.stopPropagation();
+  });
+
+  $('.button__edit').on('click', function(e) {
+    e.stopPropagation();
+    var rowId = $(this).data('id');
+    window.location.href = '/status_machine_supporters/' + rowId + '/edit';
+  });
+
   $('.button__delete').on('click', function(e) {
+    e.stopPropagation();
     var rowId = $(this).data('id');
 
     if (confirm('항목을 삭제합니다.')) {
