@@ -49,7 +49,7 @@
         </thead>
         <tbody>
           @forelse($manuals as $manual)
-          <tr>
+          <tr onclick="location.href='{{ route('user_manual.show', $manual->id) }}'">
             <td>{{ ($manuals->currentPage()-1) * $manuals->perPage() + $loop->iteration }}</td>
             <td>{{ $manual->title }}</td>
             <td>{{ $manual->user->name }}</td>
@@ -62,7 +62,7 @@
             <td>{{ $manual->created_at->format('Y-m-d') }}</td>
             <td>
               @if (auth()->user()->is_input_allowed)
-              <button class="btn btn-xs" onclick="location.href='{{ route('user_manual.show', $manual->id) }}'">보기</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('user_manual.show', $manual->id) }}'">보기</button> -->
               @can('user-manual-edit', $manual)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('user_manual.edit', $manual->id) }}'">수정</button>
               @endcan

@@ -70,7 +70,7 @@
         </thead>
         <tbody>
           @forelse($supporters as $supporter)
-          <tr>
+          <tr onclick="location.href='{{ route('manpower_supporters.show', $supporter->id) }}'">
             <td><input type="checkbox" class="check" data-id="{{ $supporter->id }}"></td>
             <td>{{ ($supporters->currentPage()-1) * $supporters->perPage() + $loop->iteration }}</td>
             <td>{{ $supporter->sigun->name }}</td>
@@ -91,7 +91,7 @@
             <td>{{ $supporter->created_at->format('Y-m-d') }}</td>
             <td>
               @if (auth()->user()->is_input_allowed)
-              <button class="btn btn-xs" onclick="location.href='{{ route('manpower_supporters.show', $supporter->id) }}'">보기</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('manpower_supporters.show', $supporter->id) }}'">보기</button> -->
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('manpower_supporters.edit', $supporter->id) }}'">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $supporter->id }}">삭제</button>
               @endif

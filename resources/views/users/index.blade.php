@@ -56,7 +56,7 @@
           </thead>
           <tbody>
             @forelse($users as $user)
-            <tr>
+            <tr onclick="location.href='{{ route('users.show', $user->id) }}'">
               <td><input type="checkbox" class="check" data-id="{{ $user->id }}"></td>
               <td>{{ ($users->currentPage()-1) * $users->perPage() + $loop->iteration }}</td>
               <td>{{ $user->sigun->name }}</td>
@@ -72,7 +72,7 @@
               @endif
               <td>{{ $user->updated_at->format('Y-m-d') }}</td>
               <td>
-                <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button>
+                <!-- <button class="btn btn-xs" onclick="location.href='{{ route('users.show', $user->id) }}'">보기</button> -->
                 <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('users.edit', $user->id) }}'">수정</button>
                 @can('delete-user', auth()->user()->nonghyup_id)
                 <button class="btn btn-xs btn-danger button__delete" data-id="{{ $user->id }}">삭제</button>

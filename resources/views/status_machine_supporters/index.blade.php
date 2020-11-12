@@ -71,7 +71,7 @@
         </thead>
         <tbody>
           @forelse($rows as $row)
-          <tr>
+          <tr onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">
             <td><input type="checkbox" class="check" data-id="{{ $row->id }}"></td>
             <td>{{ ($rows->currentPage()-1) * $rows->perPage() + $loop->iteration }}</td>
             <td>{{ $row->sigun->name }}</td>
@@ -92,7 +92,7 @@
             <td>{{ number_format($row->payment_unit) }}</td>
             <td>{{ $row->created_at->format('Y-m-d') }}</td>
             <td>
-              <button class="btn btn-xs" onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">보기</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">보기</button> -->
               @if (auth()->user()->is_input_allowed)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('status_machine_supporters.edit', $row->id) }}'">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $row->id }}">삭제</button>

@@ -49,7 +49,7 @@
         </thead>
         <tbody>
           @forelse($notices as $notice)
-          <tr>
+          <tr onclick="location.href='{{ route('notice.show', $notice->id) }}'">
             <td>{{ ($notices->currentPage()-1) * $notices->perPage() + $loop->iteration }}</td>
             <td>{{ $notice->title }}</td>
             <td>{{ $notice->user->name }}</td>
@@ -62,7 +62,7 @@
             <td>{{ $notice->created_at->format('Y-m-d') }}</td>
             <td>
               @if (auth()->user()->is_input_allowed)
-              <button class="btn btn-xs" onclick="location.href='{{ route('notice.show', $notice->id) }}'">보기</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('notice.show', $notice->id) }}'">보기</button> -->
               @can('notice-edit', $notice)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('notice.edit', $notice->id) }}'">수정</button>
               @endcan

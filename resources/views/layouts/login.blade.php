@@ -54,10 +54,12 @@
     <!-- The fav icon -->
     <link rel="shortcut icon" href="/img/favicon.ico">
     <style>
-    body {-ms-overflow-style: none;
-    	background-image:max-height:100%; min-height:1080px;
-    }
-    ::-webkit-scrollbar { display: none; }
+      body {-ms-overflow-style: none;
+      	background-image:max-height:100%; min-height:1080px;
+      }
+      ::-webkit-scrollbar { display: none; }
+
+      body > div.ch-container > div > div > div > div:nth-child(1) > div > span {text-shadow:2px 2px 5px #555555;}
     </style>
 
 </head>

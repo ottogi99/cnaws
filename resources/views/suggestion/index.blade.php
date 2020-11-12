@@ -49,7 +49,7 @@
         </thead>
         <tbody>
           @forelse($suggestions as $suggestion)
-          <tr>
+          <tr onclick="location.href='{{ route('suggestion.show', $suggestion->id) }}'">
             <td>{{ ($suggestions->currentPage()-1) * $suggestions->perPage() + $loop->iteration }}</td>
             <td>{{ $suggestion->title }}</td>
             <td>{{ $suggestion->user->name }}</td>
@@ -58,7 +58,7 @@
             <td>{{ $suggestion->created_at->format('Y-m-d') }}</td>
             <td>
               @if (auth()->user()->is_input_allowed)
-              <button class="btn btn-xs" onclick="location.href='{{ route('suggestion.show', $suggestion->id) }}'">보기</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('suggestion.show', $suggestion->id) }}'">보기</button> -->
               @can('suggestion-edit', $suggestion)
               <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('suggestion.edit', $suggestion->id) }}'">수정</button>
               @endcan

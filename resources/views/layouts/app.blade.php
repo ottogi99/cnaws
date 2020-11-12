@@ -65,8 +65,27 @@
     body {-ms-overflow-style: none;
     	background-image:max-height:100%; min-height:1080px;
     }
+    body > div.ch-container > div.row > div.col-sm-2.col-lg-2 {width:12%;}
+    #content {width:88%;}
+    .nav>li a:hover, .nav>li a:focus {background-color:#5a5b5b; color:#ffffff;}
     ::-webkit-scrollbar { display: none; }
     </style>
+
+    <!--20201110 footer-->
+  	<style>
+  	   footer {
+          height: 60px;
+  				background-color: #323333;
+  				/* position: fixed; */
+          position: absolute;
+  				width: 100%;
+  				bottom: 0px;
+  				padding-top: 10px;
+  				right:0;
+  				border-top: 1px solid #efefef;
+      }
+  		footer p {color:#dadada; font-size: 0.8em; text-align:center; margin:0;}
+  	</style>
 
 </head>
 <body style="overflow-y:scroll;">
@@ -83,6 +102,11 @@
         @yield('content')
       </div>
     </div>
+
+    <footer class="">
+		    <p class="col-md-12 col-sm-12 col-xs-12 copyright">(32263) 충청남도 홍성군 홍북읍 충남대로 64 농협중앙회 &nbsp;&nbsp;&nbsp; ☎ 대표전화:041-339-5344 </p>
+        <p class="col-md-12 col-sm-12 col-xs-12 copyright">copyright ⓒ 2020 NONGHYUP All Rights Reserved.</p>
+    </footer>
   </div>
 </body>
 

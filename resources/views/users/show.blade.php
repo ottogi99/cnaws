@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '사용자(농협)정보')
+
 @section('content')
 <div class="box col-md-6 task6_in" id="task6_in">
   <div class="box-inner" style="background-color:#ffffff;">

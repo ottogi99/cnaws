@@ -14,6 +14,8 @@
   .box-header span {margin-right:-30px;}
   .box-content table tr th {font-size:12px;}
   .box-content table tr td {font-size:11px;}
+
+  body > div.ch-container {position:relative; min-height:950px;}
 </style>
 @stop
 

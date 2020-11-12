@@ -76,7 +76,7 @@
         </thead>
         <tbody>
           @forelse($budgets as $budget)
-          <tr>
+          <tr onclick="location.href='{{ route('budgets.edit', $budget->id) }}'" data-id="{{ $budget->id }}">
             <td><input type="checkbox" class="check" data-id="{{ $budget->id }}"></td>
             <td>{{ ($budgets->currentPage()-1) * $budgets->perPage() + $loop->iteration }}</td>
             <td>{!! $budget->business_year !!}</td>
@@ -89,7 +89,7 @@
             <td>{!! number_format($budget->payment_unit) !!}</td>
             <td>{!! $budget->updated_at->format('Y-m-d') !!}</td>
             <td>
-              <button class="btn btn-xs" onclick="location.href='{{ route('budgets.edit', $budget->id) }}'" data-id="{{ $budget->id }}">수정</button>
+              <!-- <button class="btn btn-xs" onclick="location.href='{{ route('budgets.edit', $budget->id) }}'" data-id="{{ $budget->id }}">수정</button> -->
               <button class="btn btn-danger btn-xs button__delete" data-id="{{ $budget->id }}">삭제</button>
             </td>
           </tr>
