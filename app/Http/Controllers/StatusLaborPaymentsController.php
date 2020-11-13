@@ -377,7 +377,11 @@ class StatusLaborPaymentsController extends Controller
             return redirect(route('status_labor_payments.index'));
         }
 
-        flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        if ($inserted_rows == 0) {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다. (샘플 엑셀파일과 칼럼수가 일치하는지 확인해 주세요.)');
+        } else {
+            flash()->success($inserted_rows . '건의 데이터가 업로드 완료 되었습니다.');
+        }
         return redirect(route('status_labor_payments.index'));
     }
 }

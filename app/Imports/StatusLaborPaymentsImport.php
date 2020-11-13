@@ -26,7 +26,9 @@ class StatusLaborPaymentsImport implements ToModel, WithStartRow, WithValidation
 
     public function model(array $row)
     {
-        if (!isset($row[10])) {
+        // 칼럼수가 맞지 않으면
+        if (count($row) != 11) {
+            Log::debug('엑셀 칼럼수가 맞지 않습니다. 필요(11), 입력('.count($row).')');
             return null;
         }
 

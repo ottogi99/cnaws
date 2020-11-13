@@ -67,6 +67,7 @@ class PerformanceExecutiveExport implements FromArray, WithMapping, WithColumnFo
                 ($row->balance_sigun) ? $row->balance_sigun : '0',
                 ($row->balance_center) ? $row->balance_center : '0',
                 ($row->balance_unit) ? $row->balance_unit : '0',
+                ($row->execution_rate) ? $row->execution_rate : '0',
             ],
         ];
     }
@@ -88,6 +89,7 @@ class PerformanceExecutiveExport implements FromArray, WithMapping, WithColumnFo
             '예산액-합계(100%)', '예산액-도비(21%)', '예산액-시군비(49%)', '예산액-중앙회(20%)', '예산액-지역농협(10%)',
             '집행액-합계(100%)', '집행액-도비(21%)', '집행액-시군비(49%)', '집행액-중앙회(20%)', '집행액-지역농협(10%)',
             '잔액-합계(100%)', '잔액-도비(21%)', '잔액-시군비(49%)', '잔액-중앙회(20%)', '잔액-지역농협(10%)',
+            '집행율(%)'
         ];
     }
 }

@@ -26,7 +26,9 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
 
     public function model(array $row)
     {
-        if (!isset($row[8])) {
+        // 칼럼수가 맞지 않으면
+        if (count($row) != 9) {
+            Log::debug('엑셀 칼럼수가 맞지 않습니다. 필요(9), 입력('.count($row).')');
             return null;
         }
 

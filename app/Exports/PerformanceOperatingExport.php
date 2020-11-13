@@ -51,14 +51,14 @@ class PerformanceOperatingExport implements FromArray, WithMapping, WithColumnFo
                 $row->nonghyup_name,
                 ($row->small_farmer_number) ? $row->small_farmer_number : '0',
                 ($row->machine_supporter_number) ? $row->machine_supporter_number : '0',
-                '',
-                ($row->machine_supporter_working_area) ? $row->machine_supporter_working_area : '0',
+                ($row->machine_supporter_supported_farmers) ? $row->machine_supporter_supported_farmers : '0',
+                ($row->machine_supporter_performance_days) ? $row->machine_supporter_performance_days : '0',
+                ($row->machine_supporter_working_area) ? ($row->machine_supporter_working_area / 10000) : '0',
                 ($row->large_farmer_number) ? $row->large_farmer_number : '0',
                 ($row->manpower_supporter_number) ? $row->manpower_supporter_number : '0',
-                '',
+                ($row->manpower_supporter_supported_farmers) ? $row->manpower_supporter_supported_farmers : '0',
+                ($row->manpower_supporter_performance_days) ? $row->manpower_supporter_performance_days: '0',
                 ($row->manpower_supporter_working_days) ? $row->manpower_supporter_working_days : '0',
-                '',
-                '',
             ],
         ];
     }
@@ -77,9 +77,10 @@ class PerformanceOperatingExport implements FromArray, WithMapping, WithColumnFo
         return [
             '대상년도',
             '시군명', '대상농협',
-            '농가모집(명)', '지원단모집(명)', '지원농가(호)', '면적(㏊)',
-            '농가모집(명)', '지원단모집(명)', '지원농가(호)', '지원인력(명)',
-            '교육횟수', '홍보횟수'
+            // '농가모집(명)', '지원단모집(명)', '지원농가(호)', '면적(㏊)',
+            '농기계지원반-농가모집(명)', '농기계지원반-지원단모집(명)', '농기계지원반-지원농가(호)', '농기계지원반-지원일수', '농기계지원반-면적(㏊)',
+            // '농가모집(명)', '지원단모집(명)', '지원농가(호)', '지원인력(명)',
+            '인력지원반-농가모집(명)', '인력지원반-지원단모집(명)', '인력지원반-지원농가(호)', '인력지원반-지원일수(일)', '인력지원반-지원인력(명)',
         ];
     }
 }
