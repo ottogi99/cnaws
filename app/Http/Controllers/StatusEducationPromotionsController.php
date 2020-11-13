@@ -157,7 +157,6 @@ class StatusEducationPromotionsController extends Controller
         ]);
 
         try {
-            dd($payload);
             $row = \App\StatusEducationPromotion::create($payload);
         } catch (\Exception $e) {
             Log::error($e);

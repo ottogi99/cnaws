@@ -42,6 +42,8 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
         $sigun = \App\Sigun::where('name', $row[1])->first();
         $nonghyup = \App\User::where('name', $row[2])->first();
 
+        $row[8] = ($row[8] == '' ? 0 : $row[8]);
+
         if ($sigun && $nonghyup) {
             $farmer = new LargeFarmer([
                 'business_year'   => $row[0],
@@ -158,6 +160,7 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                     $name = isset($this->stack[$key]['name']) ? $this->stack[$key]['name'] : null;
 
                     // 중복검사
+                    Log::debug([$business_year, $nonghyup_id, $name, $birth]);
                     $duplicated_items = $this->check_duplicate($business_year, $nonghyup_id, $name, $birth);
                     if (count($duplicated_items) > 0)
                     {
@@ -165,10 +168,10 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                     }
                 },
             ],
-            '4' => function ($attribute, $value, $onFailure) {
-                if (!$this->is_valid_numeric($value))
-                  $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
-            },
+            // '5' => function ($attribute, $value, $onFailure) {
+            //     if (!$this->is_valid_numeric($value))
+            //       $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+            // },
             '8' => function ($attribute, $value, $onFailure) {
                 if (!$this->is_valid_numeric($value))
                   $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
@@ -189,6 +192,45 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
     public function getRowCount(): int
     {
         return $this->rows;
+    }
+
+    public function customValidationMessages()
+    {
+        return [
+            '0.required' => ':attribute 값은 필수항목입니다.',
+            '1.required' => ':attribute 값은 필수항목입니다.',
+            '2.required' => ':attribute 값은 필수항목입니다.',
+            '3.required' => ':attribute 값은 필수항목입니다.',
+            '4.required' => ':attribute 값은 필수항목입니다.',
+            '5.required' => ':attribute 값은 필수항목입니다.',
+            '6.required' => ':attribute 값은 필수항목입니다.',
+            '7.required' => ':attribute 값은 필수항목입니다.',
+            '8.required' => ':attribute 값은 필수항목입니다.',
+            '9.required' => ':attribute 값은 필수항목입니다.',
+            '10.required' => ':attribute 값은 필수항목입니다.',
+            '11.required' => ':attribute 값은 필수항목입니다.',
+            '12.required' => ':attribute 값은 필수항목입니다.',
+        ];
+    }
+
+
+    public function customValidationAttributes()
+    {
+        return [
+          '0' => '대상년도',
+          '1' => '시군명',
+          '2' => '대상농협',
+          '3' => '성명',
+          '4' => '생년월일',
+          '5' => '성별',
+          '6' => '주소',
+          '7' => '연락처',
+          '8' => '소유경지면적',
+          '9' => '재배품목',
+          '10' => '은행명',
+          '11' => '계좌번호',
+          '12' => '비고',
+        ];
     }
 
     private function check_duplicate($business_year, $nonghyup_id, $name, $birth)

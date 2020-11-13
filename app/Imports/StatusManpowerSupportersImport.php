@@ -190,7 +190,13 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['farmer_name']) ? $this->stack[$key]['farmer_name'] : null;
-                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+
+                    try {
+                        $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
 
                     $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
                                               ->when($nonghyup_id, function($query, $nonghyup_id) {
@@ -225,7 +231,13 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
-                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+
+                    try {
+                        $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
 
                     $supporter = \App\ManpowerSupporter::where('nonghyup_id', $nonghyup_id)
                                               ->where('name', trim($name))

@@ -82,6 +82,7 @@ class SmallFarmersController extends Controller
                                       'users.sequence as nonghyup_sequence', 'users.name as nonghyup_name'
                                     )
                                   ->where('small_farmers.business_year', $year)
+                                  ->where('users.is_admin', '!=', 1)
                                   // ->when($user, function($query, $user) {
                                   //     if (!$user->isAdmin())  // 관리자인 모든 시군이 보이도록
                                   //       return $query->where('small_farmers.sigun_code', $user->sigun_code);

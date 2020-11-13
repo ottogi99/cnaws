@@ -67,6 +67,10 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
             //     'remark'          => $row[10],
             // ]);
 
+            $row[8] = ($row[8] == '' ? 0 : $row[8]);
+            $row[9] = ($row[9] == '' ? 0 : $row[9]);
+            $row[10] = ($row[10] == '' ? 0 : $row[10]);
+
             $farmer = new SmallFarmer([
                 'business_year'   => $row[0],                 //$row[0]
                 'sigun_code'      => $sigun->code,            //$row[1],
@@ -231,6 +235,43 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
     public function getRowCount(): int
     {
         return $this->rows;
+    }
+
+    public function customValidationMessages()
+    {
+        return [
+            '0.required' => ':attribute 값은 필수항목입니다.',
+            '1.required' => ':attribute 값은 필수항목입니다.',
+            '2.required' => ':attribute 값은 필수항목입니다.',
+            '3.required' => ':attribute 값은 필수항목입니다.',
+            '4.required' => ':attribute 값은 필수항목입니다.',
+            '5.required' => ':attribute 값은 필수항목입니다.',
+            '6.required' => ':attribute 값은 필수항목입니다.',
+            '7.required' => ':attribute 값은 필수항목입니다.',
+            '8.required' => ':attribute 값은 필수항목입니다.',
+            '9.required' => ':attribute 값은 필수항목입니다.',
+            '10.required' => ':attribute 값은 필수항목입니다.',
+            '11.required' => ':attribute 값은 필수항목입니다.',
+        ];
+    }
+
+
+    public function customValidationAttributes()
+    {
+        return [
+          '0' => '대상년도',
+          '1' => '시군명',
+          '2' => '대상농협',
+          '3' => '성명',
+          '4' => '생년월일',
+          '5' => '성별',
+          '6' => '주소',
+          '7' => '연락처',
+          '8' => '답작',
+          '9' => '전작',
+          '10' => '기타',
+          '11' => '비고',
+        ];
     }
 
     // public function registerEvents(): array

@@ -110,7 +110,7 @@ function options_for_year($selected_year)
     $html = '';
     $selected_year = ($selected_year) ? $selected_year : now()->year;
 
-    for($year = 2019; $year <= now()->year; $year++) {
+    for($year = 2019; $year <= now()->year+1; $year++) {
         if ($year == $selected_year) {
             $selected = 'selected = "selected"';
         } else {

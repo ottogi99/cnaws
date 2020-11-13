@@ -184,6 +184,49 @@ class ManpowerSupportersImport implements ToModel, WithStartRow, WithValidation,
         return $this->rows;
     }
 
+    public function customValidationMessages()
+    {
+        return [
+            '0.required' => ':attribute 값은 필수항목입니다.',
+            '1.required' => ':attribute 값은 필수항목입니다.',
+            '2.required' => ':attribute 값은 필수항목입니다.',
+            '3.required' => ':attribute 값은 필수항목입니다.',
+            '4.required' => ':attribute 값은 필수항목입니다.',
+            '5.required' => ':attribute 값은 필수항목입니다.',
+            '6.required' => ':attribute 값은 필수항목입니다.',
+            '7.required' => ':attribute 값은 필수항목입니다.',
+            '8.required' => ':attribute 값은 필수항목입니다.',
+            '9.required' => ':attribute 값은 필수항목입니다.',
+            '10.required' => ':attribute 값은 필수항목입니다.',
+            '11.required' => ':attribute 값은 필수항목입니다.',
+            '12.required' => ':attribute 값은 필수항목입니다.',
+            '13.required' => ':attribute 값은 필수항목입니다.',
+            '14.required' => ':attribute 값은 필수항목입니다.',
+        ];
+    }
+
+
+    public function customValidationAttributes()
+    {
+        return [
+          '0' => '대상년도',
+          '1' => '시군명',
+          '2' => '대상농협',
+          '3' => '성명',
+          '4' => '생년월일',
+          '5' => '성별',
+          '6' => '주소',
+          '7' => '연락처',
+          '8' => '교육참여일1',
+          '9' => '교육참여일2',
+          '10' => '교육참여일3',
+          '11' => '상해보험가입여부',
+          '12' => '은행명',
+          '13' => '계좌번호',
+          '14' => '비고',
+        ];
+    }
+
     private function check_duplicate($business_year, $nonghyup_id, $name, $birth)
     {
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)

@@ -158,7 +158,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
                     $this->stack[$key] = [];
-                    
+
                     $nonghyup = \App\User::where('name', trim($value))->first();
                     if (!$nonghyup) {
                         $onFailure('해당 농협이 존재하지 않습니다.('. $value.')');
@@ -207,7 +207,12 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['farmer_name']) ? $this->stack[$key]['farmer_name'] : null;
-                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    try {
+                        $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
 
                     $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
                                               ->when($nonghyup_id, function($query, $nonghyup_id) {
@@ -256,7 +261,13 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     $key = substr($attribute, 0, 1);
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
-                    $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+
+                    try {
+                        $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
 
                     $supporter = \App\MachineSupporter::where('nonghyup_id', $nonghyup_id)
                                               ->where('name', trim($name))

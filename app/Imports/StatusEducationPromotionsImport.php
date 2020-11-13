@@ -148,4 +148,31 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
         return $this->rows;
     }
 
+    public function customValidationMessages()
+    {
+        return [
+            '0.required' => ':attribute 값은 필수항목입니다.',
+            '1.required' => ':attribute 값은 필수항목입니다.',
+            '2.required' => ':attribute 값은 필수항목입니다.',
+            '3.required' => ':attribute 값은 필수항목입니다.',
+            '4.required' => ':attribute 값은 필수항목입니다.',
+            '5.required' => ':attribute 값은 필수항목입니다.',
+            '6.required' => ':attribute 값은 필수항목입니다.',
+            '7.required' => ':attribute 값은 필수항목입니다.',
+        ];
+    }
+
+    public function customValidationAttributes()
+    {
+        return [
+          '0' => '대상년도',
+          '1' => '시군명',
+          '2' => '대상농협',
+          '3' => '지출일자',
+          '4' => '지출항목',
+          '5' => '지급대상',
+          '6' => '내용',
+          '7' => '지급액',
+        ];
+    }
 }
