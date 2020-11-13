@@ -60,7 +60,7 @@
               @if (auth()->user()->is_input_allowed)
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('suggestion.show', $suggestion->id) }}'">보기</button> -->
               @can('suggestion-edit', $suggestion)
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('suggestion.edit', $suggestion->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $suggestion->id }}">수정</button>
               @endcan
               @can('suggestion-delete', $suggestion)
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $suggestion->id }}">삭제</button>

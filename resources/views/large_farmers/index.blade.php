@@ -86,7 +86,7 @@
             <td>
               @if (auth()->user()->is_input_allowed)
               <!-- <button class="btn btn-xs" onclick="location.href='{{ route('large_farmers.show', $farmer->id) }}'">보기</button> -->
-              <button class="btn btn-xs btn-primary" onclick="location.href='{{ route('large_farmers.edit', $farmer->id) }}'">수정</button>
+              <button class="btn btn-xs btn-primary button__edit" data-id="{{ $farmer->id }}">수정</button>
               <button class="btn btn-xs btn-danger button__delete" data-id="{{ $farmer->id }}">삭제</button>
               @endif
             </td>
