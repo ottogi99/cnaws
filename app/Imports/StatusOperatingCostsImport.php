@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
-class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading
+class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError//, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsFailures, SkipsErrors;
 
@@ -74,15 +74,15 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
         return 2;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function batchSize(): int
+    // {
+    //     return 1000;
+    // }
+    //
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 
     public function rules(): array
     {

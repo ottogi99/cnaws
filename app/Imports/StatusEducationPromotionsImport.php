@@ -18,7 +18,7 @@ use Illuminate\Support\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Log;
 
-class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading
+class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithValidation, SkipsOnFailure, SkipsOnError//, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsFailures, SkipsErrors;
 
@@ -74,15 +74,15 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
         return 2;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function batchSize(): int
+    // {
+    //     return 1000;
+    // }
+    //
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 
     public function rules(): array
     {

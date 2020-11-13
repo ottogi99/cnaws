@@ -19,7 +19,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
-class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading
+class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailure, SkipsOnError//, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsFailures, SkipsErrors;
 
@@ -71,15 +71,15 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
         return 2;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function batchSize(): int
+    // {
+    //     return 1000;
+    // }
+    //
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 
     public function rules(): array
     {

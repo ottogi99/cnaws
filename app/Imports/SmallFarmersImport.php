@@ -20,7 +20,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
-class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailure, SkipsOnError, WithBatchInserts, WithChunkReading//, WithEvents
+class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, SkipsOnFailure, SkipsOnError//, WithBatchInserts, WithChunkReading//, WithEvents
 {
     use Importable, SkipsFailures, SkipsErrors;
     // use RemembersRowNumber;
@@ -101,15 +101,15 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
         return 2;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function batchSize(): int
+    // {
+    //     return 1000;
+    // }
+    //
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 
     public function rules(): array
     {
