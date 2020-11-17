@@ -27,7 +27,7 @@
 <div class="input-group input-group-lg {{ $errors->has('files') ? 'has-error' : '' }}" style="padding-bottom:10px;">
   <span class="input-group-addon" style="width:20%; font-size:13px;">파일첨부</span>
   <input type="file" name="files[]" id="files" class="form-control" multiple="multiple"/>
-  {!! $errors->first('files.0', '<span class="form-error">:message</span>') !!}
+  <div>{!! $errors->first('files.0', '<span class="form-error">:message</span>') !!}</div>
 </div>
 <!--
 <div class="input-group input-group-lg {{ $errors->has('attach') ? 'has-error' : '' }}" style="padding-bottom:10px;">

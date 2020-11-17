@@ -53,7 +53,8 @@ class UserManualController extends Controller
         ];
 
         $attributes = [
-            'files'      => '첨부파일',
+            'files'     => '첨부파일',
+            'files.0'   => '첨부파일',
         ];
 
         $this->validate($request, $rules, $messages, $attributes);
