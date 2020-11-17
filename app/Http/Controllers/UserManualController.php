@@ -44,12 +44,12 @@ class UserManualController extends Controller
             'content' => ['required'],
             'files' => ['array'],
             // 'files.*' => ['mimes:hwp,xls,zip', 'max:30000'],
-            'files.*' => ['max:30720'], //10240 = 10MB
+            'files.*' => ['max:15360'], //10240 = 10MB
         ];
 
         $messages = [
             'title.required' => '제목은 필수 입력 항목입니다.',
-            'max' => ':attribute은(는)의 최대 크기는 30M입니다.',
+            'max' => ':attribute은(는)의 최대 크기는 15M입니다.',
         ];
 
         $attributes = [
