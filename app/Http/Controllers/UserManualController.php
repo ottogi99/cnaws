@@ -44,19 +44,24 @@ class UserManualController extends Controller
             'content' => ['required'],
             'files' => ['array'],
             // 'files.*' => ['mimes:hwp,xls,zip', 'max:30000'],
-            'files.*' => ['max:30000'],
+            'files.*' => ['max:30720'], //10240 = 10MB
         ];
 
         $messages = [
-            'title.required' => '제목은 필수 입력 항목입니다.'
+            'title.required' => '제목은 필수 입력 항목입니다.',
+            'max' => ':attribute은(는)의 최대 크기는 30M입니다.',
         ];
+
+        $attributes = [
+            'files'      => '첨부파일',
+        ];
+
+        $this->validate($request, $rules, $messages, $attributes);
 
         // $validator = \Validator::make($request->all(), $rules, $messages);
         // if ($validtor->fails()) {
         //     return back()->withErrors($validator)->withInput();
         // }
-
-        $this->validate($request, $rules, $messages);
 
         $payload = array_merge($request->all(), [
           'hit' => $request->input('hit', 0),
