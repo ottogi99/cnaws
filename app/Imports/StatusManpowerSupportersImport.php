@@ -68,6 +68,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
+        // 마스크구입비(필수항목 아님) 빈 값 입력시 오류
         $row[13] = empty($row[13]) ? 0 : $row[13];
         $payment_sum = $row[11] + $row[12] + $row[13];
 
@@ -140,11 +141,16 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
             [
                 'required',
                 function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
+                    $this->stack[$key] = [];
+
                     $sigun = \App\Sigun::where('name', trim($value))->first();
                     if (!$sigun) {
                         $onFailure('해당 시군이 존재하지 않습니다.('. $value.')');
                         return;
                     }
+
+                    $this->stack[$key] = array('sigun' => $sigun->code);
 
                     $user = auth()->user();
                     if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
@@ -158,15 +164,18 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    $this->stack[$key] = [];
+                    // $this->stack[$key] = [];
 
-                    $nonghyup = \App\User::where('name', trim($value))->first();
+                    // 2020.11.30 동일한 이름의 농협이 존재하여 시군코드까지 함께 조회
+                    // $nonghyup = \App\User::where('name', trim($value))->first();
+                    $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
                     if (!$nonghyup) {
                         $onFailure('해당 농협이 존재하지 않습니다.('. $value.')');
                         return;
                     }
 
-                    $this->stack[$key] = array('nonghyup_id' => $nonghyup->nonghyup_id);
+                    // $this->stack[$key] = array('nonghyup_id' => $nonghyup->nonghyup_id);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
 
                     $user = auth()->user();
                     if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
