@@ -68,6 +68,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
+        $row[13] = empty($row[13]) ? 0 : $row[13];
         $payment_sum = $row[11] + $row[12] + $row[13];
 
         $payment_do = floor($payment_sum * 0.21);
@@ -246,7 +247,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
                     if (!$supporter) {
                         // $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
-                        $onFailure('해당 농기계지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
+                        $onFailure('해당 인력지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
                     //
@@ -295,7 +296,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
                     if (count($duplicated_items) > 0)
                     {
-                        $onFailure('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
+                        $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
                     }
                 }
             ],
@@ -354,11 +355,12 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
           '6' => '생년월일',
           '7' => '작업시작일',
           '8' => '작업종료일',
-          '9' => '제공자',
-          '10' => '교통비',
-          '11' => '간식비',
-          '12' => '마스크구입비',
-          '13' => '비고',
+          '9' => '작업내용',
+          '10' => '제공자',
+          '11' => '교통비',
+          '12' => '간식비',
+          '13' => '마스크구입비',
+          '14' => '비고',
         ];
     }
 
