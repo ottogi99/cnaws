@@ -192,7 +192,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
                     $user = auth()->user();
                     if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
-                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value.);
+                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
                         return;
                     }
                     // $this->stack[$key] = $nonghyup->nonghyup_id;
