@@ -105,11 +105,15 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                 $this->stack[$key] = array('business_year' => $value);
             },
             '1' => function($attribute, $value, $onFailure) {
+                $key = substr($attribute, 0, 1);
+
                 $sigun = \App\Sigun::where('name', trim($value))->first();
                 if (!$sigun) {
                     $onFailure('해당 시군이 존재하지 않습니다: '.$value);
                     return;
                 }
+
+                $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
 
                 $user = auth()->user();
                 if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
@@ -118,7 +122,11 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                 }
             },
             '2' => function($attribute, $value, $onFailure) {
-                $nonghyup = \App\User::where('name', trim($value))->first();
+                $key = substr($attribute, 0, 1);
+
+                // $nonghyup = \App\User::where('name', trim($value))->first();
+                $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
+
                 if (!$nonghyup) {
                     $onFailure('해당 농협이 존재하지 않습니다: '.$value);
                     return;
@@ -130,8 +138,6 @@ class LargeFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                     return;
                 }
 
-                // 중복처리
-                $key = substr($attribute, 0, 1);
                 $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
             },
             '3' =>  // 성명

@@ -90,21 +90,33 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
     {
         return [
             '0' => function($attribute, $value, $onFailure) {
+                $key = substr($attribute, 0, 1);
+                $this->stack[$key] = [];
+
                 if ($this->is_valid_numeric($value)){
                     $business_year = Carbon::createFromDate($value);
 
-                    if (!$business_year == now()->format('Y'))
+                    if (!$business_year == now()->format('Y')){
                         $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
+                        return;
+                    }
                 } else {
                     $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+                    return;
                 }
+
+                $this->stack[$key] = array('business_year' => $value);
             },
             '1' => function($attribute, $value, $onFailure) {
+                $key = substr($attribute, 0, 1);
+
                 $sigun = \App\Sigun::where('name', trim($value))->first();
                 if (!$sigun) {
                     $onFailure('해당 시군이 존재하지 않습니다: '.$value);
                     return;
                 }
+
+                $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
 
                 $user = auth()->user();
                 if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
@@ -113,7 +125,10 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
                 }
             },
             '2' => function($attribute, $value, $onFailure) {
-                $nonghyup = \App\User::where('name', trim($value))->first();
+                $key = substr($attribute, 0, 1);
+                // $nonghyup = \App\User::where('name', trim($value))->first();
+                $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
+
                 if (!$nonghyup) {
                     $onFailure('해당 농협이 존재하지 않습니다: '.$value);
                     return;

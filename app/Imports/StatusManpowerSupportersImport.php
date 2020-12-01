@@ -128,21 +128,28 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
     {
         return [
             '0' => function($attribute, $value, $onFailure) {                       // 대상년도
+                $key = substr($attribute, 0, 1);
+                $this->stack[$key] = [];
+
                 if ($this->is_valid_numeric($value)){
                     $business_year = Carbon::createFromDate($value);
 
-                if (!$business_year == now()->format('Y'))
-                    $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
+                    if (!$business_year == now()->format('Y')){
+                        $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
+                        return;
+                    }
                 } else {
-                    $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
+                    $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+                    return;
                 }
+
+                $this->stack[$key] = array('business_year' => $value);
             },
             '1' =>  // 시군명
             [
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    $this->stack[$key] = [];
 
                     $sigun = \App\Sigun::where('name', trim($value))->first();
                     if (!$sigun) {
@@ -150,7 +157,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
-                    $this->stack[$key] = array('sigun' => $sigun->code);
+                    $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
 
                     $user = auth()->user();
                     if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
@@ -164,7 +171,6 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    // $this->stack[$key] = [];
 
                     // 2020.11.30 동일한 이름의 농협이 존재하여 시군코드까지 함께 조회
                     // $nonghyup = \App\User::where('name', trim($value))->first();
@@ -179,7 +185,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
                     $user = auth()->user();
                     if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
-                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
+                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value.);
                         return;
                     }
                     // $this->stack[$key] = $nonghyup->nonghyup_id;
