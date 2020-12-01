@@ -47,26 +47,9 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
         }, $row);
 
         $sigun = \App\Sigun::where('name', $row[1])->first();
-        $nonghyup = \App\User::where('sigun', $row[1])->where('name', $row[2])->first();
+        $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
 
         if ($sigun && $nonghyup) {
-            // 꼭 아래와 같은 return new SmallFarmer([...]) 형태로 반환해라 아니면 오류난다.
-            // return new SmallFarmer([
-            //     'business_year'   => $row[0],
-            //     'sigun_code'      => $sigun->code, //$row[0],
-            //     'nonghyup_id'     => $nonghyup->nonghyup_id, //$row[1],
-            //     'name'            => $row[2],
-            //     'age'             => $row[3],
-            //     'sex'             => ($row[4] == '남' ? 'M' : 'F'),
-            //     'address'         => $row[5],
-            //     'contact'         => $row[6],
-            //     'sum_acreage'     => ($row[7] + $row[8] + $row[9]),
-            //     'acreage1'        => $row[7],
-            //     'acreage2'        => $row[8],
-            //     'acreage3'        => $row[9],
-            //     'remark'          => $row[10],
-            // ]);
-
             $row[8] = ($row[8] == '' ? 0 : $row[8]);
             $row[9] = ($row[9] == '' ? 0 : $row[9]);
             $row[10] = ($row[10] == '' ? 0 : $row[10]);
