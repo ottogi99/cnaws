@@ -137,7 +137,7 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
             '2' =>
             [
                 'required',
-                function($attri-bute, $value, $onFailure) {
+                function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
                     // $nonghyup = \App\User::where('name', trim($value))->first();
                     $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
