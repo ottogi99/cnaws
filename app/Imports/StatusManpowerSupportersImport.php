@@ -151,7 +151,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
                     $this->stack[$key] = array('business_year' => $value);
                 },
-            ]
+            ],
             '1' =>  // 시군명
             [
                 'required',
