@@ -44,8 +44,11 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         $farmer_birth = Date::excelToDateTimeObject($row[4])->format('Y-m-d');
         $supporter_birth = Date::excelToDateTimeObject($row[6])->format('Y-m-d');
 
+        // $sigun = \App\Sigun::where('name', $row[1])->first();
+        // $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
         $sigun = \App\Sigun::where('name', $row[1])->first();
-        $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
+        $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
+
         $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
                                 ->where('name', $row[3])

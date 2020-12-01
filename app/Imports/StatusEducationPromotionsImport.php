@@ -39,7 +39,7 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
         }, $row);
 
         $sigun = \App\Sigun::where('name', $row[1])->first();
-        $nonghyup = \App\User::where('name', $row[2])->first();
+        $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
 
         $payment_sum = $row[7];
         $payment_do = floor($payment_sum * 0.21);
@@ -89,55 +89,67 @@ class StatusEducationPromotionsImport implements ToModel, WithStartRow, WithVali
     public function rules(): array
     {
         return [
-            '0' => function($attribute, $value, $onFailure) {
-                $key = substr($attribute, 0, 1);
-                $this->stack[$key] = [];
+            '0' =>
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
+                    $this->stack[$key] = [];
 
-                if ($this->is_valid_numeric($value)){
-                    $business_year = Carbon::createFromDate($value);
+                    if ($this->is_valid_numeric($value)){
+                        $business_year = Carbon::createFromDate($value);
 
-                    if (!$business_year == now()->format('Y'))
-                        $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
-                } else {
-                    $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
-                }
+                        if (!$business_year == now()->format('Y'))
+                            $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
+                    } else {
+                        $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.: '.$value);
+                    }
 
-                $this->stack[$key] = array('business_year' => $value);
-            },
-            '1' => function($attribute, $value, $onFailure) {
-                $key = substr($attribute, 0, 1);
+                    $this->stack[$key] = array('business_year' => $value);
+                },
+            ],
+            '1' =>
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
 
-                $sigun = \App\Sigun::where('name', trim($value))->first();
-                if (!$sigun) {
-                    $onFailure('해당 시군이 존재하지 않습니다: '.$value);
-                    return;
-                }
+                    $sigun = \App\Sigun::where('name', trim($value))->first();
+                    if (!$sigun) {
+                        $onFailure('해당 시군이 존재하지 않습니다: '.$value);
+                        return;
+                    }
 
-                $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
+                    $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
 
-                $user = auth()->user();
-                if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
-                    $onFailure('타 지역의 데이터는 등록할 수 없습니다.: '.$value);
-                    return;
-                }
-            },
-            '2' => function($attribute, $value, $onFailure) {
-                $key = substr($attribute, 0, 1);
+                    $user = auth()->user();
+                    if (!$user->isAdmin() && $user->sigun_code != $sigun->code) {
+                        $onFailure('타 지역의 데이터는 등록할 수 없습니다.: '.$value);
+                        return;
+                    }
+                },
+            ],
+            '2' =>
+            [
+                'required',
+                function($attribute, $value, $onFailure) {
+                    $key = substr($attribute, 0, 1);
 
-                // $nonghyup = \App\User::where('name', trim($value))->first();
-                $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
+                    // $nonghyup = \App\User::where('name', trim($value))->first();
+                    $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
 
-                if (!$nonghyup) {
-                    $onFailure('해당 농협이 존재하지 않습니다: '.$value);
-                    return;
-                }
+                    if (!$nonghyup) {
+                        $onFailure('해당 농협이 존재하지 않습니다: '.$value);
+                        return;
+                    }
 
-                $user = auth()->user();
-                if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
-                    $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
-                    return;
-                }
-            },
+                    $user = auth()->user();
+                    if (!$user->isAdmin() && $user->nonghyup_id != $nonghyup->nonghyup_id) {
+                        $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
+                        return;
+                    }
+                },
+            ],
             '7' => [
                 'required',
                 function ($attribute, $value, $onFailure) {

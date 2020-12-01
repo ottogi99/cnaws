@@ -135,7 +135,6 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                         return;
                     }
 
-                    Log::debug($sigun->code);
                     $this->stack[$key] = array_merge($this->stack[$key], array('sigun' => $sigun->code));
 
                     $user = auth()->user();
@@ -151,7 +150,6 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
 
-                    Log::debug($this->stack[$key]);
                     // $nonghyup = \App\User::where('name', trim($value))->first();
                     $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
 
@@ -166,7 +164,6 @@ class SmallFarmersImport implements ToModel, WithValidation, WithStartRow, Skips
                         return;
                     }
 
-                    // 중복처리
                     $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
                 },
             ],

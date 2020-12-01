@@ -47,8 +47,12 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         $farmer_birth = Date::excelToDateTimeObject($row[4])->format('Y-m-d');
         $supporter_birth = Date::excelToDateTimeObject($row[6])->format('Y-m-d');
 
+        // $sigun = \App\Sigun::where('name', $row[1])->first();
+        // $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
         $sigun = \App\Sigun::where('name', $row[1])->first();
-        $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
+        $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
+
+
         $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
                                 ->where('name', $row[3])
@@ -125,21 +129,25 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
     public function rules(): array
     {
         return [
-            '0' => function($attribute, $value, $onFailure) {                       // 대상년도
-                $key = substr($attribute, 0, 1);
-                $this->stack[$key] = [];
+            '0' =>
+            [
+                'required',
+                function($attribute, $value, $onFailure) {                       // 대상년도
+                    $key = substr($attribute, 0, 1);
+                    $this->stack[$key] = [];
 
-                if ($this->is_valid_numeric($value)){
-                    $business_year = Carbon::createFromDate($value);
+                    if ($this->is_valid_numeric($value)){
+                        $business_year = Carbon::createFromDate($value);
 
-                if (!$business_year == now()->format('Y'))
-                    $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
-                } else {
-                    $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
-                }
+                    if (!$business_year == now()->format('Y'))
+                        $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
+                    } else {
+                        $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
+                    }
 
-                $this->stack[$key] = array('business_year' => $value);
-            },
+                    $this->stack[$key] = array('business_year' => $value);
+                },
+            ],
             '1' =>  // 시군명
             [
                 'required',
