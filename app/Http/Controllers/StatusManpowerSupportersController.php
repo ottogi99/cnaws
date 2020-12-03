@@ -329,10 +329,10 @@ class StatusManpowerSupportersController extends Controller
         {
             $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
-            if (in_array($id, $duplicated_items)) {
+            // if (in_array($id, $duplicated_items)) {
                 Log::debug('중복 아이템:'.$duplicated_items);
                 Log::debug('수정 아이템:'.$id);
-            }
+            // }
 
             if (count($duplicated_items) > 0)
             {
