@@ -327,7 +327,8 @@ class StatusManpowerSupportersController extends Controller
         // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
         if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-            $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
+            // 2020-12-04
+            $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date, $id);
 
             if (count($duplicated_items) > 0)
             {
