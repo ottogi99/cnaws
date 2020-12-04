@@ -327,7 +327,7 @@ class StatusManpowerSupportersController extends Controller
         // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
         if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-            // 2020-12-04
+            // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
             $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date, $id);
 
             if (count($duplicated_items) > 0)
@@ -336,31 +336,10 @@ class StatusManpowerSupportersController extends Controller
 
                 $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
                 foreach ($duplicated_items as $index => $item) {
-                    if ($item->id != $id) {
-                        $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
-                    }
-                }
-
-                flash()->warning($warning_message);
-                return back()->withInput();
-            }
-
-            // 12-04 수정시 자기 자신을 제외
-
-
-            if (count($duplicated_items) > 0)
-            {
-                // dd($duplicated_items[0]->id, $id);
-                // $error_message = '요청하신 데이터 정보<br/>';
-                flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
-
-                $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
-                foreach ($duplicated_items as $index => $item) {
-                    if ($item->id != $id) {
-                      $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
-                    }
+                    // if ($item->id != $id) {
+                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                    . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    // }
                 }
 
                 flash()->warning($warning_message);
@@ -550,19 +529,18 @@ class StatusManpowerSupportersController extends Controller
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
                                       ->where('manpower_supporters.id', $supporter_id)
-                                      // 2020-12-04, 수정할 때는 중복검사에서 자신의 id는 제외
+                                      // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
                                       ->when($edit_id, function($query, $edit_id) {
-                                          // $query->whereNotIn('status_manpower_supporters.id', $edit_id);
-                                          $query->where('status_manpower_supporters.id', '<>', $edit_id);
+                                            $query->where('status_manpower_supporters.id', '<>', $edit_id);
                                         })
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                              $query->whereRaw('
-                                                (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
-                                            		or
-                                            		(status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
-                                                or
-                                            		(status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
-                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
+                                          $query->whereRaw('
+                                              (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
+                                              or
+                                              (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
+                                              or
+                                              (status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
+                                          ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
                                       })->get();
 
         // dd(DB::getQueryLog());                                      // ->exists())

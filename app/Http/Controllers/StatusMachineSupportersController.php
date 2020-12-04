@@ -322,20 +322,19 @@ class StatusMachineSupportersController extends Controller
 
         if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
-            // $duplicated_items = $this->check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date);
-            $duplicated_items = $this->check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date);
+            // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
+            $duplicated_items = $this->check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date, $id);
 
             if (count($duplicated_items) > 0)
             {
-                // $error_message = '요청하신 데이터 정보<br/>';
                 flash()->error('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
                 $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
                 foreach ($duplicated_items as $index => $item) {
-                    if ($item->id != $id) {
-                      $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
-                    }
+                    // if ($item->id != $id) {
+                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                    . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    // }
                 }
 
                 flash()->warning($warning_message);
@@ -501,8 +500,7 @@ class StatusMachineSupportersController extends Controller
         return redirect(route('status_machine_supporters.index'));
     }
 
-    // private function check_duplicate($farmer_id, $supporter_name, $job_start_date, $job_end_date)
-    private function check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date)
+    private function check_duplicate($farmer_id, $supporter_id, $job_start_date, $job_end_date, $edit_id='')
     {
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
@@ -518,24 +516,19 @@ class StatusMachineSupportersController extends Controller
                                       ->where('status_machine_supporters.business_year', now()->year)
                                       ->where('small_farmers.id', $farmer_id)
                                       // 2020-11-09 동명이인 허용으로 id로 검색하는 것으로 변경
-                                      // ->where('machine_supporters.name', $supporter_name)
                                       ->where('machine_supporters.id', $supporter_id)
+                                      // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
+                                      ->when($edit_id, function($query, $edit_id) {
+                                            $query->where('status_machine_supporters.id', '<>', $edit_id);
+                                        })
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                          // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                          //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-                                              $query->whereRaw('
-                                                (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
-                                            		or
-                                            		(status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
-                                                or
-                                            		(status_machine_supporters.job_start_date > ? and ? > status_machine_supporters.job_end_date)
-                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
+                                          $query->whereRaw('
+                                              (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                              or
+                                              (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                              or
+                                              (status_machine_supporters.job_start_date > ? and ? > status_machine_supporters.job_end_date)
+                                          ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
                                       })->get();
-                                      //
-                                      // ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                      //     $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                      //           ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-                                      // })
-                                      // ->get();
     }
 }
