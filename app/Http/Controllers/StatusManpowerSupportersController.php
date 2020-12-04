@@ -135,8 +135,8 @@ class StatusManpowerSupportersController extends Controller
             'job_start_date' => ['required'],   // 작업시작일
             'job_end_date' => ['required'],     // 작업종료일
             'work_detail' => ['required'],      // 작업내용
-            'payment_item1' => ['required'],    // 교통비
-            'payment_item2' => ['required'],    // 간식비
+            // 'payment_item1' => ['required'],    // 교통비
+            // 'payment_item2' => ['required'],    // 간식비
             // 'payment_item3' => ['required'],    // 마스크구입비
         ];
 
@@ -154,6 +154,7 @@ class StatusManpowerSupportersController extends Controller
             'work_detail'     => '작업내용',      // 작업내용
             'payment_item1'   => '교통비',      // 작업내용
             'payment_item2'   => '간식비',     // 작업면적
+            'payment_item3'   => '마스크구입비',     // 작업면적
         ];
 
         $this->validate($request, $rules, $messages, $attributes);

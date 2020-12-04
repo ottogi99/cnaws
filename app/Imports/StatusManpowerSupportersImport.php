@@ -71,7 +71,9 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
-        // 마스크구입비(필수항목 아님) 빈 값 입력시 오류
+        // 12-04 교통비, 간식비, 마스크구입비(필수항목 아님) 빈 값 입력시 오류
+        $row[11] = empty($row[11]) ? 0 : $row[11];
+        $row[12] = empty($row[12]) ? 0 : $row[12];
         $row[13] = empty($row[13]) ? 0 : $row[13];
         $payment_sum = $row[11] + $row[12] + $row[13];
 
@@ -324,14 +326,14 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
             ],
             '9' => 'required',
             '11' => [
-                      'required',
+                      // 'required',
                       function ($attribute, $value, $onFailure) {
                         if (!$this->is_valid_numeric($value))
                           $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
                       },
 	                 ],
             '12' => [
-                   'required',
+                   // 'required',
                    function ($attribute, $value, $onFailure) {
                      if (!$this->is_valid_numeric($value))
                        $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
