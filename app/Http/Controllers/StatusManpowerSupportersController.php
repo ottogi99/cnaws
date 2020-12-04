@@ -257,6 +257,10 @@ class StatusManpowerSupportersController extends Controller
                                           ->where('status_manpower_supporters.business_year', now()->year)
                                           ->findOrFail($id);
 
+        $row->payment_item1 = empty($row->payment_item1) ? 0: $row->payment_item1;
+        $row->payment_item2 = empty($row->payment_item2) ? 0: $row->payment_item2;
+        $row->payment_item3 = empty($row->payment_item3) ? 0: $row->payment_item3;
+
         // $this->authorize('edit-status-manpower-supporter', $row);
 
         // 목록(농협(사용자), 농가(영세농), 인력지원반)
@@ -285,8 +289,8 @@ class StatusManpowerSupportersController extends Controller
             'job_start_date' => ['required'],   // 작업시작일
             'job_end_date' => ['required'],     // 작업종료일
             'work_detail' => ['required'],      // 작업내용
-            'payment_item1' => ['required'],    // 교통비
-            'payment_item2' => ['required'],    // 간식비
+            // 'payment_item1' => ['required'],    // 교통비
+            // 'payment_item2' => ['required'],    // 간식비
             'payment_do' => ['required'],       // 도비
             'payment_sigun' => ['required'],    // 시군비
             'payment_center' => ['required'],   // 중앙회
