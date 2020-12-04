@@ -552,8 +552,8 @@ class StatusManpowerSupportersController extends Controller
                                       ->where('manpower_supporters.id', $supporter_id)
                                       // 2020-12-04, 수정할 때는 중복검사에서 자신의 id는 제외
                                       ->when($edit_id, function($query, $edit_id) {
-                                          $query->whereNotIn('status_manpower_supporters.id', $edit_id);
-                                          // $query->where('status_manpower_supporters.id', '<>', $edit_id);
+                                          // $query->whereNotIn('status_manpower_supporters.id', $edit_id);
+                                          $query->where('status_manpower_supporters.id', '<>', $edit_id);
                                         })
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                               $query->whereRaw('
