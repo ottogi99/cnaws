@@ -329,10 +329,24 @@ class StatusManpowerSupportersController extends Controller
         {
             $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
-            // if (in_array($id, $duplicated_items)) {
-                Log::debug('중복 아이템:'.$duplicated_items);
-                Log::debug('수정 아이템:'.$id);
-            // }
+            if (count($duplicated_items) > 0)
+            {
+                flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
+
+                $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
+                foreach ($duplicated_items as $index => $item) {
+                    if ($item->id != $id) {
+                        $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
+                                  . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    }
+                }
+
+                flash()->warning($warning_message);
+                return back()->withInput();
+            }
+
+            // 12-04 수정시 자기 자신을 제외
+
 
             if (count($duplicated_items) > 0)
             {
@@ -519,7 +533,7 @@ class StatusManpowerSupportersController extends Controller
 
     // 인력지원반의 경우 전체 농가에 대한 중복 검사를 함. 그래서 (farmer_id 조건 사용 안함)
     // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
-    private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_id, $job_start_date, $job_end_date, $edit_id='')
     {
         // DB::enableQueryLog();
         // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
@@ -535,6 +549,11 @@ class StatusManpowerSupportersController extends Controller
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
                                       ->where('manpower_supporters.id', $supporter_id)
+                                      // 2020-12-04, 수정할 때는 중복검사에서 자신의 id는 제외
+                                      ->when($edit_id, function($query, $edit_id) {
+                                          $query->whereNotIn('status_manpower_supporters.id', $edit_id);
+                                          // $query->where('status_manpower_supporters.id', '<>', $edit_id);
+                                        })
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                               $query->whereRaw('
                                                 (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
