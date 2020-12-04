@@ -99,13 +99,13 @@
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_item1') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">교통비(*)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">교통비</span>
   <input type="number" name="payment_item1" id="payment_item1" value="{{ old('payment_item1', $row->payment_item1) }}" class="form-control" placeholder="숫자만 입력하세요" numberOnly/>
   {!! $errors->first('payment_item1', '<span class="form-error">:message</span>') !!}
 </div>
 
 <div class="input-group input-group-lg {{ $errors->has('payment_item2') ? 'has-error' : '' }}" style="padding-bottom:10px;">
-  <span class="input-group-addon" style="width:150px; font-size:13px;">간식비(*)</span>
+  <span class="input-group-addon" style="width:150px; font-size:13px;">간식비</span>
   <input type="number" name="payment_item2" id="payment_item2" value="{{ old('payment_item2', $row->payment_item2) }}" class="form-control" placeholder="숫자만 입력하세요" numberOnly/>
   {!! $errors->first('payment_item2', '<span class="form-error">:message</span>') !!}
 </div>
