@@ -155,13 +155,13 @@ class StatusManpowerSupportersController extends Controller
         $business_year = now()->format('Y');
 
         $supporter_id = $request->input('supporter_id');
-        Log::dubug($request);
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
-        Log::dubug($supporter);
+        Log::debug($supporter_id);
+        Log::debug($supporter->id);
         $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
