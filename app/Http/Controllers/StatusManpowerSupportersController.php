@@ -160,7 +160,8 @@ class StatusManpowerSupportersController extends Controller
 
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
-
+        Log::dubug($supporter->id)
+        Log::dubug($supporter_id)
         $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
