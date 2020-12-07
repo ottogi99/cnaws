@@ -160,15 +160,15 @@ class StatusManpowerSupportersController extends Controller
 
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
-        Log::dubug($supporter->id)
-        Log::dubug($supporter_id)
+        Log::dubug($supporter->id);
+        Log::dubug($supporter_id);
         $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
             flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
-            $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
+            $warning_message = '[ 기존 등록된 데이터 정보 ]<  br/>';
             foreach ($duplicated_items as $index => $item) {
                 $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
                             . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
