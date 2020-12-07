@@ -155,7 +155,7 @@ class StatusManpowerSupportersController extends Controller
         $business_year = now()->format('Y');
 
         $supporter_id = $request->input('supporter_id');
-        Log::dubug($supporter_id);
+        Log::dubug($request);
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
