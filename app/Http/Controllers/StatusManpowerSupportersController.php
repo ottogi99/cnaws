@@ -78,14 +78,10 @@ class StatusManpowerSupportersController extends Controller
                                       [$keyword, $keyword, $keyword, $keyword, $keyword]
                                     );
                     })
-                    // ->when($keyword, function($query, $keyword) use ($raw) {
-                    //     return $query->whereRaw($raw, [$keyword]);
-                    // })
                     ->orderby('siguns.sequence')
                     ->orderby('users.sequence')
                     ->orderby('users.name')
                     ->orderby('status_manpower_supporters.created_at', 'desc')
-                    //->orderby($sort, $order)
                     ->paginate(20);
 
         if ($user->isAdmin()) {
@@ -106,9 +102,6 @@ class StatusManpowerSupportersController extends Controller
         $siguns = \App\Sigun::orderBy('sequence')->get();
         $nonghyups = $this->nonghyups;
         $row = new \App\StatusManpowerSupporter;
-        //if (auth()->user()->is_admin)
-        //    $row->nonghyup_id = 'nh485014';   //[TODO] 관리자인 경우 ca(천안)으로 일단 정의
-        //else
         $row->nonghyup_id = auth()->user()->nonghyup_id;
 
         $farmers = \App\LargeFarmer::where('nonghyup_id', $row->nonghyup_id)
@@ -116,7 +109,6 @@ class StatusManpowerSupportersController extends Controller
                               ->orderBy('name')
                               ->get();
 
-        // dd($row->nonghyup_id);
         $supporters = \App\ManpowerSupporter::where('nonghyup_id', $row->nonghyup_id)
                               ->where('business_year', now()->year)
                               ->orderBy('name')
@@ -162,8 +154,6 @@ class StatusManpowerSupportersController extends Controller
         $user = auth()->user();
         $business_year = now()->format('Y');
 
-        // 인력반은 모드 농가 대상으로 중복 검사함
-        // $farmer_id = $request->input('farmer_id');
         $supporter_id = $request->input('supporter_id');
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
@@ -171,12 +161,10 @@ class StatusManpowerSupportersController extends Controller
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         $supporter_name = $supporter->name;
 
-        // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
         $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
-            // $error_message = '요청하신 데이터 정보<br/>';
             flash()->error('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. 중복을 확인하여 주세요.');
 
             $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
@@ -270,7 +258,6 @@ class StatusManpowerSupportersController extends Controller
                               ->orderBy('name')
                               ->get();
 
-        // dd($row->nonghyup_id);
         $supporters = \App\ManpowerSupporter::where('nonghyup_id', $row->nonghyup_id)
                               ->where('business_year', now()->year)
                               ->orderBy('name')
@@ -442,8 +429,6 @@ class StatusManpowerSupportersController extends Controller
         Log::debug($excel->getClientOriginalName());
 
         $import = new StatusManpowerSupportersImport();
-
-        // $import->import('uploaded_status_manpower_supporters.xlsx', 'local', \Maatwebsite\Excel\Excel::XLSX);
         $import->import($excel, \Maatwebsite\Excel\Excel::XLSX);
 
         $inserted_rows = $import->getRowCount();
@@ -462,13 +447,11 @@ class StatusManpowerSupportersController extends Controller
                     $first_quotes = strpos($error->getMessage(), '\'');
                     $end_quotes = strpos($error->getMessage(), '\'', $first_quotes + 1);
                     $duplicated = substr($error->getMessage(), $first_quotes, $end_quotes - $first_quotes + 1);
-                    // Log::debug($duplicated);
                     flash()->error('자료 중에 추가하려는 농가가 이미 존재하고 있습니다. 입력 데이터를 확인하여 다시 시도하시기 바랍니다. (중복 키: '.$duplicated.')');
                 } else {
                     flash()->error('엑셀 업로드 도중 에러가 발생하였습니다. 관리자에게 문의바랍니다(에러메시지:'.$error->errorInfo[2].')');
                 }
             }
-            // Log::debug($errors);
             return redirect(route('status_manpower_supporters.index'));
         }
 
@@ -485,25 +468,15 @@ class StatusManpowerSupportersController extends Controller
                 $row = $failure->row();
                 $value = isset($failure_rows[(string)$row]) ? $failure_rows[(string)$row] : 0;
                 $failure_rows += [(string)$row => $value + 1];
-                // array_push($failure_rows, (string)$row, );
-                // dd($failure_rows[(string)$row]);
                 $column = $failure->attribute();
+
                 Log::warning($row.'행 '.$column.'열: '.$failure->errors()[0]);
 
-                 // if ($index <= 10)
                 $failure_message .= ($index+1). ')' . $row.'행 '.$column.'열: '.$failure->errors()[0].'<br/>';
             }
             $total_rows = $inserted_rows + count($failure_rows);
 
             flash()->error('전체 '.$total_rows.'개의 데이터 중 '.$inserted_rows.' 건의 데이터가 입력 되었습니다.');
-            // success(), error(), warning(),
-
-            // $message = '입력한 데이터의 형식이 잘못되었습니다. 행 [';
-            // foreach($failure_rows as $row_number => $values) {
-            //     $message = $message . $row_number . ', ';
-            // }
-            // $message = $message . ']';
-
             flash()->warning($failure_message);
             return redirect(route('status_manpower_supporters.index'));
         }
@@ -520,8 +493,6 @@ class StatusManpowerSupportersController extends Controller
     // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
     private function check_duplicate($supporter_id, $job_start_date, $job_end_date, $edit_id='')
     {
-        // DB::enableQueryLog();
-        // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
                                       ->join('large_farmers', 'status_manpower_supporters.farmer_id', 'large_farmers.id')
@@ -546,10 +517,8 @@ class StatusManpowerSupportersController extends Controller
                                               or
                                               (status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
                                           ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
-                                      })->get();
-
-        // dd(DB::getQueryLog());                                      // ->exists())
-
+                                        })
+                                      ->get();
         return $duplicated_items;
     }
 }

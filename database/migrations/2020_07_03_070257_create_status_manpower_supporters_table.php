@@ -49,13 +49,14 @@ class CreateStatusManpowerSupportersTable extends Migration
 
             $table->string('remark')->nullable();   // 비고
 
-            // 키 지정
-            // $table->unique('nonghyup_id', 'name', 'supporter_id');                  // 키 확인 필요
+            // 2020-12-07 중복데이터가 들어가니깐(중복 Request) unique를 통한 중복 방지
+            $table->unique(['business_year', 'farmer_id', 'job_start_date', 'job_end_date']); // 동작업자가 동일일에 여러 농가에 중복되지 않도록 (기간인 경우 중복될지도)
 
             // 외래키 정의
             $table->foreign('sigun_code')->references('code')->on('siguns')->onUpdate('cascade')->onDelete('cascade');  //시군 코드, softDelete인데 이 경우도 삭제가 될까? 궁금?????
             $table->foreign('nonghyup_id')->references('nonghyup_id')->on('users')->onUpdate('cascade')->onDelete('cascade'); //농협 사용자 ID
-            $table->foreign('supporter_id')->references('id')->on('manpower_supporters')->onUpdate('cascade')->onDelete('cascade'); //농협 사용자 ID
+            $table->foreign('farmer_id')->references('id')->on('large_farmers')->onUpdate('cascade')->onDelete('cascade'); //농가 ID
+            $table->foreign('supporter_id')->references('id')->on('manpower_supporters')->onUpdate('cascade')->onDelete('cascade'); //지원반 ID
         });
     }
 

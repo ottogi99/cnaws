@@ -60,15 +60,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                 ->where('birth', $supporter_birth)
                                 ->first();
 
-        // $job_start_date = new Carbon($row[5]);
-        // $job_end_date   = new Carbon($row[6]);
-        // $working_days = $job_start_date->diffInDays($job_end_date)+1;//->format('%H:%I:%S');
-        //
-        // dd([$row[5], $row[6]]);
         $job_start_date = Date::excelToDateTimeObject($row[7]);
         $job_end_date = Date::excelToDateTimeObject($row[8]);
-        // $job_start_date = new DateTime($row[5]);
-        // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
         // 12-04 교통비, 간식비, 마스크구입비(필수항목 아님) 빈 값 입력시 오류
@@ -182,14 +175,12 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $key = substr($attribute, 0, 1);
 
                     // 2020.11.30 동일한 이름의 농협이 존재하여 시군코드까지 함께 조회
-                    // $nonghyup = \App\User::where('name', trim($value))->first();
                     $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
                     if (!$nonghyup) {
                         $onFailure('해당 농협이 존재하지 않습니다.('. $value.')');
                         return;
                     }
 
-                    // $this->stack[$key] = array('nonghyup_id' => $nonghyup->nonghyup_id);
                     $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
 
                     $user = auth()->user();
@@ -197,7 +188,6 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         $onFailure('타 농협의 데이터는 등록할 수 없습니다.: '.$value);
                         return;
                     }
-                    // $this->stack[$key] = $nonghyup->nonghyup_id;
                 },
             ],
             '3' =>  // 농가명
@@ -232,12 +222,10 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                               ->first();
 
                     if (!$farmer) {
-                        // $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
                         $onFailure('해당 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
-                    // $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
                     $this->stack[$key] = array_merge($this->stack[$key], array('farmer_id' => $farmer->id));
                 },
             ],
@@ -270,13 +258,9 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                               ->first();
 
                     if (!$supporter) {
-                        // $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
                         $onFailure('해당 인력지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
-                    //
-                    // $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
-                    // $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
 
                     $this->stack[$key] = array_merge($this->stack[$key], array('supporter_id' => $supporter->id));
                 },
@@ -315,8 +299,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
-                    // 2020-11-11 동명이인 허용
-                    // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
+                    // 2020-11-11 동명이인 허용 ($supporter_name --> $supporter_id)
                     $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
                     if (count($duplicated_items) > 0)
                     {
@@ -403,10 +386,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         return $this->rows;
     }
 
-    // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
     private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
     {
-        // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
                                       ->join('large_farmers', 'status_manpower_supporters.farmer_id', 'large_farmers.id')
@@ -418,27 +399,15 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                           'manpower_supporters.name as supporter_name'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
-                                      // ->where('status_manpower_supporters.supporter_id', $supporter_id)
-                                      // id 중복이 아니라 이름 중복을 검색하여야 한다.
-                                      //->where('manpower_supporters.name', $supporter_name)
                                       ->where('manpower_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                          // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                          //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
                                               $query->whereRaw('
                                                 (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
-                                            		or
-                                            		(status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
                                                 or
-                                            		(status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
+                                                (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)
+                                                or
+                                                (status_manpower_supporters.job_start_date > ? and ? > status_manpower_supporters.job_end_date)
                                               ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
                                       })->get();
-                                      //
-                                      // ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                      //     $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                      //           ->orWhereBetween('status_manpower_supporters.job_end_date', [$job_start_date, $job_end_date]);
-                                      // })
-                                      // ->get();
-                                      // ->exists())
     }
 }

@@ -38,17 +38,11 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
 
         ++$this->rows;
 
-        // $currentRowNumber = $this->getRowNumber();
-        // if ($currentRowNumber == 1)
-        //     return;
-        //
         $row = array_map('trim', $row);
 
         $farmer_birth = Date::excelToDateTimeObject($row[4])->format('Y-m-d');
         $supporter_birth = Date::excelToDateTimeObject($row[6])->format('Y-m-d');
 
-        // $sigun = \App\Sigun::where('name', $row[1])->first();
-        // $nonghyup = \App\User::with('sigun')->where('name', $row[2])->first();
         $sigun = \App\Sigun::where('name', $row[1])->first();
         $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
 
@@ -65,15 +59,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                 ->where('birth', $supporter_birth)
                                 ->first();
 
-        // $job_start_date = new Carbon($row[5]);
-        // $job_end_date   = new Carbon($row[6]);
-        // $working_days = $job_start_date->diffInDays($job_end_date)+1;//->format('%H:%I:%S');
-        //
-        // dd([$row[5], $row[6]]);
         $job_start_date = Date::excelToDateTimeObject($row[7]);
         $job_end_date = Date::excelToDateTimeObject($row[8]);
-        // $job_start_date = new DateTime($row[5]);
-        // $job_end_date = new DateTime($row[6]);
         $working_days = $job_start_date->diff($job_end_date)->days + 1;
 
         $payment_sum = $row[11];
@@ -175,7 +162,6 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
 
-                    // $nonghyup = \App\User::where('name', trim($value))->first();
                     $nonghyup = \App\User::where('sigun_code', $this->stack[$key]['sigun'])->where('name', trim($value))->first();
 
                     if (!$nonghyup) {
@@ -183,7 +169,6 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                         return;
                     }
 
-                    // $this->stack[$key] = array('nonghyup_id' => $nonghyup->nonghyup_id);
                     $this->stack[$key] = array_merge($this->stack[$key], array('nonghyup_id' => $nonghyup->nonghyup_id));
 
                     $user = auth()->user();
@@ -198,25 +183,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    // $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
-                    // dd('농협 ID: '.$nonghyup_id.', 농가명: '.$value);
-
-                    // 2020-11-11 농가 동명이인 허용
-                    // $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
-                    //                           ->when($nonghyup_id, function($query, $nonghyup_id) {
-                    //                               $query->where('nonghyup_id', $nonghyup_id);
-                    //                             })
-                    //                           ->where('name', trim($value))->First();
-                    //
-                    // if (!$farmer) {
-                    //     $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
-                    //     return;
-                    // }
-
-                    // $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
-                    // $this->stack[$key] = array_merge($this->stack[$key], $array_farmer);
                     $this->stack[$key] = array_merge($this->stack[$key], array('farmer_name' => $value));
-
                 },
             ],
             '4' =>  // 농가 생년월일
@@ -242,12 +209,10 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                               ->first();
 
                     if (!$farmer) {
-                        // $onFailure('해당 농가가 존재하지 않습니다.('. $value.')');
                         $onFailure('해당 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
-                    // $array_farmer = array('farmer_id' => $farmer->id, 'farmer_name' => $farmer->name);
                     $this->stack[$key] = array_merge($this->stack[$key], array('farmer_id' => $farmer->id));
                 },
             ],
@@ -256,20 +221,6 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
-                    // $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
-
-                    // 2020-11-11 동명이인 허용
-                    // $supporter = \App\MachineSupporter::with('sigun')->with('nonghyup')
-                    //                           ->where('nonghyup_id', $nonghyup_id)
-                    //                           ->where('name', trim($value))->First();
-                    // if (!$supporter) {
-                    //     $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
-                    //     return;
-                    // }
-                    //
-                    // $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
-                    // $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
-
                     $this->stack[$key] = array_merge($this->stack[$key], array('supporter_name' => $value));
                 },
             ],
@@ -294,13 +245,9 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                               ->first();
 
                     if (!$supporter) {
-                        // $onFailure('해당 농기계지원반이 존재하지 않습니다.('. $value.')');
                         $onFailure('해당 농기계지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
-                    //
-                    // $array_supporter = array('supporter_id' => $supporter->id, 'supporter_name' => $supporter->name);
-                    // $this->stack[$key] = array_merge($this->stack[$key], $array_supporter);
 
                     $this->stack[$key] = array_merge($this->stack[$key], array('supporter_id' => $supporter->id));
                 },
@@ -340,12 +287,12 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     }
 
                     // 2020-11-11 동명이인 허용
-                    // $duplicated_items = $this->check_duplicate($supporter_name, $job_start_date, $job_end_date);
-                    $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
-                    if (count($duplicated_items) > 0)
-                    {
-                        $onFailure('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
-                    }
+                    // 2020-12-07 농기계지원반의 경우 동일작업자가 필지만 다른 동일 농가의 작업도 진행할 수 있으므로 중복 검사 제외함(신철희 주무관)
+                    // $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
+                    // if (count($duplicated_items) > 0)
+                    // {
+                    //     $onFailure('요청하신 농기계지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
+                    // }
                 }
             ],
             '9' => 'required',
@@ -412,10 +359,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         return $this->rows;
     }
 
-    // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
     private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
     {
-        // 중복 체크(지원반의 id가 아니라 이름으로 검색하여야 한다.)
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_machine_supporters.nonghyup_id', 'users.nonghyup_id')
                                       ->join('small_farmers', 'status_machine_supporters.farmer_id', 'small_farmers.id')
@@ -427,33 +372,17 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                           'machine_supporters.name as supporter_name'
                                         )
                                       ->where('status_machine_supporters.business_year', now()->year)
-                                      // ->where('status_machine_supporters.supporter_id', $supporter_id)
-                                      // id 중복이 아니라 이름 중복을 검색하여야 한다.
-                                      // ->where('machine_supporters.name', $supporter_name)
                                       ->where('machine_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                          // $query->whereBetween('status_manpower_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                          //       ->orWhereBetween('job_end_date', [$job_start_date, $job_end_date]);
-                                              $query->whereRaw('
-                                                (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
-                                            		or
-                                            		(status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
-                                                or
-                                            		(status_machine_supporters.job_start_date > ? and ? > status_machine_supporters.job_end_date)
-                                              ', [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]);
-                                      })->get();
-                                      // ->where(function ($query) use ($job_start_date, $job_end_date) {
-                                      //     $query->whereBetween('status_machine_supporters.job_start_date', [$job_start_date, $job_end_date])
-                                      //           ->orWhereBetween('status_machine_supporters.job_end_date', [$job_start_date, $job_end_date]);
-                                      // })
-                                      // ->get();
-                                      // ->exists())
+                                          $query->whereRaw('
+                                              (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                              or
+                                              (status_machine_supporters.job_start_date <= ? and ? <= status_machine_supporters.job_end_date)
+                                              or
+                                              (status_machine_supporters.job_start_date > ? and ? > status_machine_supporters.job_end_date)
+                                              ',
+                                              [$job_start_date, $job_start_date, $job_end_date, $job_end_date, $job_start_date, $job_end_date]
+                                          );
+                                        })->get();
     }
-
-    // function validateDate($date, $format = 'Y-m-d')
-    // {
-    //     $d = DateTime::createFromFormat($format, $date);
-    //     // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-    //     return $d && $d->format($format) === $date;
-    // }
 }
