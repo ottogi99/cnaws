@@ -429,9 +429,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                           'large_farmers.name as farmer_name',
                                           'large_farmers.address as farmer_address',
                                           'manpower_supporters.name as supporter_name',
-                                          'manpower_supporters.birth as supporter_birth',
-                                          'manpower_supporters.job_start_date as job_start_date',
-                                          'manpower_supporters.job_end_date as job_end_date'
+                                          'manpower_supporters.birth as supporter_birth'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
                                       // ->where('manpower_supporters.id', $supporter_id)
