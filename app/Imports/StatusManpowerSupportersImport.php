@@ -207,6 +207,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['farmer_name']) ? $this->stack[$key]['farmer_name'] : null;
 
@@ -217,10 +218,13 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
+                    // 2020-12-08 농가는 농협에 등록된 농가여야 한다.
                     $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
-                                              ->when($nonghyup_id, function($query, $nonghyup_id) {
-                                                  $query->where('nonghyup_id', $nonghyup_id);
-                                                })
+                                              ->where('business_year', $business_year)
+                                              ->where('nonghyup_id', $nonghyup_id)
+                                              // ->when($nonghyup_id, function($query, $nonghyup_id) {
+                                              //     $query->where('nonghyup_id', $nonghyup_id);
+                                              //   })
                                               ->where('name', trim($name))
                                               ->where('birth', trim($birth))
                                               ->first();
@@ -246,6 +250,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
 
@@ -256,7 +261,9 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
-                    $supporter = \App\ManpowerSupporter::where('nonghyup_id', $nonghyup_id)
+                    // 2020-12-08 작업자는 해당농협에 등록된 작업자여야 한다.
+                    $supporter = \App\ManpowerSupporter::where('business_year', $business_year)
+                                              ->where('nonghyup_id', $nonghyup_id)
                                               ->where('name', trim($name))
                                               ->where('birth', trim($birth))
                                               ->first();
@@ -267,6 +274,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     }
 
                     $this->stack[$key] = array_merge($this->stack[$key], array('supporter_id' => $supporter->id));
+                    // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.
+                    $this->stack[$key] = array_merge($this->stack[$key], array('supporter_birth' => $supporter->birth));
                 },
             ],
             '7' =>  // 작업시작일
@@ -292,6 +301,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $supporter_name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
                     $supporter_id = isset($this->stack[$key]['supporter_id']) ? $this->stack[$key]['supporter_id'] : null;
+                    $supporter_birth = isset($this->stack[$key]['supporter_birth']) ? $this->stack[$key]['supporter_birth'] : null;
                     $job_start_date = isset($this->stack[$key]['job_start_date']) ? $this->stack[$key]['job_start_date'] : null;
 
                     try {
@@ -304,10 +314,23 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     }
 
                     // 2020-11-11 동명이인 허용 ($supporter_name --> $supporter_id)
-                    $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
+                    // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
+                    //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
+                    //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다. ($supporter_name, $supporter_birth로 검색)
+                    $duplicated_items = $this->check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date);
+                    // $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
                     if (count($duplicated_items) > 0)
                     {
-                        $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
+                        foreach($duplicated_items as $item) {
+                            // $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 생년월일:'.$supporter_birth', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
+                            $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [
+                              농협: '.$item->nonghyup_name.
+                              ', 작업자명: '.$item->supporter_name.
+                              ', 생년월일:'.$item->supporter_birth.
+                              ', 작업시작일: '.$job_start_date.
+                              ', 작업종료일: '.$job_end_date.
+                            ']');
+                        }
                     }
                 }
             ],
@@ -390,7 +413,11 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         return $this->rows;
     }
 
-    private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
+    // private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
+    // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
+    //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
+    //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다.
+    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date)
     {
         return $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
@@ -399,11 +426,17 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                       ->select(
                                           'status_manpower_supporters.*',
                                           'users.name as nonghyup_name',
-                                          'large_farmers.name as farmer_name', 'large_farmers.address as farmer_address',
-                                          'manpower_supporters.name as supporter_name'
+                                          'large_farmers.name as farmer_name',
+                                          'large_farmers.address as farmer_address',
+                                          'manpower_supporters.name as supporter_name',
+                                          'manpower_supporters.birth as supporter_birth',
+                                          'manpower_supporters.job_start_date as job_start_date',
+                                          'manpower_supporters.job_end_date as job_end_date'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
-                                      ->where('manpower_supporters.id', $supporter_id)
+                                      // ->where('manpower_supporters.id', $supporter_id)
+                                      ->where('manpower_supporters.name', $supporter_name)
+                                      ->where('manpower_supporters.birth', $supporter_birth)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                               $query->whereRaw('
                                                 (status_manpower_supporters.job_start_date <= ? and ? <= status_manpower_supporters.job_end_date)

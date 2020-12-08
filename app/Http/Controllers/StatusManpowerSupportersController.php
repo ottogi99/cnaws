@@ -459,7 +459,7 @@ class StatusManpowerSupportersController extends Controller
         $total_rows = 0;
         $failure_rows = [];
         if (count($failures) > 0) {
-            $failure_message = '[실패한 입력 데이터].<br/>';
+            $failure_message = '[실패한 입력 데이터]<br/>';
             foreach ($failures as $index => $failure) {
                 // $failure->row(); // row that went wrong
                 // $failure->attribute(); // either heading key (if using heading row concern) or column index
