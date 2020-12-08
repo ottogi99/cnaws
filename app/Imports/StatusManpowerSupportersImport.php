@@ -51,11 +51,15 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
         $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
+                                // 2020-12-08 동명인이 다른 시군에도 등명으로 등록(생년월일 동일)되어 supporter_id가 변경됨
+                                ->where('nonghyup_id', $nonghyup->id)
                                 ->where('name', $row[3])
                                 ->where('birth', $farmer_birth)
                                 ->first();
         $supporter = \App\ManpowerSupporter::with('sigun')->with('nonghyup')
                                 ->where('business_year', now()->year)
+                                // 2020-12-08 동명인이 다른 시군에도 등명으로 등록(생년월일 동일)되어 supporter_id가 변경됨
+                                ->where('nonghyup_id', $nonghyup->id)
                                 ->where('name', $row[5])
                                 ->where('birth', $supporter_birth)
                                 ->first();
