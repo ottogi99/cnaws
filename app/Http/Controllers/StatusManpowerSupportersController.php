@@ -159,10 +159,11 @@ class StatusManpowerSupportersController extends Controller
         $job_end_date = $request->input('job_end_date');
 
         $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
-        $supporter_name = $supporter->name;
-        Log::debug($supporter_id);
-        Log::debug($supporter->id);
-        $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
+        // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
+        //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
+        //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다. ($supporter_name, $supporter_birth로 검색)
+        $duplicated_items = $this->check_duplicate($supporter->name, $supporter->birth, $job_start_date, $job_end_date);
+        // $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
 
         if (count($duplicated_items) > 0)
         {
@@ -170,8 +171,13 @@ class StatusManpowerSupportersController extends Controller
 
             $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
             foreach ($duplicated_items as $index => $item) {
-                $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                            . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                $warning_message .= ($index + 1) .
+                                '. 농협: ' . $item->nonghyup_name .
+                                ', 농가명: ' . $item->farmer_name .
+                                ', 작업반: ' . $item->supporter_name .
+                                ', 생년월일: ' . $item->supporter_birth .
+                                ', 시작일자: '. $item->job_start_date->format('Y-m-d') .
+                                ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
             }
             flash()->warning($warning_message);
             return back()->withInput();
@@ -315,13 +321,17 @@ class StatusManpowerSupportersController extends Controller
         $job_start_date = $request->input('job_start_date');
         $job_end_date = $request->input('job_end_date');
 
-        // $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
+        $supporter = \App\ManpowerSupporter::where('id', $supporter_id)->first();
         // $supporter_name = $supporter->name;
         // 기존 작업시작일과 작업종료일이 같은지 비교 : 같으면 중복 검사 X : 다르면 중복 검사
         if ($row->job_start_date->format('Y-m-d') != $job_start_date || $row->job_end_date->format('Y-m-d') != $job_end_date)
         {
             // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
-            $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date, $id);
+            // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
+            //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
+            //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다. ($supporter_name, $supporter_birth로 검색)
+            $duplicated_items = $this->check_duplicate($supporter->name, $supporter->birth, $job_start_date, $job_end_date);
+            // $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date, $id);
 
             if (count($duplicated_items) > 0)
             {
@@ -330,8 +340,13 @@ class StatusManpowerSupportersController extends Controller
                 $warning_message = '[ 기존 등록된 데이터 정보 ]<br/>';
                 foreach ($duplicated_items as $index => $item) {
                     // if ($item->id != $id) {
-                    $warning_message .= ($index + 1) . '. 농협: ' . $item->nonghyup_name . ', 농가: ' . $item->farmer_name . ', 작업반: ' . $item->supporter_name . ', 시작일자: '
-                                    . $item->job_start_date->format('Y-m-d') . ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
+                    $warning_message .= ($index + 1) .
+                                    '. 농협: ' . $item->nonghyup_name .
+                                    ', 농가: ' . $item->farmer_name .
+                                    ', 작업반: ' . $item->supporter_name .
+                                    ', 생년월일: ' . $item->supporter_birth .
+                                    ', 시작일자: ' . $item->job_start_date->format('Y-m-d') .
+                                    ', 종료일자: ' . $item->job_end_date->format('Y-m-d') . '<br/>';
                     // }
                 }
 
@@ -491,8 +506,10 @@ class StatusManpowerSupportersController extends Controller
     }
 
     // 인력지원반의 경우 전체 농가에 대한 중복 검사를 함. 그래서 (farmer_id 조건 사용 안함)
-    // private function check_duplicate($supporter_name, $job_start_date, $job_end_date)
-    private function check_duplicate($supporter_id, $job_start_date, $job_end_date, $edit_id='')
+    // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
+    //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
+    //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다.
+    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date)
     {
         $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
@@ -501,11 +518,15 @@ class StatusManpowerSupportersController extends Controller
                                       ->select(
                                           'status_manpower_supporters.*',
                                           'users.name as nonghyup_name',
-                                          'large_farmers.name as farmer_name', 'large_farmers.address as farmer_address',
-                                          'manpower_supporters.name as supporter_name'
+                                          'large_farmers.name as farmer_name',
+                                          'large_farmers.address as farmer_address',
+                                          'manpower_supporters.name as supporter_name',
+                                          'manpower_supporters.birth as supporter_birth'
                                         )
                                       ->where('status_manpower_supporters.business_year', now()->year)
-                                      ->where('manpower_supporters.id', $supporter_id)
+                                      // ->where('manpower_supporters.id', $supporter_id)
+                                      ->where('manpower_supporters.name', $supporter_name)
+                                      ->where('manpower_supporters.birth', $supporter_birth)
                                       // 2020-12-04, 수정시 중복검사에서 자신의 id는 제외
                                       ->when($edit_id, function($query, $edit_id) {
                                             $query->where('status_manpower_supporters.id', '<>', $edit_id);
