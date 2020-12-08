@@ -325,6 +325,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                             // $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [작업자명: '.$supporter_name.', 생년월일:'.$supporter_birth', 작업시작일: '.$job_start_date.', 작업종료일: '.$job_end_date.']');
                             $onFailure('요청하신 인력지원반의 작업일자가 이미 등록되어 있습니다. [
                               농협: '.$item->nonghyup_name.
+                              ', 농가명: '.$item->farmer_name.
+                              ', 농가주소: '.$item->farmer_address.
                               ', 작업자명: '.$item->supporter_name.
                               ', 생년월일:'.$item->supporter_birth.
                               ', 작업시작일: '.$job_start_date.
