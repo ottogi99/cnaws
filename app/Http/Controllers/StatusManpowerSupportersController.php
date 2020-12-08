@@ -509,7 +509,7 @@ class StatusManpowerSupportersController extends Controller
     // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
     //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
     //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다.
-    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date, $edit_id='')
     {
         $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
