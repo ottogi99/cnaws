@@ -137,7 +137,9 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $this->stack[$key] = [];
 
                     if ($this->is_valid_numeric($value)){
-                        $business_year = Carbon::createFromDate($value)->year();
+                        $business_year = Carbon::createFromDate($value)->year;
+                        Log::debug($business_year);
+                        Log::debug(now()->format('Y'));
                         if (!($business_year == now()->format('Y'))){
                             $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
                             return;
