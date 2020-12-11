@@ -193,8 +193,10 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['farmer_name']) ? $this->stack[$key]['farmer_name'] : null;
+
                     try {
                         $birth = Date::excelToDateTimeObject($value)->format('Y-m-d');
                     } catch (\Exception $e) {
@@ -230,6 +232,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                 'required',
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
                     $nonghyup_id = isset($this->stack[$key]['nonghyup_id']) ? $this->stack[$key]['nonghyup_id'] : null;
                     $name = isset($this->stack[$key]['supporter_name']) ? $this->stack[$key]['supporter_name'] : null;
 
