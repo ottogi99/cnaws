@@ -138,7 +138,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
 
                     if ($this->is_valid_numeric($value)){
                         $business_year = Carbon::createFromDate($value);
-
+                        Log::debug('$business_year:'.$business_year);
                         if (!$business_year == now()->format('Y')){
                             $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
                             return;
@@ -157,6 +157,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                 function($attribute, $value, $onFailure) {
                     $key = substr($attribute, 0, 1);
 
+                    Log::debug('$business_year:'.$value);
                     $sigun = \App\Sigun::where('name', trim($value))->first();
                     if (!$sigun) {
                         $onFailure('해당 시군이 존재하지 않습니다.('. $value.')');
@@ -218,6 +219,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
+                    Log::debug('생년월일:'.$value);
                     // 2020-12-08 농가는 농협에 등록된 농가여야 한다.
                     $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
                                               ->where('business_year', $business_year)
