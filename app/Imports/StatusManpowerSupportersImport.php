@@ -313,6 +313,14 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                         return;
                     }
 
+                    // 2020-12-11 작업시작일은 작업종료일보다 클수 없다는 조건 추가 : 작업시작일이 큰 경우 아래 중복 체크에서 누락됨.
+                    if ($job_start_date > $job_end_date) {
+                        Log::debug('작업시작일:'.$job_start_date->format('Y-m-d'));
+                        Log::debug('작업종료일:'.$job_start_date->format('Y-m-d'));
+                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.('. $value.')');
+                        return;
+                    }
+
                     // 2020-11-11 동명이인 허용 ($supporter_name --> $supporter_id)
                     // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
                     //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
