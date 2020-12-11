@@ -137,7 +137,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $this->stack[$key] = [];
 
                     if ($this->is_valid_numeric($value)){
-                        $business_year = Carbon::createFromDate($value)->toDateString();
+                        $business_year = Carbon::createFromDate($value)->year();
                         Log::debug('$business_year:'.$business_year);
                         if (!($business_year == now()->format('Y'))){
                             $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
@@ -223,15 +223,12 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
                                               ->where('business_year', $business_year)
                                               ->where('nonghyup_id', $nonghyup_id)
-                                              // ->when($nonghyup_id, function($query, $nonghyup_id) {
-                                              //     $query->where('nonghyup_id', $nonghyup_id);
-                                              //   })
                                               ->where('name', trim($name))
                                               ->where('birth', trim($birth))
                                               ->first();
 
                     if (!$farmer) {
-                        $onFailure('해당 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
+                        $onFailure('대상년도에 등록된 농가가 존재하지 않습니다.(대상년도: '.$business_year.', 농가명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
@@ -270,7 +267,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                               ->first();
 
                     if (!$supporter) {
-                        $onFailure('해당 인력지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
+                        $onFailure('대상년도에 등록된 해당 인력지원반이 존재하지 않습니다.(대상년도: '.$business_year.', 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
