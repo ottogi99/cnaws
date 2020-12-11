@@ -314,17 +314,13 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     }
 
                     // 2020-12-11 작업시작일은 작업종료일보다 클수 없다는 조건 추가 : 작업시작일이 큰 경우 아래 중복 체크에서 누락됨.
-
-                    Log::debug('작업시작일:'.$job_start_date);
-                    Log::debug('작업종료일:'.$job_end_date);
-
-                    $start_date = Carbon::createFromFormat('Y-m-d', $job_start_date);
-                    $end_date = Carbon::createFromFormat('Y-m-d', $job_end_date);
+                    $start_date = Carbon::create($job_start_date);
+                    $end_date = Carbon::create($job_end_date);
 
                     if ($start_date->greaterThan($end_date)) {
                         Log::debug('작업시작일:'.$start_date->toDateTimeString());
                         Log::debug('작업종료일:'.$end_date->toDateTimeString());
-                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.('. $value.')');
+                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.(시작일:'.$start_date.', 종료일:'.$end_date.')');
                         return;
                     }
 
