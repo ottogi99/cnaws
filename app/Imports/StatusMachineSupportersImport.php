@@ -203,9 +203,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     }
 
                     $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
-                                              ->when($nonghyup_id, function($query, $nonghyup_id) {
-                                                  $query->where('nonghyup_id', $nonghyup_id);
-                                                })
+                                              ->where('business_year', $business_year)
+                                              ->where('nonghyup_id', $nonghyup_id)
                                               ->where('name', trim($name))
                                               ->where('birth', trim($birth))
                                               ->first();
@@ -241,7 +240,9 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                         return;
                     }
 
-                    $supporter = \App\MachineSupporter::where('nonghyup_id', $nonghyup_id)
+                    // 2020-12-08 작업자는 해당농협에 등록된 작업자여야 한다.
+                    $supporter = \App\MachineSupporter::where('business_year', $business_year)
+                                              ->where('nonghyup_id', $nonghyup_id)
                                               ->where('name', trim($name))
                                               ->where('birth', trim($birth))
                                               ->first();
