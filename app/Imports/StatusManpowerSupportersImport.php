@@ -318,9 +318,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $end_date = Carbon::create($job_end_date);
 
                     if ($start_date->greaterThan($end_date)) {
-                        Log::debug('작업시작일:'.$start_date->toDateTimeString());
-                        Log::debug('작업종료일:'.$end_date->toDateTimeString());
-                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.(시작일:'.$start_date.', 종료일:'.$end_date.')');
+                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.(시작일:'.$start_date->toDateString().', 종료일:'.$end_date->toDateString().')');
                         return;
                     }
 
