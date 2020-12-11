@@ -99,9 +99,8 @@ class StatusOperatingCostsImport implements ToModel, WithStartRow, WithValidatio
                     $this->stack[$key] = [];
 
                     if ($this->is_valid_numeric($value)){
-                        $business_year = Carbon::createFromDate($value);
-
-                        if (!$business_year == now()->format('Y')){
+                        $business_year = Carbon::createFromDate($value)->year;
+                        if (!($business_year == now()->format('Y'))){
                             $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
                             return;
                         }

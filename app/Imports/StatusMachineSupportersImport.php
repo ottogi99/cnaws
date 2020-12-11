@@ -124,12 +124,14 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                     $this->stack[$key] = [];
 
                     if ($this->is_valid_numeric($value)){
-                        $business_year = Carbon::createFromDate($value);
-
-                    if (!$business_year == now()->format('Y'))
-                        $onFailure('당해년도 데이터만 입력할 수 있습니다.('. $value.')');
+                        $business_year = Carbon::createFromDate($value)->year;
+                        if (!($business_year == now()->format('Y'))){
+                            $onFailure('당해년도 데이터만 입력할 수 있습니다.: '.$value);
+                            return;
+                        }
                     } else {
                         $onFailure('숫자 형식의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
                     }
 
                     $this->stack[$key] = array('business_year' => $value);
@@ -209,7 +211,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                               ->first();
 
                     if (!$farmer) {
-                        $onFailure('해당 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
+                        $onFailure('대상년도에 등록된 농가가 존재하지 않습니다.( 농가명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
@@ -245,7 +247,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                               ->first();
 
                     if (!$supporter) {
-                        $onFailure('해당 농기계지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
+                        $onFailure('대상년도에 등록된 농기계지원반이 존재하지 않습니다.( 성명: '.$name.', 생년월일: '.$birth.' )');
                         return;
                     }
 
@@ -283,6 +285,15 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                         $this->stack[$key] = array_merge($this->stack[$key], $array_job_end);
                     } catch (\Exception $e) {
                         $onFailure('날짜 형태의 데이터만 입력할 수 있습니다.('. $value.')');
+                        return;
+                    }
+
+                    // 2020-12-11 작업시작일은 작업종료일보다 클수 없다는 조건 추가 : 작업시작일이 큰 경우 아래 중복 체크에서 누락됨.
+                    $start_date = Carbon::create($job_start_date);
+                    $end_date = Carbon::create($job_end_date);
+
+                    if ($start_date->greaterThan($end_date)) {
+                        $onFailure('작업시작일은 작업종료일보다 작거나 같아야 합니다.(시작일:'.$start_date->toDateString().', 종료일:'.$end_date->toDateString().')');
                         return;
                     }
 
