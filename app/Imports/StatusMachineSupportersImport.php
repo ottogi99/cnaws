@@ -48,13 +48,15 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
 
 
         $farmer = \App\SmallFarmer::with('sigun')->with('nonghyup')
-                                ->where('business_year', now()->year)
+                                // ->where('business_year', now()->year)
+                                ->where('business_year', $row[0])
                                 ->where('name', $row[3])
                                 ->where('birth', $farmer_birth)
                                 ->first();
 
         $supporter = \App\MachineSupporter::with('sigun')->with('nonghyup')
-                                ->where('business_year', now()->year)
+                                // ->where('business_year', now()->year)
+                                ->where('business_year', $row[0])
                                 ->where('name', $row[5])
                                 ->where('birth', $supporter_birth)
                                 ->first();
@@ -375,7 +377,7 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
         return $this->rows;
     }
 
-    private function check_duplicate($supporter_id, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_id, $job_start_date, $job_end_date, $business_year)
     {
         return $duplicated_items = \App\StatusMachineSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_machine_supporters.nonghyup_id', 'users.nonghyup_id')
@@ -387,7 +389,8 @@ class StatusMachineSupportersImport implements ToModel, WithStartRow, WithValida
                                           'small_farmers.name as farmer_name', 'small_farmers.address as farmer_address',
                                           'machine_supporters.name as supporter_name'
                                         )
-                                      ->where('status_machine_supporters.business_year', now()->year)
+                                      // ->where('status_machine_supporters.business_year', now()->year)
+                                      ->where('status_machine_supporters.business_year', $business_year)
                                       ->where('machine_supporters.id', $supporter_id)
                                       ->where(function ($query) use ($job_start_date, $job_end_date) {
                                           $query->whereRaw('
