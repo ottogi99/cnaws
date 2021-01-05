@@ -50,14 +50,15 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
         $nonghyup = \App\User::where('sigun_code', $sigun->code)->where('name', $row[2])->first();
 
         $farmer = \App\LargeFarmer::with('sigun')->with('nonghyup')
-                                ->where('business_year', now()->year)
+                                // ->where('business_year', now()->year)
+                                ->where('business_year', $row[0])
                                 // 2020-12-08 동명인이 다른 시군에도 등명으로 등록(생년월일 동일)되어 supporter_id가 변경됨
                                 ->where('nonghyup_id', $nonghyup->nonghyup_id)
                                 ->where('name', $row[3])
                                 ->where('birth', $farmer_birth)
                                 ->first();
         $supporter = \App\ManpowerSupporter::with('sigun')->with('nonghyup')
-                                ->where('business_year', now()->year)
+                                ->where('business_year', $row[0])
                                 // 2020-12-08 동명인이 다른 시군에도 등명으로 등록(생년월일 동일)되어 supporter_id가 변경됨
                                 ->where('nonghyup_id', $nonghyup->nonghyup_id)
                                 ->where('name', $row[5])
@@ -300,6 +301,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     $supporter_id = isset($this->stack[$key]['supporter_id']) ? $this->stack[$key]['supporter_id'] : null;
                     $supporter_birth = isset($this->stack[$key]['supporter_birth']) ? $this->stack[$key]['supporter_birth'] : null;
                     $job_start_date = isset($this->stack[$key]['job_start_date']) ? $this->stack[$key]['job_start_date'] : null;
+                    $business_year = isset($this->stack[$key]['business_year']) ? $this->stack[$key]['business_year'] : null;
 
                     try {
                         $job_end_date = Date::excelToDateTimeObject($value)->format('Y-m-d');
@@ -323,7 +325,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                     // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
                     //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
                     //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다. ($supporter_name, $supporter_birth로 검색)
-                    $duplicated_items = $this->check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date);
+                    // $duplicated_items = $this->check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date);
+                    $duplicated_items = $this->check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date, $business_year);
                     // $duplicated_items = $this->check_duplicate($supporter_id, $job_start_date, $job_end_date);
                     if (count($duplicated_items) > 0)
                     {
@@ -425,7 +428,7 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
     // 2020-12-08 동일한 작업자가 동일일에 작업할 수 없다.(supporter_id는 다르고, supporter_name, supporter_birth, contact 비교???)
     //            그런데 동일인이 여러 농가에 등록되어 있을수 있다. 예를들면, C라는 작업자가 A농협에도, B농협에도 등록되어 있는데,
     //            동일인이므로 중복날짜에 있으면 오류를 알려줘야 한다.
-    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date)
+    private function check_duplicate($supporter_name, $supporter_birth, $job_start_date, $job_end_date, $business_year)
     {
         return $duplicated_items = \App\StatusManpowerSupporter::with('nonghyup')->with('farmer')->with('supporter')
                                       ->join('users', 'status_manpower_supporters.nonghyup_id', 'users.nonghyup_id')
@@ -439,7 +442,8 @@ class StatusManpowerSupportersImport implements ToModel, WithStartRow, WithValid
                                           'manpower_supporters.name as supporter_name',
                                           'manpower_supporters.birth as supporter_birth'
                                         )
-                                      ->where('status_manpower_supporters.business_year', now()->year)
+                                      // ->where('status_manpower_supporters.business_year', now()->year)
+                                      ->where('status_manpower_supporters.business_year', $business_year)
                                       // ->where('manpower_supporters.id', $supporter_id)
                                       ->where('manpower_supporters.name', $supporter_name)
                                       ->where('manpower_supporters.birth', $supporter_birth)
