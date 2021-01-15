@@ -216,12 +216,12 @@ class StatusMachineSupportersController extends Controller
         return redirect(route('status_machine_supporters.index'));
     }
 
-    public function show($id, $year)
+    public function show($id)
     {
         $row = \App\StatusMachineSupporter::findOrFail($id);
         $this->authorize('show-status-machine-supporter', $row);
 
-        return view('status_machine_supporters.show', compact('row', 'year'));
+        return view('status_machine_supporters.show', compact('row'));
     }
 
     public function edit($id)

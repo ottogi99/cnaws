@@ -71,7 +71,7 @@
         </thead>
         <tbody>
           @forelse($rows as $row)
-          <tr onclick="location.href='{{ route('status_machine_supporters.show', ['id'=>$row->id, 'year'=>$row->business_year]) }}'">
+          <tr onclick="location.href='{{ route('status_machine_supporters.show', $row->id) }}'">
             <td><input type="checkbox" class="check" data-id="{{ $row->id }}"></td>
             <td>{{ ($rows->currentPage()-1) * $rows->perPage() + $loop->iteration }}</td>
             <td>{{ $row->sigun->name }}</td>

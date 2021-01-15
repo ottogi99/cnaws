@@ -90,7 +90,7 @@
         <style>
         .upload:hover, .upload:active {color:#ffffff;}
         </style>
-        <a href="{{ route('status_machine_supporters.index', ['year' => $year]) }}" class="btn btn-sm btn-primary">목록</a>
+        <a href="{{ route('status_machine_supporters.index') }}" class="btn btn-sm btn-primary">목록</a>
       </div>
 
       <div style="float:right; margin-right:30px;">
