@@ -221,7 +221,7 @@ class StatusMachineSupportersController extends Controller
         $row = \App\StatusMachineSupporter::findOrFail($id);
         $this->authorize('show-status-machine-supporter', $row);
 
-        return view('status_machine_supporters.show', compact('row'));
+        return view('status_machine_supporters.show', compact('row', 'year'));
     }
 
     public function edit($id)
