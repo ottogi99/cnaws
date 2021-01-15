@@ -235,7 +235,7 @@ class StatusMachineSupportersController extends Controller
                                                 'small_farmers.name as farmer_name',
                                                 'machine_supporters.name as supporter_name'
                                             )
-                                          ->where('status_machine_supporters.business_year', now()->year)
+                                          // ->where('status_machine_supporters.business_year', now()->year)
                                           ->findOrFail($id);
 
         // $this->authorize('edit-status-machine-supporter', $row);
@@ -243,12 +243,12 @@ class StatusMachineSupportersController extends Controller
         // 목록(농협(사용자), 농가(영세농), 농기계지원반)
         $nonghyups = $this->nonghyups;
         $farmers = \App\SmallFarmer::where('nonghyup_id', $row->nonghyup_id)
-                              ->where('business_year', now()->year)
+                              // ->where('business_year', now()->year)
                               ->orderBy('name')
                               ->get();
 
         $supporters = \App\MachineSupporter::where('nonghyup_id', $row->nonghyup_id)
-                              ->where('business_year', now()->year)
+                              // ->where('business_year', now()->year)
                               ->orderBy('name')
                               ->get();
 
